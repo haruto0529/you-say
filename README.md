@@ -27,13 +27,15 @@
 
 ## ER図
 <!-- ER図の画像をここに追加 -->
-![ER図](docs/er.png)
+![ER図](<img width="1172" height="716" alt="you_say 完成版 drawio" src="https://github.com/user-attachments/assets/910bf790-345a-45e5-a330-e085748bbd0a" />
+)
 
 ---
 
 ## スクリーンショット
 <!-- スクリーンショットをここに追加 -->
-![トップページ](docs/top.png)
+![トップページ](<img width="1440" height="777" alt="スクリーンショット 2026-05-27 22 22 10" src="https://github.com/user-attachments/assets/b0be302a-0d6d-428f-a09d-81b415107206" />
+)
 
 ---
 
