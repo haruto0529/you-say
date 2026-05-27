@@ -1,53 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head">
+<head>
+    <meta charset="UTF-8">
+    <title>クイズアプリ</title>
 </head>
 <body>
-
-<header th:replace="fragments/header :: header"></header>
-
-<main style="
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 120px);
-    background-color: #ffffff;
-">
-    <!-- タイトル -->
-    <h1 style="font-size: 72px; font-weight: bold; letter-spacing: 10px; margin-bottom: 80px;">
-        <span style="color: #f5a623;">Y</span><span style="color: #4a90d9;">O</span><span style="color: #e74c3c;">U</span>
-        &nbsp;&nbsp;
-        <span style="color: #2ecc71;">S</span><span style="color: #e91e8c;">A</span><span style="color: #3498db;">Y</span>
-        &nbsp;&nbsp;
-        <span style="color: #f5a623;">Q</span><span style="color: #9b59b6;">U</span><span style="color: #2ecc71;">I</span><span style="color: #e74c3c;">Z</span><span style="color: #f1c40f;">E</span>
-    </h1>
-
-    <!-- ボタン -->
-    <div style="display: flex; gap: 60px;">
-        <a href="/register" style="
-            background-color: #e74c3c;
-            color: white;
-            padding: 18px 50px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: bold;
-        ">新規登録</a>
-
-        <a href="/login" style="
-            background-color: #f39c12;
-            color: white;
-            padding: 18px 50px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: bold;
-        ">ログイン</a>
-    </div>
-</main>
-
-<footer th:replace="fragments/footer :: footer"></footer>
-
+    <h1>クイズへようこそ！</h1>
+    <a href="/quiz">クイズをはじめる</a>
 </body>
 </html>
