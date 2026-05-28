@@ -1,11 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>クイズアプリ</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOU SAY QUIZE</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/top.css}">
 </head>
 <body>
-    <h1>クイズへようこそ！</h1>
-    <a href="/quiz">クイズをはじめる</a>
+
+  <div class="top-page">
+
+    <!-- ヘッダー -->
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <!-- メインコンテンツ -->
+    <main class="top-main">
+
+      <!-- タイトルロゴ -->
+      <div class="top-logo">
+        <span class="top-logo-word">
+          <span>Y</span><span>O</span><span>U</span>
+        </span>
+        <span class="top-logo-word">
+          <span>S</span><span>A</span><span>Y</span>
+        </span>
+        <span class="top-logo-word">
+          <span>Q</span><span>U</span><span>I</span><span>Z</span><span>E</span>
+        </span>
+      </div>
+
+      <!-- ボタン -->
+      <div class="top-actions">
+        <a th:href="@{/register}" class="btn btn-red">新規登録</a>
+        <a th:href="@{/login}"    class="btn btn-orange">ログイン</a>
+      </div>
+
+    </main>
+
+    <!-- フッター -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+  </div>
+
 </body>
 </html>

@@ -1,0 +1,111 @@
+/* ===========================
+   common.css — 共通スタイル
+   =========================== */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+/* ---- リセット & ベース ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-green:  #4caf50;
+  --color-red:    #e8453c;
+  --color-orange: #f5a623;
+  --color-blue:   #4285f4;
+  --color-yellow: #fbbc05;
+  --color-pink:   #e91e8c;
+  --color-teal:   #34a853;
+
+  --font-display: 'Nunito', sans-serif;
+  --font-body:    'Noto Sans JP', sans-serif;
+
+  --radius-btn: 50px;
+  --radius-card: 16px;
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.10);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.14);
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  color: #333;
+  background: #fff;
+}
+
+/* ---- ヘッダー ---- */
+.site-header {
+  width: 100%;
+  height: 56px;
+  background: var(--color-green);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+}
+
+/* ---- フッター ---- */
+.site-footer {
+  width: 100%;
+  height: 56px;
+  background: var(--color-green);
+}
+
+/* ---- ボタン共通 ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 44px;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  filter: brightness(1.06);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-red    { background: var(--color-red); }
+.btn-orange { background: var(--color-orange); }
+.btn-blue   { background: var(--color-blue); }
+.btn-green  { background: var(--color-green); }
+
+/* ---- カード ---- */
+.card {
+  background: #fff;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+  padding: 32px;
+}
+
+/* ---- ユーティリティ ---- */
+.text-center { text-align: center; }
+.mt-sm  { margin-top: 12px; }
+.mt-md  { margin-top: 24px; }
+.mt-lg  { margin-top: 48px; }
+.gap-sm { gap: 12px; }
+.gap-md { gap: 24px; }
+
+.flex        { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-col    { flex-direction: column; }
