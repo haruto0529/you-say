@@ -1,0 +1,208 @@
+@charset "UTF-8";/* ===========================
+   registration.css — 新規登録ページ専用
+   =========================== */
+
+/* ---- ページ全体レイアウト ---- */
+.reg-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f7f9fc;
+}
+
+.reg-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px 64px;
+  gap: 0;
+}
+
+/* ---- タイトル ---- */
+.reg-title-wrap {
+  text-align: center;
+  margin-bottom: 32px;
+  animation: fadeUp 0.5s ease both;
+}
+
+.reg-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 900;
+  color: var(--color-green);
+  letter-spacing: 0.06em;
+}
+
+.reg-subtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #888;
+  font-family: var(--font-body);
+}
+
+/* ---- カード ---- */
+.reg-card {
+  background: #fff;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 460px;
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+
+/* ---- フォーム ---- */
+.reg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #555;
+  font-family: var(--font-body);
+}
+
+/* ---- 入力欄 ---- */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  color: #aaa;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 12px 12px 38px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: var(--font-body);
+  color: #333;
+  background: #fafafa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  outline: none;
+}
+
+.input-wrapper input:focus {
+  border-color: var(--color-green);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
+}
+
+.input-wrapper input::placeholder {
+  color: #bbb;
+}
+
+/* パスワード入力欄（右にトグルボタン分の余白） */
+.password-wrapper input {
+  padding-right: 44px;
+}
+
+/* ---- パスワードトグルボタン ---- */
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  transition: color 0.15s ease;
+}
+
+.toggle-password:hover {
+  color: #555;
+}
+
+.toggle-password svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---- エラーメッセージ ---- */
+.field-error {
+  font-size: 12px;
+  color: var(--color-red);
+  font-family: var(--font-body);
+  min-height: 16px;
+}
+
+.global-error {
+  font-size: 13px;
+  color: var(--color-red);
+  text-align: center;
+  background: rgba(232, 69, 60, 0.07);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-family: var(--font-body);
+}
+
+/* ---- 登録ボタン ---- */
+.btn-register {
+  width: 100%;
+  margin-top: 8px;
+  font-size: 16px;
+  padding: 16px;
+  letter-spacing: 0.08em;
+}
+
+/* ---- ログインリンク ---- */
+.reg-login-link {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  font-family: var(--font-body);
+}
+
+.link-underline {
+  color: var(--color-green);
+  text-decoration: underline;
+  font-weight: 700;
+  transition: color 0.15s ease;
+}
+
+.link-underline:hover {
+  color: #388e3c;
+}
+
+/* ---- フェードインアニメーション ---- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- レスポンシブ ---- */
+@media (max-width: 480px) {
+  .reg-card {
+    padding: 28px 20px;
+  }
+}
