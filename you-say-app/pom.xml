@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>you-say-app</artifactId>
+	<artifactId>try1</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>you-say-app</name>
+	<name>try1</name>
 	<description/>
 	<url/>
 	<licenses>
@@ -45,6 +45,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>

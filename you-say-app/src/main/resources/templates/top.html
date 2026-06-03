@@ -33,16 +33,105 @@
 
       <!-- ボタン -->
       <div class="top-actions">
-        <a th:href="@{/register}" class="btn btn-red">新規登録</a>
-        <a th:href="@{/login}"    class="btn btn-orange">ログイン</a>
+       <button class="btn btn-red" onclick="location.href='/registration'">新規登録</button>
+
+			<button th:if="${session.loginUser == null}" class="btn btn-orange" id="openLogin">ログイン</button>
+
+			<button th:unless="${session.loginUser == null}" class="btn btn-login"
+				onclick="location.href='/menu'">ゲームスタート</button>
       </div>
 
+
     </main>
+    	<div class="green-bar"></div>
+	<div class="modal-overlay" id="loginModal">
+		<div class="modal-content">
+			<span class="close-btn" id="closeLogin">&times;</span>
+			<div class="modal-header">LOGIN</div>
+			<form th:action="@{/login}" method="post">
+				<div class="form-group">
+					<label>メールアドレス</label>
+					<input type="email" name="mail" th:value="${email}" placeholder="example@mail.com" required>
+				</div>
+				<div class="form-group">
+					<label>パスワード</label>
+					<div class="password-wrapper">
+						<input type="password" name="password" id="passwordInput" required>
+						<button type="button" class="toggle-password" id="togglePassword" aria-label="パスワードを表示する">
+							<svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+								stroke-width="1.5" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div>
+					<p id="errMsg" th:text="${err}" style="color:red;"></p>
+				</div>
+				<button type="submit" class="btn btn-submit">ログイン</button>
+			</form>
+		</div>
+	</div>
 
     <!-- フッター -->
     <footer th:replace="~{fragments/footer :: footer}"></footer>
 
   </div>
+  
+  
+  	<script>
+		const openBtn = document.getElementById('openLogin');
+		const closeBtn = document.getElementById('closeLogin');
+		const modal = document.getElementById('loginModal');
+		// ログインボタンを押したら表示
+		openBtn.addEventListener('click', () => {
+			modal.style.display = 'flex';
+		});
+		// ×ボタンを押したら非表示
+		closeBtn.addEventListener('click', () => {
+			modal.style.display = 'none';
+			document.getElementById('errMsg').textContent = '';
+			if (document.getElementById('errMsg2')) document.getElementById('errMsg2').textContent = '';
+		});
+		// モーダルの外側（背景）をクリックしたら非表示
+		window.addEventListener('click', (e) => {
+			if (e.target === modal) {
+				modal.style.display = 'none';
+				document.getElementById('errMsg').textContent = '';
+				if (document.getElementById('errMsg2')) document.getElementById('errMsg2').textContent = '';
+			}
+		});
+		// エラーがあるときは自動でモーダルを開く
+		const err = "[[${err}]]";
+		if (err && err !== 'null') {
+			modal.style.display = 'flex';
+		}
+
+		// ★追加：パスワード表示・非表示の切り替えロジック
+		const passwordInput = document.getElementById('passwordInput');
+		const togglePasswordBtn = document.getElementById('togglePassword');
+		const eyeIcon = document.getElementById('eyeIcon');
+
+		// 表示・非表示で切り替えるSVGのパス（形状）
+		const eyeOpenPath = `<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />`;
+		const eyeClosedPath = `<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />`;
+
+		togglePasswordBtn.addEventListener('click', () => {
+			// type属性がpasswordならtextに、textならpasswordに変更
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+				eyeIcon.innerHTML = eyeClosedPath; // 斜線付きの目のアイコンに変更
+				togglePasswordBtn.setAttribute('aria-label', 'パスワードを非表示にする');
+			} else {
+				passwordInput.type = 'password';
+				eyeIcon.innerHTML = eyeOpenPath; // 通常の目のアイコンに変更
+				togglePasswordBtn.setAttribute('aria-label', 'パスワードを表示する');
+			}
+		});
+	</script>
 
 </body>
 </html>
