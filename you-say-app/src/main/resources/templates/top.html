@@ -39,8 +39,8 @@
 
 				<button th:if="${session.loginUser == null}" class="btn btn-orange" id="openLogin">ログイン</button>
 
-				<button th:unless="${session.loginUser == null}" class="btn btn-login"
-					onclick="location.href='/menu'">ゲームスタート</button>
+				<button th:unless="${session.loginUser == null}" class="btn btn-orange"
+					onclick="location.href='/'">ゲームスタート</button>
 			</div>
 
 
