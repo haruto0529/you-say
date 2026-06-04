@@ -20,7 +20,7 @@ public class RoutingController {
 	public String top(HttpSession session, Model model) {
 		UserDto loginUser = (UserDto) session.getAttribute("loginUser");
 		if (loginUser == null) {
-			return "redirect:/top"; // ログイン画面のURLへ
+			return "redirect:/top";
 		}
 		model.addAttribute("user_name", loginUser.getName());
 		model.addAttribute("user_rank", userdao.userRank(loginUser.getRankId()));
