@@ -28,21 +28,22 @@ public class UserController {
 			return "redirect:/";
 		}
 
-		if (mail == null || password == null) {
+		if (mail == null || password == null || mail.isEmpty() || password.isEmpty()) {
 			return "redirect:/top";
 		}
 
 		UserDto userdto = userdao.verify(mail);
 
 		if (userdto == null) {
-			model.addAttribute("err", "メールアドレスが違います");
+			model.addAttribute("err", "メールアドレスまたはパスワードが違います");
+			model.addAttribute("email", mail);
 			return "top";
 		}
 
 		Login login = new Login(userdto);
 
 		if (!login.checkPassword(password)) {
-			model.addAttribute("err", "パスワードが違います");
+			model.addAttribute("err", "メールアドレスまたはパスワードが違います");
 			model.addAttribute("email", login.getUserDto().getMail());
 			return "top";
 		}
