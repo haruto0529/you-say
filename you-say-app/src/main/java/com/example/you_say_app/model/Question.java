@@ -22,8 +22,8 @@ public class Question {
 		this.question.remove(0);
 	}
 
-	public void setQuestion(QuestionDto questiondto) {
-		this.question.add(questiondto);
+	public void setQuestion(QuestionDto questionDto) {
+		this.question.add(questionDto);
 	}
 
 }
