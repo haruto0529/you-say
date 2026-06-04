@@ -36,7 +36,7 @@ public class UserDao extends SuperDao {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} 
 		return null;
 	}
 
