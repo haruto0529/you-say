@@ -11,8 +11,7 @@
 	<div class="top-page" style="display: flex; flex-direction: column; min-height: 100vh; position: relative;">
 		<header th:replace="~{fragments/header :: header}"></header>
 		
-		<canvas id="effectCanvas"
-			style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2;"></canvas>
+		<canvas id="effectCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2;"></canvas>
 		
 		<div class="rank-display" style="position: absolute; top: calc(var(--header-height, 60px) + 20px); left: 20px; z-index: 10;">
 			<div class="rank-badge">
@@ -20,8 +19,8 @@
 				<span class="rank-name" th:text="${user_rank}">JAVA</span>
 			</div>
 		</div>
+		
 		<div class="user-setting-container" style="position: absolute; top: calc(var(--header-height, 60px) + 20px); right: 20px; z-index: 10; display: flex; align-items: center; gap: 12px;">
-			
 			<div class="user-name-badge">
 				<span class="user-name-text" th:text="${user_name}">YOU</span>
 			</div>
@@ -49,46 +48,42 @@
 				</div>
 			</div>
 		</div>
+		
 		<main style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 0; z-index: 5; position: relative;">
-			<div class="menu-buttons"
-				style="display: flex; flex-direction: column; gap: clamp(14px, 2.8vh, 26px); width: 100%; max-width: 440px; padding: 0 20px;">
-				<button class="btn btn-red">
-					<span class="icon-left"
-						style="position: absolute; left: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 14px;">★
-						★</span>
-					<span>クイズをスタート</span>
-					<span class="icon-right"
-						style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 14px;">★
-						★</span>
-				</button>
-				<button class="btn btn-orange">
-					<span class="icon-left"
-						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">🎮</span>
+			<div class="menu-buttons" style="display: flex; flex-direction: column; gap: clamp(14px, 2.8vh, 26px); width: 100%; max-width: 440px; padding: 0 20px;">
+				
+				<form th:action="@{/quize}" method="get" style="width: 100%; margin: 0;">
+					<button type="submit" class="btn btn-red">
+						<span class="icon-left" style="position: absolute; left: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 14px;">★ ★</span>
+						<span>クイズをスタート</span>
+						<span class="icon-right" style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 14px;">★ ★</span>
+					</button>
+				</form>
+				
+				<button type="button" class="btn btn-orange" th:onclick="|location.href='@{/minigame}'|">
+					<span class="icon-left" style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">🎮</span>
 					<span>ミニゲームで遊ぶ</span>
-					<span class="icon-right"
-						style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 16px;">⚡🎮</span>
+					<span class="icon-right" style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 16px;">⚡🎮</span>
 				</button>
-				<button class="btn btn-blue">
-					<span class="icon-left"
-						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">🏆</span>
+				
+				<button type="button" class="btn btn-blue" th:onclick="|location.href='@{/collection}'|">
+					<span class="icon-left" style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">🏆</span>
 					<span>コレクションを見る</span>
-					<span class="icon-right"
-						style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffd700; font-size: 16px;">🪙✨</span>
+					<span class="icon-right" style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffd700; font-size: 16px;">🪙✨</span>
 				</button>
-				<button class="btn btn-green">
-					<span class="icon-left"
-						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 18px;">📖</span>
+				
+				<button type="button" class="btn btn-green" th:onclick="|location.href='@{/about}'|">
+					<span class="icon-left" style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 18px;">📖</span>
 					<span>紹介を見る</span>
-					<span class="icon-right"
-						style="position: absolute; right: 15px; display: flex; align-items: center; font-size: 18px;">✨</span>
+					<span class="icon-right" style="position: absolute; right: 15px; display: flex; align-items: center; font-size: 18px;">✨</span>
 				</button>
+				
 			</div>
 		</main>
 		
 		<footer th:replace="~{fragments/footer :: footer}" style="z-index: 5; position: relative;"></footer>
 		
 		<script>
-			// --- 背景アニメーション（紙吹雪・風船）の制御 ---
 			const canvas = document.getElementById('effectCanvas');
 			const ctx = canvas.getContext('2d');
 			
