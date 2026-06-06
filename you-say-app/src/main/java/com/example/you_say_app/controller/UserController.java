@@ -1,5 +1,7 @@
 package com.example.you_say_app.controller;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.you_say_app.model.Login;
 import com.example.you_say_app.model.dao.UserDao;
 import com.example.you_say_app.model.dto.UserDto;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
@@ -59,6 +59,18 @@ public class UserController {
 			session.invalidate();
 		}
 		return "redirect:/top";
+	}
+	
+	@PostMapping("/registration/new")
+	public String register(
+			@RequestParam("username") String name,
+			@RequestParam("mail") String mail,
+			@RequestParam("password") String password,
+			HttpSession session) {
+		
+		session.setAttribute("loginUser", userdao.userRegister(name, mail, password));
+		return "redirect:/";
+		
 	}
 
 }

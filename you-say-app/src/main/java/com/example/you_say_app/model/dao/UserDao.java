@@ -39,6 +39,25 @@ public class UserDao extends SuperDao {
 		} 
 		return null;
 	}
+	
+	public UserDto userRegister(String name, String mail, String password) {
+		int ret = 0;
+		
+		String sql = "INSERT INTO `you_say`.`users` (`user_name`, `email`, `password`) VALUES (?, ?, ?);";
+		
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1,name);
+			ps.setString(2,mail);
+			ps.setString(3,password);
+			 ret = ps.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+		return verify(mail);
+		
+	}
 
 	public String userRank(String userId) {
 		try (Connection con = getConnection();
@@ -56,4 +75,5 @@ public class UserDao extends SuperDao {
 		}
 		return null;
 	}
+	
 }
