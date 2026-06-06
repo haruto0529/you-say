@@ -17,7 +17,7 @@ public class RoutingController {
 	private UserDao userdao;
 
 	@GetMapping("/")
-	public String top(HttpSession session, Model model) {
+	public String showIndex(HttpSession session, Model model) {
 		UserDto loginUser = (UserDto) session.getAttribute("loginUser");
 		if (loginUser == null) {
 			return "redirect:/top";
@@ -28,8 +28,17 @@ public class RoutingController {
 	}
 
 	@GetMapping("/top")
-	public String top() {
+	public String showTop() {
 		return "top";
+	}
+	
+	@GetMapping("/collection")
+	public String showCollection(HttpSession session) {
+		UserDto loginUser = (UserDto) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return "redirect:/top";
+		}
+		return "collection";
 	}
 
 }
