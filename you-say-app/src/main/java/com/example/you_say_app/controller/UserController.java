@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.you_say_app.model.Login;
 import com.example.you_say_app.model.dao.UserDao;
@@ -67,11 +68,12 @@ public class UserController {
 			@RequestParam("mail") String mail,
 			@RequestParam("password") String password,
 			HttpSession session,
-			Model model) {
+			RedirectAttributes redirectAttrs
+			) {
 		
 		if (userdao.isMailDuplication(mail)) {
-			model.addAttribute("errorMassage", "そのメールアドレスはすでに登録済みです");
-			return "/registration";
+			redirectAttrs.addFlashAttribute("errorMassage", "そのメールアドレスはすでに登録済みです");
+			return "redirect:/registration";
 		}
 		UserDto user = userdao.userRegister(name, mail, password);
 		
