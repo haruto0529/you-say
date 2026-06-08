@@ -1,189 +1,192 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>新規登録 | YOU SAY QUIZE</title>
-  <link rel="stylesheet" th:href="@{/css/common.css}">
-  <link rel="stylesheet" th:href="@{/css/registration.css}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>新規登録 | YOU SAY QUIZE</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+	<link rel="stylesheet" th:href="@{/css/registration.css}">
 </head>
+
 <body>
 
-  <div class="reg-page">
+	<div class="reg-page">
 
-    <!-- ヘッダー -->
-    <header th:replace="~{fragments/header :: header}"></header>
+		<!-- ヘッダー -->
+		<header th:replace="~{fragments/header :: header}"></header>
 
-    <!-- メインコンテンツ -->
-    <main class="reg-main">
+		<!-- メインコンテンツ -->
+		<main class="reg-main">
 
-      <!-- タイトル -->
-      <div class="reg-title-wrap">
-        <h1 class="reg-title">新規登録</h1>
-        <p class="reg-subtitle">アカウントを作成してゲームを楽しもう！</p>
-      </div>
+			<!-- タイトル -->
+			<div class="reg-title-wrap">
+				<h1 class="reg-title">新規登録</h1>
+				<p class="reg-subtitle">アカウントを作成してゲームを楽しもう！</p>
+			</div>
+			
+			<p th:text="${errorMassage}"></p> 
+			<!-- 登録フォームカード -->
+				<form th:action="@{/registration/new}" method="post" class="reg-form">
 
-      <!-- 登録フォームカード -->
-      <div class="reg-card">
-        <form th:action="@{/registration}" method="post" class="reg-form">
+					<!-- ユーザー名 -->
+					<div class="form-group">
+						<label for="username">ユーザー名</label>
+						<div class="input-wrapper">
+							<svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+								stroke-width="1.5" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+							</svg>
+							<input type="text" id="username" name="username"
+								th:value="${form != null ? form.username : ''}" placeholder="ユーザー名を入力" required
+								maxlength="20">
+						</div>
+						<p class="field-error" th:if="${errors != null and errors.username != null}"
+							th:text="${errors.username}"></p>
+					</div>
 
-          <!-- ユーザー名 -->
-          <div class="form-group">
-            <label for="username">ユーザー名</label>
-            <div class="input-wrapper">
-              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-              </svg>
-              <input type="text" id="username" name="username"
-                th:value="${form != null ? form.username : ''}"
-                placeholder="ユーザー名を入力" required maxlength="20">
-            </div>
-            <p class="field-error" th:if="${errors != null and errors.username != null}"
-               th:text="${errors.username}"></p>
-          </div>
+					<!-- メールアドレス -->
+					<div class="form-group">
+						<label for="mail">メールアドレス</label>
+						<div class="input-wrapper">
+							<svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+								stroke-width="1.5" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+							</svg>
+							<input type="email" id="mail" name="mail" th:value="${form != null ? form.mail : ''}"
+								placeholder="example@mail.com" required>
+						</div>
+						<p class="field-error" th:if="${errors != null and errors.mail != null}"
+							th:text="${errors.mail}"></p>
+					</div>
 
-          <!-- メールアドレス -->
-          <div class="form-group">
-            <label for="mail">メールアドレス</label>
-            <div class="input-wrapper">
-              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-              </svg>
-              <input type="email" id="mail" name="mail"
-                th:value="${form != null ? form.mail : ''}"
-                placeholder="example@mail.com" required>
-            </div>
-            <p class="field-error" th:if="${errors != null and errors.mail != null}"
-               th:text="${errors.mail}"></p>
-          </div>
+					<!-- パスワード -->
+					<div class="form-group">
+						<label for="password">パスワード</label>
+						<div class="input-wrapper password-wrapper">
+							<svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+								stroke-width="1.5" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+							</svg>
+							<input type="password" id="password" name="password" placeholder="8文字以上" required
+								minlength="8">
+							<button type="button" class="toggle-password" id="togglePassword" aria-label="パスワードを表示する">
+								<svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+									stroke-width="1.5" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+								</svg>
+							</button>
+						</div>
+						<p class="field-error" th:if="${errors != null and errors.password != null}"
+							th:text="${errors.password}"></p>
+					</div>
 
-          <!-- パスワード -->
-          <div class="form-group">
-            <label for="password">パスワード</label>
-            <div class="input-wrapper password-wrapper">
-              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-              </svg>
-              <input type="password" id="password" name="password"
-                placeholder="8文字以上" required minlength="8">
-              <button type="button" class="toggle-password" id="togglePassword" aria-label="パスワードを表示する">
-                <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                  stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-              </button>
-            </div>
-            <p class="field-error" th:if="${errors != null and errors.password != null}"
-               th:text="${errors.password}"></p>
-          </div>
+					<!-- パスワード確認 -->
+					<div class="form-group">
+						<label for="passwordConfirm">パスワード（確認）</label>
+						<div class="input-wrapper password-wrapper">
+							<svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+								stroke-width="1.5" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+							</svg>
+							<input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="パスワードを再入力"
+								required>
+							<button type="button" class="toggle-password" id="togglePasswordConfirm"
+								aria-label="パスワードを表示する">
+								<svg id="eyeIconConfirm" xmlns="http://www.w3.org/2000/svg" fill="none"
+									viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+								</svg>
+							</button>
+						</div>
+						<p class="field-error" id="confirmError"></p>
+						<p class="field-error" th:if="${errors != null and errors.passwordConfirm != null}"
+							th:text="${errors.passwordConfirm}"></p>
+					</div>
 
-          <!-- パスワード確認 -->
-          <div class="form-group">
-            <label for="passwordConfirm">パスワード（確認）</label>
-            <div class="input-wrapper password-wrapper">
-              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-              </svg>
-              <input type="password" id="passwordConfirm" name="passwordConfirm"
-                placeholder="パスワードを再入力" required>
-              <button type="button" class="toggle-password" id="togglePasswordConfirm" aria-label="パスワードを表示する">
-                <svg id="eyeIconConfirm" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                  stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-              </button>
-            </div>
-            <p class="field-error" id="confirmError"></p>
-            <p class="field-error" th:if="${errors != null and errors.passwordConfirm != null}"
-               th:text="${errors.passwordConfirm}"></p>
-          </div>
+					<!-- グローバルエラー -->
+					<p class="global-error" th:if="${errMsg != null}" th:text="${errMsg}"></p>
 
-          <!-- グローバルエラー -->
-          <p class="global-error" th:if="${errMsg != null}" th:text="${errMsg}"></p>
+					<!-- 送信ボタン -->
+					<button type="submit" class="btn btn-red btn-register">登録する</button>
 
-          <!-- 送信ボタン -->
-          <button type="submit" class="btn btn-red btn-register">登録する</button>
+					<!-- ログインへ -->
+					<p class="reg-login-link">
+						すでにアカウントをお持ちの方は
+						<a href="/" class="link-underline">ログインはこちら</a>
+					</p>
 
-          <!-- ログインへ -->
-          <p class="reg-login-link">
-            すでにアカウントをお持ちの方は
-            <a href="/" class="link-underline">ログインはこちら</a>
-          </p>
+				</form>
+			</div>
 
-        </form>
-      </div>
+		</main>
 
-    </main>
+		<!-- フッター -->
+		<footer th:replace="~{fragments/footer :: footer}"></footer>
 
-    <!-- フッター -->
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+	</div>
 
-  </div>
+	<script>
+		/* ---- パスワード表示切り替え（共通ヘルパー） ---- */
+		const eyeOpenPath = `<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />`;
+		const eyeClosedPath = `<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />`;
 
-  <script>
-    /* ---- パスワード表示切り替え（共通ヘルパー） ---- */
-    const eyeOpenPath = `<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />`;
-    const eyeClosedPath = `<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />`;
+		function setupToggle(btnId, inputId, iconId) {
+			const btn = document.getElementById(btnId);
+			const input = document.getElementById(inputId);
+			const icon = document.getElementById(iconId);
+			btn.addEventListener('click', () => {
+				if (input.type === 'password') {
+					input.type = 'text';
+					icon.innerHTML = eyeClosedPath;
+					btn.setAttribute('aria-label', 'パスワードを非表示にする');
+				} else {
+					input.type = 'password';
+					icon.innerHTML = eyeOpenPath;
+					btn.setAttribute('aria-label', 'パスワードを表示する');
+				}
+			});
+		}
 
-    function setupToggle(btnId, inputId, iconId) {
-      const btn   = document.getElementById(btnId);
-      const input = document.getElementById(inputId);
-      const icon  = document.getElementById(iconId);
-      btn.addEventListener('click', () => {
-        if (input.type === 'password') {
-          input.type = 'text';
-          icon.innerHTML = eyeClosedPath;
-          btn.setAttribute('aria-label', 'パスワードを非表示にする');
-        } else {
-          input.type = 'password';
-          icon.innerHTML = eyeOpenPath;
-          btn.setAttribute('aria-label', 'パスワードを表示する');
-        }
-      });
-    }
+		setupToggle('togglePassword', 'password', 'eyeIcon');
+		setupToggle('togglePasswordConfirm', 'passwordConfirm', 'eyeIconConfirm');
 
-    setupToggle('togglePassword',        'password',        'eyeIcon');
-    setupToggle('togglePasswordConfirm', 'passwordConfirm', 'eyeIconConfirm');
+		/* ---- パスワード一致バリデーション ---- */
+		const passwordInput = document.getElementById('password');
+		const confirmInput = document.getElementById('passwordConfirm');
+		const confirmError = document.getElementById('confirmError');
 
-    /* ---- パスワード一致バリデーション ---- */
-    const passwordInput = document.getElementById('password');
-    const confirmInput  = document.getElementById('passwordConfirm');
-    const confirmError  = document.getElementById('confirmError');
+		function checkMatch() {
+			if (confirmInput.value && passwordInput.value !== confirmInput.value) {
+				confirmError.textContent = 'パスワードが一致しません';
+			} else {
+				confirmError.textContent = '';
+			}
+		}
 
-    function checkMatch() {
-      if (confirmInput.value && passwordInput.value !== confirmInput.value) {
-        confirmError.textContent = 'パスワードが一致しません';
-      } else {
-        confirmError.textContent = '';
-      }
-    }
+		passwordInput.addEventListener('input', checkMatch);
+		confirmInput.addEventListener('input', checkMatch);
 
-    passwordInput.addEventListener('input', checkMatch);
-    confirmInput.addEventListener('input', checkMatch);
-
-    /* ---- フォーム送信前チェック ---- */
-    document.querySelector('.reg-form').addEventListener('submit', (e) => {
-      if (passwordInput.value !== confirmInput.value) {
-        e.preventDefault();
-        confirmError.textContent = 'パスワードが一致しません';
-        confirmInput.focus();
-      }
-    });
-  </script>
+		/* ---- フォーム送信前チェック ---- */
+		document.querySelector('.reg-form').addEventListener('submit', (e) => {
+			if (passwordInput.value !== confirmInput.value) {
+				e.preventDefault();
+				confirmError.textContent = 'パスワードが一致しません';
+				confirmInput.focus();
+			}
+		});
+	</script>
 
 </body>
+
 </html>
