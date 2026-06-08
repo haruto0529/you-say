@@ -66,9 +66,16 @@ public class UserController {
 			@RequestParam("username") String name,
 			@RequestParam("mail") String mail,
 			@RequestParam("password") String password,
-			HttpSession session) {
+			HttpSession session,
+			Model model) {
 		
-		session.setAttribute("loginUser", userdao.userRegister(name, mail, password));
+		if (userdao.isMailDuplication(mail)) {
+			model.addAttribute("errorMassage", "そのメールアドレスはすでに登録済みです");
+			return "/registration";
+		}
+		UserDto user = userdao.userRegister(name, mail, password);
+		
+		session.setAttribute("loginUser", user);
 		return "redirect:/";
 		
 	}

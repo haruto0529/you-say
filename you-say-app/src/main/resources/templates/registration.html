@@ -24,9 +24,9 @@
 				<h1 class="reg-title">新規登録</h1>
 				<p class="reg-subtitle">アカウントを作成してゲームを楽しもう！</p>
 			</div>
-
+			
+			<p th:text="${errorMassage}"></p> 
 			<!-- 登録フォームカード -->
-			<div class="reg-card">
 				<form th:action="@{/registration/new}" method="post" class="reg-form">
 
 					<!-- ユーザー名 -->
