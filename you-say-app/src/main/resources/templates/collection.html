@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collection List – YOU SAY QUIZE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- ===========================
+       collectionList.css 差分スタイル
+       =========================== -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:        #4CAF50;
+      --green-dark:   #388E3C;
+      --bg:           #F4ECEC;
+      --card-bg:      #ffffff;
+      --text-primary: #222222;
+      --text-muted:   #888888;
+      --border:       rgba(0, 0, 0, 0.08);
+      --font-main:    'Noto Sans JP', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cl-header,
+    .cl-footer {
+      background: var(--green);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cl-header h1 {
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .cl-main {
+      flex: 1;
+      padding: 16px 20px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cl-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .cl-sort-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .cl-sort-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .cl-sort-btn:hover { background: rgba(0,0,0,0.06); }
+
+    .cl-sort-btn svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s;
+    }
+    .cl-sort-btn.asc  svg { transform: rotate(0deg); }
+    .cl-sort-btn.desc svg { transform: rotate(180deg); }
+
+    .cl-search {
+      width: 100%;
+      padding: 9px 14px;
+      border: none;
+      border-radius: 8px;
+      background: #ddd4d4;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      font-family: var(--font-main);
+      transition: background 0.15s;
+    }
+    .cl-search::placeholder { color: #aaa; }
+    .cl-search:focus { background: #d0c8c8; }
+
+    .cl-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .cl-item {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 0.5px solid var(--border);
+    }
+
+    .cl-item-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      min-width: 36px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .cl-item-title {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cl-item-emoji {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .cl-item-likes {
+      font-size: 13px;
+      color: var(--text-muted);
+      min-width: 28px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .cl-empty {
+      text-align: center;
+      padding: 40px 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .cl-back {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      font-size: 14px;
+      color: #4285f4;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .cl-back:hover { opacity: 0.7; }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="cl-header">
+    <h1>YOU SAY QUIZE</h1>
+  </header>
+
+  <main class="cl-main">
+
+    <!-- ツールバー -->
+    <div class="cl-toolbar">
+      <span class="cl-sort-label">並び替え</span>
+      <button class="cl-sort-btn asc" id="sortBtn" aria-label="並び順を切り替える">
+        <span id="sortLabel">昇順</span>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="4,6 8,10 12,6"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- 検索バー -->
+    <input
+      class="cl-search"
+      type="text"
+      id="searchInput"
+      placeholder="ワード検索"
+      aria-label="ワード検索"
+    />
+
+    <!-- ======================================================
+         Thymeleaf でサーバーサイドレンダリングするリスト
+         Controller から List<CollectionItem> items を渡す想定
+         ====================================================== -->
+    <ul class="cl-list" id="collectionList" aria-label="コレクション一覧">
+
+      <!-- items が空のとき -->
+      <li th:if="${#lists.isEmpty(items)}" class="cl-empty">
+        登録されているアイテムがありません
+      </li>
+
+      <!-- items をループ -->
+      <li th:each="item : ${items}" class="cl-item"
+          th:data-date="${item.date}"
+          th:data-title="${item.title}"
+          th:data-likes="${item.likes}">
+
+        <span class="cl-item-date"  th:text="${item.date}">5/12</span>
+        <span class="cl-item-title" th:text="${item.title}">タイトル</span>
+        <span class="cl-item-emoji" th:text="${item.emoji}">👍</span>
+        <span class="cl-item-likes" th:text="${item.likes}">0</span>
+
+      </li>
+    </ul>
+
+    <!-- JS フィルタ後の空状態（初期は非表示） -->
+    <p class="cl-empty" id="emptyMsg" style="display:none;">
+      一致するアイテムが見つかりません
+    </p>
+
+  </main>
+
+  <a class="cl-back" th:href="@{/menu}" href="index.html">メニューに戻る</a>
+
+  <footer class="cl-footer"></footer>
+
+
+  <script>
+    /*
+     * サーバーからレンダリング済みの <li> を読み取り、
+     * クライアント側の検索・ソートに利用する
+     */
+    const listEl  = document.getElementById("collectionList");
+    const emptyEl = document.getElementById("emptyMsg");
+
+    /* DOM から全アイテムを取得してキャッシュ */
+    const ALL_ITEMS = Array.from(
+      listEl.querySelectorAll("li.cl-item")
+    ).map(li => ({
+      el:    li,
+      date:  li.dataset.date  || "",
+      title: li.dataset.title || "",
+      likes: parseInt(li.dataset.likes || "0", 10),
+    }));
+
+    let sortAsc = true;
+    let query   = "";
+
+    function render() {
+      /* フィルタ */
+      let filtered = ALL_ITEMS.filter(item =>
+        item.title.includes(query) || item.date.includes(query)
+      );
+
+      /* ソート */
+      filtered.sort((a, b) =>
+        sortAsc ? a.likes - b.likes : b.likes - a.likes
+      );
+
+      /* 全 li を非表示にしてから並べ直す */
+      ALL_ITEMS.forEach(item => item.el.style.display = "none");
+
+      if (filtered.length === 0) {
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+
+      filtered.forEach(item => {
+        item.el.style.display = "";
+        listEl.appendChild(item.el); /* 順序を変える */
+      });
+    }
+
+    document.getElementById("searchInput").addEventListener("input", e => {
+      query = e.target.value.trim();
+      render();
+    });
+
+    document.getElementById("sortBtn").addEventListener("click", () => {
+      sortAsc = !sortAsc;
+      document.getElementById("sortLabel").textContent = sortAsc ? "昇順" : "降順";
+      document.getElementById("sortBtn").className = "cl-sort-btn " + (sortAsc ? "asc" : "desc");
+      render();
+    });
+
+    render();
+  </script>
+
+</body>
+</html>
