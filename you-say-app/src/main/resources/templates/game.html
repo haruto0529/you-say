@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Connect Four</title>
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;700&display=swap"
+		rel="stylesheet">
+	<style>
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background-color: #0d0d0d;
+			background-image:
+				radial-gradient(ellipse at 20% 20%, rgba(0, 85, 255, 0.08) 0%, transparent 60%),
+				radial-gradient(ellipse at 80% 80%, rgba(245, 197, 24, 0.06) 0%, transparent 60%);
+			font-family: 'Noto Sans JP', sans-serif;
+			color: #f0f0f0;
+			padding: 2rem;
+		}
+
+		h1 {
+			font-family: 'Bebas Neue', sans-serif;
+			font-size: clamp(2.5rem, 6vw, 4rem);
+			letter-spacing: 0.1em;
+			color: #ffffff;
+			margin-bottom: 0.25rem;
+		}
+
+		.subtitle {
+			font-size: 13px;
+			color: #666;
+			letter-spacing: 0.2em;
+			text-transform: uppercase;
+			margin-bottom: 1.5rem;
+		}
+
+		#status {
+			font-size: 16px;
+			font-weight: 700;
+			color: #f5c518;
+			letter-spacing: 0.05em;
+			margin-bottom: 1.25rem;
+			min-height: 1.5em;
+			text-align: center;
+			transition: color 0.3s;
+		}
+
+		#status.win {
+			color: #4ade80;
+		}
+
+		#status.draw {
+			color: #94a3b8;
+		}
+
+		#status.error {
+			color: #f87171;
+		}
+
+		.board-wrap {
+			background: #0033cc;
+			padding: 14px;
+			border-radius: 16px;
+			box-shadow:
+				0 0 0 3px #0022aa,
+				0 20px 60px rgba(0, 55, 255, 0.4);
+		}
+
+		.board {
+			display: grid;
+			grid-template-columns: repeat(7, 58px);
+			grid-template-rows: repeat(6, 58px);
+			gap: 8px;
+		}
+
+		.cell {
+			width: 58px;
+			height: 58px;
+			border-radius: 50%;
+			background-color: #0d0d0d;
+			position: relative;
+			cursor: pointer;
+			transition: background-color 0.15s;
+			overflow: hidden;
+		}
+
+		.cell:hover {
+			background-color: #1a1a1a;
+		}
+
+		.board.locked .cell {
+			cursor: not-allowed;
+		}
+
+		.piece {
+			width: 100%;
+			height: 100%;
+			border-radius: 50%;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		.piece.color-1 {
+			background: radial-gradient(circle at 35% 35%, #ffffff, #cccccc);
+			box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+		}
+
+		/* コントローラー側の仕様に合わせたカスタム画像クラス */
+		.piece.color-1.custom-image {
+			background-image: url('/images/player.png');
+			background-size: cover;
+			background-position: center;
+			background-color: transparent;
+			box-shadow: none;
+		}
+
+		.piece.color-2 {
+			background: radial-gradient(circle at 35% 35%, #ffe84d, #f5c518);
+			box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+		}
+
+		.fall-animation {
+			animation: fallEffect 0.45s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+		}
+
+		@keyframes fallEffect {
+			0% {
+				transform: translateY(var(--fall-y));
+			}
+
+			80% {
+				transform: translateY(0);
+			}
+
+			90% {
+				transform: translateY(-8px);
+			}
+
+			100% {
+				transform: translateY(0);
+			}
+		}
+
+		.controls {
+			margin-top: 1.5rem;
+			display: flex;
+			gap: 12px;
+		}
+
+		.btn {
+			padding: 10px 24px;
+			border: 1.5px solid #333;
+			background: transparent;
+			color: #f0f0f0;
+			font-family: 'Noto Sans JP', sans-serif;
+			font-size: 13px;
+			font-weight: 700;
+			letter-spacing: 0.05em;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: background 0.15s, border-color 0.15s;
+		}
+
+		.btn:hover {
+			background: rgba(255, 255, 255, 0.08);
+			border-color: #555;
+		}
+
+		.btn-primary {
+			border-color: #0055ff;
+			color: #6699ff;
+		}
+
+		.btn-primary:hover {
+			background: rgba(0, 85, 255, 0.15);
+			border-color: #3377ff;
+		}
+
+		.legend {
+			display: flex;
+			gap: 1.5rem;
+			margin-top: 1rem;
+			font-size: 12px;
+			color: #555;
+		}
+
+		.legend-item {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.legend-dot {
+			width: 14px;
+			height: 14px;
+			border-radius: 50%;
+		}
+
+		.legend-dot.color-1 {
+			background: #cccccc;
+		}
+
+		.legend-dot.color-2 {
+			background: #f5c518;
+		}
+
+		.overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.75);
+			z-index: 100;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			animation: fadeIn 0.4s ease forwards;
+		}
+
+		.overlay.show {
+			display: flex;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
+		.overlay-message {
+			font-family: 'Bebas Neue', sans-serif;
+			font-size: clamp(2.5rem, 8vw, 5rem);
+			letter-spacing: 0.1em;
+			color: #f5c518;
+			margin-bottom: 2rem;
+			text-align: center;
+			animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+		}
+
+		.overlay-message.draw {
+			color: #94a3b8;
+		}
+
+		@keyframes popIn {
+			from {
+				transform: scale(0.5);
+				opacity: 0;
+			}
+
+			to {
+				transform: scale(1);
+				opacity: 1;
+			}
+		}
+
+		.overlay-buttons {
+			display: flex;
+			gap: 12px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="overlay" id="overlay">
+		<div class="overlay-message" id="overlayMessage"></div>
+		<div class="overlay-buttons">
+			<button class="btn btn-primary" onclick="location.href='/'">もう一度プレイ</button>
+		</div>
+	</div>
+
+	<h1>Connect Four</h1>
+	<p class="subtitle">4目並べ</p>
+	<div id="status">接続中...</div>
+	<div class="board-wrap">
+		<div class="board" id="board"></div>
+	</div>
+	<div class="legend">
+		<div class="legend-item">
+			<div class="legend-dot color-1"></div>
+			<span id="legend1">プレイヤー1</span>
+		</div>
+		<div class="legend-item">
+			<div class="legend-dot color-2"></div>
+			<span id="legend2">プレイヤー2</span>
+		</div>
+	</div>
+
+	<div class="controls">
+		<button class="btn btn-primary" onclick="location.reload()">リセット</button>
+		<button class="btn" onclick="location.href='/minigame'">設定に戻る</button>
+	</div>
+
+	<script>
+		const ROWS = 6;
+		const COLS = 7;
+		const boardEl = document.getElementById('board');
+		const statusEl = document.getElementById('status');
+		let isLocked = false;
+		let prevBoard = null;
+
+		// window.vsComputer の初期化や管理は不要になったため削除
+
+		function initBoard() {
+			boardEl.innerHTML = '';
+			for (let r = 0; r < ROWS; r++) {
+				for (let c = 0; c < COLS; c++) {
+					const cell = document.createElement('div');
+					cell.classList.add('cell');
+					cell.dataset.row = r;
+					cell.dataset.col = c;
+					cell.addEventListener('click', () => handleClick(c));
+					boardEl.appendChild(cell);
+				}
+			}
+		}
+
+		function renderBoard(board, animate = false) {
+			for (let r = 0; r < ROWS; r++) {
+				for (let c = 0; c < COLS; c++) {
+					const color = board[r][c];
+					const displayRow = ROWS - 1 - r;
+					const cell = boardEl.querySelector(`[data-row="${displayRow}"][data-col="${c}"]`);
+					if (!cell) continue;
+
+					const existing = cell.querySelector('.piece');
+					if (color !== 0) {
+						if (!existing) {
+							const piece = document.createElement('div');
+							// ★修正：常に通常のcolorクラス（グラデーション）のみを適用するようにシンプル化
+							piece.classList.add('piece', `color-${color}`);
+
+							if (animate && (!prevBoard || prevBoard[r][c] === 0)) {
+								const cellSize = 58 + 8;
+								piece.style.setProperty('--fall-y', `${-(displayRow + 1) * cellSize}px`);
+								piece.classList.add('fall-animation');
+							}
+							cell.appendChild(piece);
+						}
+					} else {
+						if (existing) cell.removeChild(existing);
+					}
+				}
+			}
+			prevBoard = board.map(row => [...row]);
+		}
+
+		function setStatus(message, type = '') {
+			statusEl.textContent = message;
+			statusEl.className = type;
+			if (type === 'win' || type === 'draw') {
+				const overlay = document.getElementById('overlay');
+				const overlayMessage = document.getElementById('overlayMessage');
+				overlayMessage.textContent = message;
+				if (type === 'draw') {
+					overlayMessage.classList.add('draw');
+				} else {
+					overlayMessage.classList.remove('draw');
+				}
+				overlay.classList.add('show');
+			}
+		}
+
+		function lock() {
+			isLocked = true;
+			boardEl.classList.add('locked');
+		}
+
+		function unlock() {
+			isLocked = false;
+			boardEl.classList.remove('locked');
+		}
+
+		async function handleClick(targetCol) {
+			if (isLocked) return;
+			lock();
+
+			let currentCol = targetCol;
+			let keepPlaying = true;
+
+			try {
+				while (keepPlaying) {
+					const res = await fetch('/drop', {
+						method: 'POST',
+						headers: {'Content-Type': 'application/json'},
+						body: JSON.stringify({column: currentCol})
+					});
+					if (!res.ok) throw new Error('サーバーエラー');
+
+					const result = await res.json();
+					renderBoard(result.board, true);
+
+					if (result.gameOver) {
+						setStatus(result.message, result.message === '引き分け' ? 'draw' : 'win');
+						return;
+					}
+
+					setStatus(result.message);
+
+					if (result.computerTurn) {
+						await new Promise(r => setTimeout(r, 700));
+						currentCol = -1;
+					} else {
+						keepPlaying = false;
+					}
+				}
+			} catch (e) {
+				setStatus('エラーが発生しました', 'error');
+			}
+			unlock();
+		}
+
+		// 初期状態の読み込み
+		initBoard();
+		fetch('/status')
+			.then(r => r.json())
+			.then(async data => {
+				// vsComputerのフラグチェックを省略し、そのまま描画へ
+				renderBoard(data.board, false);
+				setStatus(data.message);
+				if (data.computerTurn) {
+					await handleClick(-1);
+				}
+			})
+			.catch(() => setStatus('サーバーに接続できませんでした', 'error'));
+	</script>
+</body>
+
+</html>
