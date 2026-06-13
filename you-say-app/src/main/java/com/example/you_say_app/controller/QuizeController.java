@@ -1,6 +1,7 @@
 package com.example.you_say_app.controller;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,95 +9,89 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.example.you_say_app.model.Question;
 import com.example.you_say_app.model.dao.QuestionDao;
-import com.example.you_say_app.model.dto.UserDto;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class QuizeController {
 	@Autowired
-	private QuestionDao questiondao;
+	private QuestionDao questionDao;
 
 	@GetMapping("/quize")
-	public String quize(HttpSession session, Model model) {
-		UserDto userdto = (UserDto) session.getAttribute("loginUser");
-		if (userdto == null) {
+	public String quize(@SessionAttribute(name = "questions", required = false) List<Integer> questionsList,
+			Model model, HttpSession session) {
+		if (session.getAttribute("loginUser") == null) {
 			return "redirect:/top";
 		}
-		Question question = (Question) session.getAttribute("questions");
-		if (question == null) {
-			question = questiondao.putInQuestion();
-			Collections.shuffle(question.getQuestion());
-			session.setAttribute("questions", question);
+		if (questionsList == null) {
+			questionsList = questionDao.getQuestionId();
+			Collections.shuffle(questionsList);
+			session.setAttribute("questions", questionsList);
 		}
-		if (question.getQuestion().size() == 0) {
+		if (questionsList.size() == 0) {
 			session.removeAttribute("questions");
 			return "redirect:/";
 		}
-		model.addAttribute("question", question.getQuestion());
+		model.addAttribute("question", questionDao.putInQuestion(questionsList.get(0)).getQuestionText());
 		return "quize";
 	}
 
-	
 	@PostMapping("/quize/check")
-	public String checkQuize(@RequestParam("userAnswer") String userAnswer, HttpSession session, Model model) {
-		UserDto userDto = (UserDto) session.getAttribute("loginUser");
-		if (userDto == null) {
+	public String checkQuize(@RequestParam("userAnswer") String userAnswer, HttpSession session, Model model,
+			@SessionAttribute(name = "questions", required = false) List<Integer> questionsList) {
+		if (session.getAttribute("loginUser") == null) {
 			return "redirect:/top";
 		}
-		Question question = (Question) session.getAttribute("questions");
-		if (question == null) {
+		if (questionsList == null) {
 			return "redirect:/quize";
 		}
-		if (question.getQuestion().size() == 0) {
+		if (questionsList.size() == 0) {
 			session.removeAttribute("questions");
 			return "redirect:/";
 		}
 		boolean isCorrect;
 		model.addAttribute("userAnswer", userAnswer);
-		model.addAttribute("answer", question.getQuestion().get(0).getAnswerText());
-		if (userAnswer.equals(question.getQuestion().get(0).getAnswerText())) {
+		model.addAttribute("questions", questionsList);
+		model.addAttribute("answer", questionDao.putInQuestion(questionsList.get(0)).getAnswerText());
+		if (userAnswer.equals(questionDao.putInQuestion(questionsList.get(0)).getAnswerText())) {
 			isCorrect = true;
 		} else {
 			isCorrect = false;
 		}
 		model.addAttribute("isCorrect", isCorrect);
-		model.addAttribute("question", question);
 
 		return "result";
 
 	}
 
 	@GetMapping("/onemore")
-	public String oneMoreQuize(HttpSession session, Model model) {
-		UserDto userdto = (UserDto) session.getAttribute("loginUser");
-		if (userdto == null) {
+	public String oneMoreQuize(HttpSession session, Model model,
+			@SessionAttribute(name = "questions", required = false) List<Integer> questionsList) {
+		if (session.getAttribute("loginUser") == null) {
 			return "redirect:/top";
 		}
-		Question question = (Question) session.getAttribute("questions");
-		if (question == null) {
+		if (questionsList == null) {
 			return "redirect:/quize";
 		}
-		if (question.getQuestion().size() == 0) {
+		if (questionsList.size() == 0) {
 			session.removeAttribute("questions");
 			return "redirect:/";
 		}
-		question.deleteTopQuestion();
-		model.addAttribute("question", question.getQuestion());
+		questionsList.remove(0);
+		model.addAttribute("question", questionDao.putInQuestion(questionsList.get(0)).getQuestionText());
 		return "quize";
 	}
 
 	@GetMapping("/tomenu")
-	public String toMenu(HttpSession session) {
-		UserDto userdto = (UserDto) session.getAttribute("loginUser");
-		if (userdto == null) {
+	public String toMenu(HttpSession session,
+			@SessionAttribute(name = "questions", required = false) List<Integer> questionsList) {
+		if (session.getAttribute("loginUser") == null) {
 			return "redirect:/top";
 		}
-		Question question = (Question) session.getAttribute("questions");
-		if (question != null) {
+		if (questionsList != null) {
 			session.removeAttribute("questions");
 		}
 		return "redirect:/";
