@@ -113,7 +113,6 @@
 </head>
 
 <body class="quiz-page-container">
-
 	<header class="site-header flex quiz-custom-header">
 		<div style="display: flex; align-items: center;">
 			<h1 class="top-logo-word" style="font-size: 28px; margin: 0; letter-spacing: 0.06em;">
@@ -122,29 +121,21 @@
 			</h1>
 		</div>
 	</header>
-
 	<main class="quiz-main">
-
 		<div class="card quiz-display-card">
-			<p class="quiz-question-text" th:text="${question}">
+			<p class="quiz-question-text" th:text="${question.questionText}">
 				ここにクイズの文章が表示されます
 			</p>
 		</div>
-
 		<form class="quiz-answer-form" th:action="@{/quize/check}" method="post">
-
+			<input type="hidden" name="questionId" th:value="${question.questionId}" />
 
 			<input type="text" class="quiz-input-field" name="userAnswer" placeholder="回答を入力してください" required
 				autocomplete="off">
-
 			<button type="submit" class="btn btn-orange">決定</button>
-
 		</form>
-
 	</main>
-
 	<footer class="site-footer"></footer>
-
 </body>
 
 </html>

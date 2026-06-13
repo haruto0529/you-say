@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.example.you_say_app.model.dao.QuestionDao;
+import com.example.you_say_app.model.dto.QuestionDto;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -31,16 +32,17 @@ public class QuizeController {
 			Collections.shuffle(questionsList);
 			session.setAttribute("questions", questionsList);
 		}
-		if (questionsList.size() == 0) {
+		if (questionsList.isEmpty()) {
 			session.removeAttribute("questions");
 			return "redirect:/";
 		}
-		model.addAttribute("question", questionDao.putInQuestion(questionsList.get(0)).getQuestionText());
+		model.addAttribute("question", questionDao.putInQuestion(questionsList.get(0)));
 		return "quize";
 	}
 
 	@PostMapping("/quize/check")
-	public String checkQuize(@RequestParam("userAnswer") String userAnswer, HttpSession session, Model model,
+	public String checkQuize(@RequestParam("userAnswer") String userAnswer,
+			@RequestParam("questionId") int questionId, HttpSession session, Model model,
 			@SessionAttribute(name = "questions", required = false) List<Integer> questionsList) {
 		if (session.getAttribute("loginUser") == null) {
 			return "redirect:/top";
@@ -55,8 +57,9 @@ public class QuizeController {
 		boolean isCorrect;
 		model.addAttribute("userAnswer", userAnswer);
 		model.addAttribute("questions", questionsList);
-		model.addAttribute("answer", questionDao.putInQuestion(questionsList.get(0)).getAnswerText());
-		if (userAnswer.equals(questionDao.putInQuestion(questionsList.get(0)).getAnswerText())) {
+		QuestionDto questionDto = questionDao.putInQuestion(questionId);
+		model.addAttribute("answer", questionDto.getAnswerText());
+		if (userAnswer.equals(questionDto.getAnswerText())) {
 			isCorrect = true;
 		} else {
 			isCorrect = false;
@@ -73,16 +76,11 @@ public class QuizeController {
 		if (session.getAttribute("loginUser") == null) {
 			return "redirect:/top";
 		}
-		if (questionsList == null) {
-			return "redirect:/quize";
+
+		if (questionsList != null && !questionsList.isEmpty()) {
+			questionsList.remove(0);
 		}
-		if (questionsList.size() == 0) {
-			session.removeAttribute("questions");
-			return "redirect:/";
-		}
-		questionsList.remove(0);
-		model.addAttribute("question", questionDao.putInQuestion(questionsList.get(0)).getQuestionText());
-		return "quize";
+		return "redirect:/quize";
 	}
 
 	@GetMapping("/tomenu")
