@@ -1,33 +1,41 @@
 package com.example.you_say_app.model.dto;
 
 public class UserDto {
-	private String userId;
+	private int userId;
+	private int rankId;
 	private String name;
 	private String mail;
 	private String password;
 	private String salt;
-	private String rankId;
 
 	public UserDto() {
 
 	}
 
-	public UserDto(String userId, String name, String mail, String password, String salt, String rankId) {
+	public UserDto(int userId, int rankId, String name, String mail, String password, String salt) {
 		super();
 		this.userId = userId;
+		this.rankId = rankId;
 		this.name = name;
 		this.mail = mail;
 		this.password = password;
 		this.salt = salt;
-		this.rankId = rankId;
 	}
 
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	public int getRankId() {
+		return rankId;
+	}
+
+	public void setRankId(int rankId) {
+		this.rankId = rankId;
 	}
 
 	public String getName() {
@@ -52,14 +60,6 @@ public class UserDto {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getRankId() {
-		return rankId;
-	}
-
-	public void setRankId(String rankId) {
-		this.rankId = rankId;
 	}
 
 	public String getSalt() {
