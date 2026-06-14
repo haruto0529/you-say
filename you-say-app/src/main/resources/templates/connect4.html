@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Connect 4 - スタート設定</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* 明るい薄グレーの背景 */
+            color: #212529; /* ダークグレーの文字 */
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .start-card {
+            max-width: 550px;
+            width: 100%;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* 優しい影 */
+            background-color: #ffffff; /* 真っ白なカード */
+            border: 1px solid #e9ecef;
+        }
+        .mode-option {
+            cursor: pointer;
+            border: 2px solid #dee2e6;
+            color: #495057;
+            background-color: #ffffff;
+            transition: 0.2s;
+        }
+        .mode-option:hover {
+            background-color: #f1f3f5;
+            color: #212529;
+        }
+        /* ラジオボタンがチェックされた時のスタイル（爽やかなブルー） */
+        input[type="radio"]:checked + label {
+            border-color: #4ea8de;
+            background-color: #eef8ff;
+            color: #0077b6;
+        }
+    </style>
+</head>
+<body>
+<div class="start-card">
+    <h1 class="text-center mb-4 fw-bold th-title" style="color: #0077b6;">Connect 4</h1>
+    <p class="text-center text-muted mb-4">ゲームの基本設定を行ってください。</p>
+    <form th:action="@{/start}" method="post">
+        
+        <h5 class="fw-bold mb-3" style="color: #0077b6;">1. プレイ人数を選択</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-6">
+                <input type="radio" class="btn-check" name="gameMode" id="mode1P" value="1P" checked onclick="toggleOptions()">
+                <label class="btn mode-option w-100 p-3 rounded-3 text-start" for="mode1P">
+                    <span class="fs-5 fw-bold d-block">1人プレイ 👤</span>
+                    <span class="text-muted small">コンピュータと対戦</span>
+                </label>
+            </div>
+            <div class="col-6">
+                <input type="radio" class="btn-check" name="gameMode" id="mode2P" value="2P" onclick="toggleOptions()">
+                <label class="btn mode-option w-100 p-3 rounded-3 text-start" for="mode2P">
+                    <span class="fs-5 fw-bold d-block">2人プレイ 👥</span>
+                    <span class="text-muted small">画面を交互に操作</span>
+                </label>
+            </div>
+        </div>
+        <div id="vsCpuOptions">
+            <hr class="my-4" style="border-color: #dee2e6;">
+            <h5 class="fw-bold mb-3" style="color: #0077b6;">2. 先攻・後攻の選択</h5>
+            <div class="d-grid gap-2">
+                <div>
+                    <input type="radio" class="btn-check" name="firstPlayer" id="orderHuman" value="human" checked>
+                    <label class="btn btn-outline-secondary w-100 py-2.5 fw-bold" for="orderHuman">
+                        自分が先攻で始める（白の駒 ⚪）
+                    </label>
+                </div>
+                <div class="mt-2">
+                    <input type="radio" class="btn-check" name="firstPlayer" id="orderCpu" value="computer">
+                    <label class="btn btn-outline-warning w-100 py-2.5 fw-bold text-dark" for="orderCpu">
+                        コンピュータ先攻で始める（黄の駒 🟡）
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ボタンエリア -->
+        <div class="mt-5 d-flex flex-column gap-3">
+            <!-- メインのアクション（開始ボタン） -->
+            <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold text-white" style="background-color: #0077b6; border: none;">
+                ゲームを開始する 🚀
+            </button>
+            
+            <!-- わかりやすい枠線付きのメニュー戻るボタン -->
+            <a th:href="@{/}" class="btn btn-outline-secondary btn-lg w-100 py-2.5 fw-bold">
+                メニュー画面に戻る
+            </a>
+        </div>
+    </form>
+</div>
+<script>
+    function toggleOptions() {
+        const is1P = document.getElementById('mode1P').checked;
+        const optionsDiv = document.getElementById('vsCpuOptions');
+        optionsDiv.style.display = is1P ? 'block' : 'none';
+    }
+</script>
+</body>
+</html>
