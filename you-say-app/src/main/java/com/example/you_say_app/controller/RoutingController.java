@@ -40,5 +40,10 @@ public class RoutingController {
 		}
 		return "collection";
 	}
+	
+	@GetMapping("/minigame")
+    public String showStart() {
+        return "connect4";
+    }
 
 }
