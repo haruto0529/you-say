@@ -1,8 +1,8 @@
 package com.example.you_say_app.model.dto;
 
 public class QuestionDto {
-	private String questionId;
-	private String quoteId;
+	private int questionId;
+	private int quoteId;
 	private String questionText;
 	private String answerText;
 
@@ -10,7 +10,7 @@ public class QuestionDto {
 
 	}
 
-	public QuestionDto(String questionId, String quoteId, String questionText, String answerText) {
+	public QuestionDto(int questionId, int quoteId, String questionText, String answerText) {
 		super();
 		this.questionId = questionId;
 		this.quoteId = quoteId;
@@ -18,19 +18,19 @@ public class QuestionDto {
 		this.answerText = answerText;
 	}
 
-	public String getQuestionId() {
+	public int getQuestionId() {
 		return questionId;
 	}
 
-	public void setQuestionId(String questionId) {
+	public void setQuestionId(int questionId) {
 		this.questionId = questionId;
 	}
 
-	public String getQuoteId() {
+	public int getQuoteId() {
 		return quoteId;
 	}
 
-	public void setQuoteId(String quoteId) {
+	public void setQuoteId(int quoteId) {
 		this.quoteId = quoteId;
 	}
 
