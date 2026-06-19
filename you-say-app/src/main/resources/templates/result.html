@@ -1,269 +1,304 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>QUIZE - 結果発表</title>
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/top.css">
-    <style>
-        /* ==========================================================================
+	<meta charset="UTF-8">
+	<title>QUIZE - 結果発表</title>
+	<link rel="stylesheet" href="/css/common.css">
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="stylesheet" href="/css/top.css">
+	<style>
+		/* ==========================================================================
            🎨 結果画面専用のスタイル
            ========================================================================== */
-        .result-page-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: #fff;
-            position: relative;
-            overflow: hidden; /* 星が画面外に飛び散ったときのスクロールバーを防止 */
-        }
+		.result-page-container {
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			background: #fff;
+			position: relative;
+			overflow: hidden;
+			/* 星が画面外に飛び散ったときのスクロールバーを防止 */
+		}
 
-        /* ヘッダーの幅・高さを拡張（quize.htmlと完全統一） */
-        .result-custom-header {
-            height: auto !important;
-            padding: 24px 40px !important;
-            box-shadow: var(--shadow-sm);
-        }
+		/* ヘッダーの幅・高さを拡張（quize.htmlと完全統一） */
+		.result-custom-header {
+			height: auto !important;
+			padding: 24px 40px !important;
+			box-shadow: var(--shadow-sm);
+		}
 
-        .result-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
+		.result-main {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 40px 20px;
+			box-sizing: border-box;
+		}
 
-        /* --------------------------------------------------------------------------
+		/* --------------------------------------------------------------------------
            正解・不正解タイトルの3D装飾
            -------------------------------------------------------------------------- */
-        .result-status-title {
-            font-size: clamp(36px, 5vw, 54px);
-            font-weight: 900;
-            margin-bottom: 30px;
-            text-align: center;
-            letter-spacing: 4px;
-            animation: fadeUp 0.5s ease both;
-        }
-        
-        /* 正解時：緑と深緑の立体テキスト */
-        .status-correct {
-            color: #fff;
-            text-shadow: 
-                -2px -2px 0 var(--color-green),  2px -2px 0 var(--color-green),
-                -2px  2px 0 var(--color-green),  2px  2px 0 var(--color-green),
-                0px 6px 0px #2e7d32, 0px 10px 15px rgba(0,0,0,0.3);
-        }
-        
-        /* 不正解時：赤とダークレッドの立体テキスト */
-        .status-incorrect {
-            color: #fff;
-            text-shadow: 
-                -2px -2px 0 var(--color-red),  2px -2px 0 var(--color-red),
-                -2px  2px 0 var(--color-red),  2px  2px 0 var(--color-red),
-                0px 6px 0px #b71c1c, 0px 10px 15px rgba(0,0,0,0.3);
-        }
+		.result-status-title {
+			font-size: clamp(36px, 5vw, 54px);
+			font-weight: 900;
+			margin-bottom: 30px;
+			text-align: center;
+			letter-spacing: 4px;
+			animation: fadeUp 0.5s ease both;
+		}
 
-        /* --------------------------------------------------------------------------
+		/* 正解時：緑と深緑の立体テキスト */
+		.status-correct {
+			color: #fff;
+			text-shadow:
+				-2px -2px 0 var(--color-green), 2px -2px 0 var(--color-green),
+				-2px 2px 0 var(--color-green), 2px 2px 0 var(--color-green),
+				0px 6px 0px #2e7d32, 0px 10px 15px rgba(0, 0, 0, 0.3);
+		}
+
+		/* 不正解時：赤とダークレッドの立体テキスト */
+		.status-incorrect {
+			color: #fff;
+			text-shadow:
+				-2px -2px 0 var(--color-red), 2px -2px 0 var(--color-red),
+				-2px 2px 0 var(--color-red), 2px 2px 0 var(--color-red),
+				0px 6px 0px #b71c1c, 0px 10px 15px rgba(0, 0, 0, 0.3);
+		}
+
+		/* --------------------------------------------------------------------------
            解説ボックス（index.cssの高級3Dカード風）
            -------------------------------------------------------------------------- */
-        .explanation-display-card {
-            width: 100%;
-            max-width: 720px;
-            min-height: 250px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #fdfdfd;
-            border: 2px solid #ffea9f;
-            outline: 1.5px solid #a3751a;
-            position: relative;
-            margin-bottom: 40px;
-            animation: fadeUp 0.6s ease 0.1s both;
-        }
+		.explanation-display-card {
+			width: 100%;
+			max-width: 720px;
+			min-height: 250px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #fdfdfd;
+			border: 2px solid #ffea9f;
+			outline: 1.5px solid #a3751a;
+			position: relative;
+			margin-bottom: 40px;
+			animation: fadeUp 0.6s ease 0.1s both;
+		}
 
-        .explanation-display-card::after {
-            content: '';
-            position: absolute;
-            z-index: -1;
-            top: 4px; left: 4px; right: -4px; bottom: -4px;
-            background: rgba(163, 117, 26, 0.15);
-            border-radius: var(--radius-card);
-        }
+		.explanation-display-card::after {
+			content: '';
+			position: absolute;
+			z-index: -1;
+			top: 4px;
+			left: 4px;
+			right: -4px;
+			bottom: -4px;
+			background: rgba(163, 117, 26, 0.15);
+			border-radius: var(--radius-card);
+		}
 
-        .explanation-inner-text {
-            font-size: clamp(16px, 2.2vw, 20px);
-            font-weight: 800;
-            color: #333;
-            text-align: center;
-            line-height: 1.8;
-            padding: 15px;
-        }
+		.explanation-inner-text {
+			font-size: clamp(16px, 2.2vw, 20px);
+			font-weight: 800;
+			color: #333;
+			text-align: center;
+			line-height: 1.8;
+			padding: 15px;
+		}
 
-        /* 正解の答えをオレンジで強調 */
-        .correct-answer-highlight {
-            color: var(--color-orange);
-            font-size: 1.25em;
-            border-bottom: 3px double var(--color-orange);
-            padding-bottom: 2px;
-            display: inline-block;
-        }
+		/* 正解の答えをオレンジで強調 */
+		.correct-answer-highlight {
+			color: var(--color-orange);
+			font-size: 1.25em;
+			border-bottom: 3px double var(--color-orange);
+			padding-bottom: 2px;
+			display: inline-block;
+		}
 
-        /* --------------------------------------------------------------------------
+		/* --------------------------------------------------------------------------
            下部のボタングループ（横並びレスポンシブ）
            -------------------------------------------------------------------------- */
-        .result-button-group {
-            display: flex;
-            width: 100%;
-            max-width: 720px;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            animation: fadeUp 0.6s ease 0.2s both;
-        }
+		.result-button-group {
+			display: flex;
+			width: 100%;
+			max-width: 720px;
+			justify-content: center;
+			gap: 20px;
+			flex-wrap: wrap;
+			animation: fadeUp 0.6s ease 0.2s both;
+		}
 
-        /* 横並び用にボタンの幅を柔軟に調整 */
-        .result-button-group .btn {
-            flex: 1;
-            min-width: 180px;
-            text-decoration: none;
-            white-space: nowrap;
-        }
+		/* 横並び用にボタンの幅を柔軟に調整 */
+		.result-button-group .btn {
+			flex: 1;
+			min-width: 180px;
+			text-decoration: none;
+			white-space: nowrap;
+		}
 
-        /* ==========================================================================
+		/* ==========================================================================
            ✨ 演出用CSS：【1.5秒で爽快に消え去る爆速テンポ版】
            ========================================================================== */
-        .quiz-success-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
+		.quiz-success-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			z-index: 9999;
+		}
 
-        /* 「CORRECT!!」の文字を1.2秒でシャッと消す */
-        .quiz-success-text {
-            position: absolute;
-            top: 35%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.5);
-            font-family: var(--font-display);
-            font-size: clamp(60px, 9vw, 110px);
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 
-                0 0 25px rgba(76, 175, 80, 0.8),
-                -3px -3px 0 #34a853,  3px -3px 0 #34a853,
-                -3px  3px 0 #34a853,  3px  3px 0 #34a853,
-                0px 10px 0px #1b5e20,  0px 18px 25px rgba(0,0,0,0.5);
-            /* ★ 1.2秒でテンポよくフェードアウト */
-            animation: quizPopSuccessKey 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
+		/* 「CORRECT!!」の文字を1.2秒でシャッと消す */
+		.quiz-success-text {
+			position: absolute;
+			top: 35%;
+			left: 50%;
+			transform: translate(-50%, -50%) scale(0.5);
+			font-family: var(--font-display);
+			font-size: clamp(60px, 9vw, 110px);
+			font-weight: 900;
+			color: #fff;
+			text-shadow:
+				0 0 25px rgba(76, 175, 80, 0.8),
+				-3px -3px 0 #34a853, 3px -3px 0 #34a853,
+				-3px 3px 0 #34a853, 3px 3px 0 #34a853,
+				0px 10px 0px #1b5e20, 0px 18px 25px rgba(0, 0, 0, 0.5);
+			/* ★ 1.2秒でテンポよくフェードアウト */
+			animation: quizPopSuccessKey 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+		}
 
-        @keyframes quizPopSuccessKey {
-            0% { transform: translate(-50%, -50%) scale(0.4) rotate(-10deg); opacity: 0; }
-            15% { transform: translate(-50%, -50%) scale(1.2) rotate(5deg); opacity: 1; }
-            25% { transform: translate(-50%, -50%) scale(1.0) rotate(0deg); opacity: 1; }
-            65% { transform: translate(-50%, -50%) scale(1.0); opacity: 1; } 
-            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-        }
+		@keyframes quizPopSuccessKey {
+			0% {
+				transform: translate(-50%, -50%) scale(0.4) rotate(-10deg);
+				opacity: 0;
+			}
 
-        /* 星パーツ：ジャスト1.5秒アニメーション */
-        .quiz-custom-sparkle {
-            position: absolute;
-            width: 18px; 
-            height: 18px;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            /* ★ ジャスト1.5秒でパッと消えるように短縮 */
-            animation: quizExplodeKey 1.5s cubic-bezier(0.05, 0.7, 0.1, 1) forwards;
-        }
+			15% {
+				transform: translate(-50%, -50%) scale(1.2) rotate(5deg);
+				opacity: 1;
+			}
 
-        @keyframes quizExplodeKey {
-            0% { 
-                transform: translate(0, 0) scale(0) rotate(0deg); 
-                opacity: 0; 
-            }
-            5% {
-                opacity: 1;
-            }
-            15% { 
-                transform: translate(calc(var(--tx) * 0.55), calc(var(--ty) * 0.55)) scale(1.4) rotate(180deg); 
-            }
-            60% {
-                transform: translate(calc(var(--tx) * 0.85), calc(var(--ty) * 0.85)) scale(0.8) rotate(360deg);
-                opacity: 1;
-            }
-            100% { 
-                /* 1.5秒の瞬間に綺麗に消滅 */
-                transform: translate(var(--tx), var(--ty)) scale(0.1) rotate(540deg); 
-                opacity: 0; 
-            }
-        }
-    </style>
+			25% {
+				transform: translate(-50%, -50%) scale(1.0) rotate(0deg);
+				opacity: 1;
+			}
+
+			65% {
+				transform: translate(-50%, -50%) scale(1.0);
+				opacity: 1;
+			}
+
+			100% {
+				transform: translate(-50%, -50%) scale(0.8);
+				opacity: 0;
+			}
+		}
+
+		/* 星パーツ：ジャスト1.5秒アニメーション */
+		.quiz-custom-sparkle {
+			position: absolute;
+			width: 18px;
+			height: 18px;
+			clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+			/* ★ ジャスト1.5秒でパッと消えるように短縮 */
+			animation: quizExplodeKey 1.5s cubic-bezier(0.05, 0.7, 0.1, 1) forwards;
+		}
+
+		@keyframes quizExplodeKey {
+			0% {
+				transform: translate(0, 0) scale(0) rotate(0deg);
+				opacity: 0;
+			}
+
+			5% {
+				opacity: 1;
+			}
+
+			15% {
+				transform: translate(calc(var(--tx) * 0.55), calc(var(--ty) * 0.55)) scale(1.4) rotate(180deg);
+			}
+
+			60% {
+				transform: translate(calc(var(--tx) * 0.85), calc(var(--ty) * 0.85)) scale(0.8) rotate(360deg);
+				opacity: 1;
+			}
+
+			100% {
+				/* 1.5秒の瞬間に綺麗に消滅 */
+				transform: translate(var(--tx), var(--ty)) scale(0.1) rotate(540deg);
+				opacity: 0;
+			}
+		}
+	</style>
 </head>
+
 <body class="result-page-container">
 
-    <div class="quiz-success-overlay" id="quizSuccessOverlay" th:if="${isCorrect}">
-        <div class="quiz-success-text">CORRECT!!</div>
-    </div>
+	<div class="quiz-success-overlay" id="quizSuccessOverlay" th:if="${isCorrect}">
+		<div class="quiz-success-text">YOU SAY!</div>
+	</div>
 
-    <header class="site-header flex result-custom-header">
-        <div style="display: flex; align-items: center;">
-            <h1 class="top-logo-word" style="font-size: 28px; margin: 0; letter-spacing: 0.06em;">
-                <span>Y</span><span>O</span><span>U</span>
-                <span style="margin-left: 8px;">S</span><span>A</span><span>Y</span>
-            </h1>
-        </div>
-    </header>
+	<header class="site-header flex result-custom-header">
+		<div style="display: flex; align-items: center;">
+			<h1 class="top-logo-word" style="font-size: 28px; margin: 0; letter-spacing: 0.06em;">
+				<span>Y</span><span>O</span><span>U</span>
+				<span style="margin-left: 8px;">S</span><span>A</span><span>Y</span>
+			</h1>
+		</div>
+	</header>
 
-    <main class="result-main">
-        
-        <div class="result-status-title">
-            <span th:if="${isCorrect}" class="status-correct">正解！</span>
-            <span th:unless="${isCorrect}" class="status-incorrect">不正解...</span>
-        </div>
+	<main class="result-main">
 
-        <div class="card explanation-display-card">
-            <p class="explanation-inner-text">
-                【答え】 <span class="correct-answer-highlight" th:text="${answer}"></span><br><br>
-                名言の解説がここに記載されます。
-            </p>
-        </div>
+		<div class="result-status-title">
+			<span th:if="${isCorrect}" class="status-correct">正解！</span>
+			<span th:unless="${isCorrect}" class="status-incorrect">不正解...</span>
+		</div>
 
-        <div class="result-button-group">
-            <a th:href="@{/tomenu}" class="btn btn-red">メニュー画面へ</a>
-            <a th:href="@{/collection}" class="btn btn-blue">コレクションを見る</a>
-            <a th:href="@{/onemore}" class="btn btn-orange" th:if="${question.getQuestion().size()>1}">次の問題へ</a>
-        </div>
+		<div class="card explanation-display-card">
+			<p class="explanation-inner-text">
+				【答え】 <span class="correct-answer-highlight" th:text="${answer}"></span><br><br>
+				名言の解説がここに記載されます。
+			</p>
+		</div>
 
-    </main>
+		<div class="result-button-group">
+			<a th:href="@{/tomenu}" class="btn btn-red">メニュー画面へ</a>
+			<a th:href="@{/collection}" class="btn btn-blue">コレクションを見る</a>
+			<a th:href="@{/onemore}" class="btn btn-orange"
+				th:if="${questions != null && #lists.size(questions) > 1}">次の問題へ</a>
+		</div>
 
-    <footer class="site-footer"></footer>
+	</main>
 
-    <script th:if="${isCorrect}">
-        const overlay = document.getElementById('quizSuccessOverlay');
-        if (overlay) {
-            for (let i = 0; i < 35; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.classList.add('quiz-custom-sparkle');
-                
-                const angle = Math.random() * Math.PI * 2;
-                const distance = 140 + Math.random() * 240; 
-                const tx = Math.cos(angle) * distance + 'px';
-                const ty = Math.sin(angle) * distance + 'px';
-                
-                sparkle.style.left = '50%';
-                sparkle.style.top = '35%'; 
-                sparkle.style.setProperty('--tx', tx);
-                sparkle.style.setProperty('--ty', ty);
-                sparkle.style.transform = 'translate(-50%, -50%)';
-                
-                const colors = ['#fbbc05', '#4285f4', '#e8453c', '#34a853', '#e91e8c'];
-                sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                overlay.appendChild(sparkle);
-            }
-        }
-    </script>
+	<footer class="site-footer"></footer>
+
+	<script th:if="${isCorrect}">
+		const overlay = document.getElementById('quizSuccessOverlay');
+		if (overlay) {
+			for (let i = 0; i < 35; i++) {
+				const sparkle = document.createElement('div');
+				sparkle.classList.add('quiz-custom-sparkle');
+
+				const angle = Math.random() * Math.PI * 2;
+				const distance = 140 + Math.random() * 240;
+				const tx = Math.cos(angle) * distance + 'px';
+				const ty = Math.sin(angle) * distance + 'px';
+
+				sparkle.style.left = '50%';
+				sparkle.style.top = '35%';
+				sparkle.style.setProperty('--tx', tx);
+				sparkle.style.setProperty('--ty', ty);
+				sparkle.style.transform = 'translate(-50%, -50%)';
+
+				const colors = ['#fbbc05', '#4285f4', '#e8453c', '#34a853', '#e91e8c'];
+				sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+				overlay.appendChild(sparkle);
+			}
+		}
+	</script>
 </body>
+
 </html>

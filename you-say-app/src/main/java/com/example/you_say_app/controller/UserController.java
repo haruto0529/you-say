@@ -1,7 +1,5 @@
 package com.example.you_say_app.controller;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,14 +7,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.you_say_app.model.Login;
 import com.example.you_say_app.model.dao.UserDao;
 import com.example.you_say_app.model.dto.UserDto;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
 	@Autowired
-	private UserDao userdao;
+	private UserDao userDao;
 
 	@PostMapping("/login")
 	public String doLogin(
@@ -33,23 +32,21 @@ public class UserController {
 			return "redirect:/top";
 		}
 
-		UserDto userdto = userdao.verify(mail);
+		UserDto userDto = userDao.verify(mail);
 
-		if (userdto == null) {
+		if (userDto == null) {
 			model.addAttribute("err", "メールアドレスまたはパスワードが違います");
 			model.addAttribute("email", mail);
 			return "top";
 		}
 
-		Login login = new Login(userdto);
-
-		if (!login.checkPassword(password)) {
+		if (!password.equals(userDto.getPassword())) {
 			model.addAttribute("err", "メールアドレスまたはパスワードが違います");
-			model.addAttribute("email", login.getUserDto().getMail());
+			model.addAttribute("email", userDto.getMail());
 			return "top";
 		}
 
-		session.setAttribute("loginUser", login.getUserDto()); // セッションに保存
+		session.setAttribute("loginUser", userDto.getUserId()); // セッションに保存
 
 		return "redirect:/";
 	}
@@ -61,25 +58,24 @@ public class UserController {
 		}
 		return "redirect:/top";
 	}
-	
+
 	@PostMapping("/registration/new")
 	public String register(
 			@RequestParam("username") String name,
 			@RequestParam("mail") String mail,
 			@RequestParam("password") String password,
 			HttpSession session,
-			RedirectAttributes redirectAttrs
-			) {
-		
-		if (userdao.isMailDuplication(mail)) {
+			RedirectAttributes redirectAttrs) {
+
+		if (userDao.isMailDuplication(mail)) {
 			redirectAttrs.addFlashAttribute("errorMassage", "そのメールアドレスはすでに登録済みです");
 			return "redirect:/registration";
 		}
-		UserDto user = userdao.userRegister(name, mail, password);
-		
+		UserDto user = userDao.userRegister(name, mail, password);
+
 		session.setAttribute("loginUser", user);
 		return "redirect:/";
-		
+
 	}
 
 }

@@ -19,10 +19,7 @@ import com.example.you_say_app.model.connect4.Connect4;
 @SessionAttributes("game")
 public class Connect4Controller {
 
-    @GetMapping("/minigame")
-    public String showStart() {
-        return "connect4";
-    }
+    
 
     @PostMapping("/start")
     public String showGame(

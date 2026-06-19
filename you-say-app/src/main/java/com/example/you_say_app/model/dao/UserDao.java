@@ -14,6 +14,7 @@ public class UserDao extends SuperDao {
 
 	private static final String sql1 = "SELECT users.user_id,users.user_name,users.password,users.salt,users.email,users.rank_id FROM users WHERE  users.email = ? AND users.deleted_at IS NULL";
 	private static final String sql2 = "SELECT rank_name FROM users,ranks WHERE users.rank_id=ranks.rank_id AND user_id = ?";
+	private static final String sql3 = "SELECT *  FROM users WHERE user_id= ?";
 
 	//DBに一致するメールアドレス存在する場合、対応するユーザーの情報を取得
 	public UserDto verify(String mail) {
@@ -26,12 +27,12 @@ public class UserDao extends SuperDao {
 
 				if (rs.next()) {
 					UserDto user = new UserDto();
-					user.setUserId(rs.getString("user_id"));
+					user.setUserId(rs.getInt("user_id"));
 					user.setName(rs.getString("user_name"));
 					user.setMail(rs.getString("email"));
 					user.setPassword(rs.getString("password"));
 					user.setSalt(rs.getString("salt"));
-					user.setRankId(rs.getString("rank_id"));
+					user.setRankId(rs.getInt("rank_id"));
 					return user;
 				}
 			}
@@ -79,10 +80,10 @@ public class UserDao extends SuperDao {
 
 	}
 
-	public String userRank(String userId) {
+	public String userRank(int userId) {
 		try (Connection con = getConnection();
 				PreparedStatement ps = con.prepareStatement(sql2)) {
-			ps.setString(1, userId);
+			ps.setInt(1, userId);
 
 			try (ResultSet rs = ps.executeQuery()) {
 
@@ -94,6 +95,27 @@ public class UserDao extends SuperDao {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	//	ユーザの名前とランクIDを持ってくるメソッド
+	public UserDto getUserInfo(int userId) {
+		UserDto userDto = new UserDto();
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql3)) {
+			ps.setInt(1, userId);
+
+			try (ResultSet rs = ps.executeQuery()) {
+
+				if (rs.next()) {
+					userDto.setName(rs.getString("user_name"));
+					userDto.setRankId(rs.getInt("rank_id"));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return userDto;
+
 	}
 
 }
