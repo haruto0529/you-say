@@ -100,7 +100,6 @@
 		.delete-inline-container {
 			display: none;
 			padding: 16px 12px;
-			/* 変更：余白を増やす */
 			background: #fff5f5;
 			border: 1px solid #ffcccc;
 			border-radius: 6px;
@@ -108,10 +107,8 @@
 			color: #cc0000;
 			text-align: left;
 			font-size: 13px;
-			/* 変更：11px → 13px */
 		}
 
-		/* 変更：削除フォーム内のlabel・inputを少し大きく */
 		.delete-inline-container .inline-group label {
 			font-size: 12px;
 		}
@@ -248,12 +245,107 @@
 			color: #fff;
 			border-color: #555;
 		}
+
+		/* --- 目マーク付きパスワード入力 --- */
+		.password-wrapper {
+			position: relative;
+			display: flex;
+			align-items: center;
+		}
+
+		.password-wrapper input {
+			width: 100%;
+			padding-right: 30px !important;
+			box-sizing: border-box;
+		}
+
+		.toggle-password-btn {
+			position: absolute;
+			right: 6px;
+			background: none;
+			border: none;
+			cursor: pointer;
+			padding: 0;
+			display: flex;
+			align-items: center;
+			color: #999;
+			font-size: 15px;
+			line-height: 1;
+		}
+
+		.toggle-password-btn:hover {
+			color: #555;
+		}
+
+		/* --- フラッシュメッセージ --- */
+		.flash-message {
+			position: fixed;
+			top: calc(var(--header-height, 60px) + 12px);
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 9999;
+			min-width: 260px;
+			max-width: 90vw;
+			background: #ffffff;
+			border-left: 5px solid #4caf50;
+			border-radius: 8px;
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+			padding: 12px 20px 12px 16px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			font-size: 14px;
+			font-weight: bold;
+			color: #2e7d32;
+			animation: flashSlideIn 0.3s ease, flashFadeOut 0.5s ease 3s forwards;
+		}
+
+		.flash-message::before {
+			content: '✅';
+			font-size: 18px;
+			flex-shrink: 0;
+		}
+
+		@keyframes flashSlideIn {
+			from {
+				opacity: 0;
+				transform: translateX(-50%) translateY(-10px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateX(-50%) translateY(0);
+			}
+		}
+
+		@keyframes flashFadeOut {
+			from {
+				opacity: 1;
+			}
+
+			to {
+				opacity: 0;
+				pointer-events: none;
+			}
+		}
 	</style>
 </head>
 
 <body>
 	<div class="top-page" style="display: flex; flex-direction: column; min-height: 100vh; position: relative;">
 		<header th:replace="~{fragments/header :: header}"></header>
+
+		<div th:if="${message}" id="flashMessage" class="flash-message">
+			<span th:text="${message}"></span>
+		</div>
+		<script>
+			(function () {
+				const msg = document.getElementById('flashMessage');
+				if (msg) {
+					setTimeout(() => {msg.remove();}, 3500);
+				}
+			})();
+		</script>
 
 		<canvas id="effectCanvas"
 			style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2;"></canvas>
@@ -301,14 +393,23 @@
 
 									<div class="inline-group">
 										<label for="inlinePassword">新しいパスワード</label>
-										<input type="password" id="inlinePassword" name="password" placeholder="変更時のみ入力"
-											oninput="checkPasswordRequired()">
+										<div class="password-wrapper">
+											<input type="password" id="inlinePassword" name="password"
+												placeholder="変更時のみ入力（8文字以上）" minlength="8"
+												oninput="checkPasswordRequired()">
+											<button type="button" class="toggle-password-btn"
+												onclick="togglePw('inlinePassword', this)">👁</button>
+										</div>
 									</div>
 									<div id="currentPasswordArea" class="inline-group current-password-area"
 										style="border-top: 1px dashed #ddd; margin-top: 8px; padding-top: 8px;">
 										<label id="currentPasswordLabel" for="currentPassword">現在のパスワード</label>
-										<input type="password" id="currentPassword" name="currentPassword"
-											placeholder="パスワード変更時のみ必須">
+										<div class="password-wrapper">
+											<input type="password" id="currentPassword" name="currentPassword"
+												placeholder="パスワード変更時のみ必須">
+											<button type="button" class="toggle-password-btn"
+												onclick="togglePw('currentPassword', this)">👁</button>
+										</div>
 									</div>
 
 									<div class="inline-actions">
@@ -362,7 +463,6 @@
 
 							<li class="menu-divider"></li>
 
-							<!-- アカウント削除項目（パスワード確認式） -->
 							<li onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
 								<a href="javascript:void(0);" onclick="toggleDeleteForm(event);"
 									class="menu-delete-account">
@@ -373,10 +473,13 @@
 									class="delete-inline-container" onclick="event.stopPropagation();">
 									<p style="margin: 0 0 6px 0; font-weight: bold;">⚠️ すべてのデータが完全に削除されます。</p>
 									<div class="inline-group">
-										<!-- 【変更】ユーザー名入力からパスワード入力に変更 -->
 										<label for="deleteConfirmPassword">本人確認のため、現在のパスワードを入力してください：</label>
-										<input type="password" id="deleteConfirmPassword" name="currentPassword"
-											placeholder="パスワードを入力" oninput="validateDeleteInput()" required>
+										<div class="password-wrapper">
+											<input type="password" id="deleteConfirmPassword" name="currentPassword"
+												placeholder="パスワードを入力" oninput="validateDeleteInput()" required>
+											<button type="button" class="toggle-password-btn"
+												onclick="togglePw('deleteConfirmPassword', this)">👁</button>
+										</div>
 									</div>
 									<div class="inline-actions">
 										<button type="button" class="inline-btn btn-inline-cancel"
@@ -448,6 +551,17 @@
 		<footer th:replace="~{fragments/footer :: footer}" style="z-index: 5; position: relative;"></footer>
 
 		<script>
+			function togglePw(inputId, btn) {
+				const input = document.getElementById(inputId);
+				if (input.type === 'password') {
+					input.type = 'text';
+					btn.textContent = '🙈';
+				} else {
+					input.type = 'password';
+					btn.textContent = '👁';
+				}
+			}
+
 			let isEffectEnabled = true;
 			let currentEffectType = 'all';
 			let isSwitchingToggle = false;
@@ -515,19 +629,16 @@
 				} else {
 					deleteContainer.style.display = 'block';
 					const inputField = document.getElementById('deleteConfirmPassword');
-					inputField.value = ''; // 開くたびにリセット
+					inputField.value = '';
 					document.getElementById('finalDeleteBtn').disabled = true;
 					inputField.focus();
 				}
 				setTimeout(() => {isSwitchingToggle = false;}, 100);
 			}
 
-			// 【変更】パスワード欄に文字が入っているかでボタンの活性状態を切り替える
 			function validateDeleteInput() {
 				const inputPassword = document.getElementById('deleteConfirmPassword').value.trim();
 				const finalDeleteBtn = document.getElementById('finalDeleteBtn');
-
-				// 1文字以上入力されていれば「完全に削除する」ボタンを押せるようにする
 				if (inputPassword.length > 0) {
 					finalDeleteBtn.disabled = false;
 				} else {

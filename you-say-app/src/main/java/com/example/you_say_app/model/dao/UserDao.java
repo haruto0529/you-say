@@ -16,6 +16,15 @@ public class UserDao extends SuperDao {
 	private static final String sql2 = "SELECT rank_name FROM users,ranks WHERE users.rank_id=ranks.rank_id AND user_id = ?";
 	private static final String sql3 = "SELECT *  FROM users WHERE user_id= ?";
 
+	//	ユーザー名とパスワードをアップデートするSQL
+	private static final String sql4 = "UPDATE `you_say`.`users` SET `user_name` = ?, `password` = ? WHERE `user_id` = ?";
+
+	//	パスワードを更新するSQL
+	private static final String sql5 = "UPDATE `you_say`.`users` SET `password` = ? WHERE `user_id` = ?";
+
+	//	ユーザー名を更新するSQL
+	private static final String sql6 = "UPDATE `you_say`.`users` SET `user_name` = ? WHERE `user_id` = ?";
+
 	//DBに一致するメールアドレス存在する場合、対応するユーザーの情報を取得
 	public UserDto verify(String mail) {
 
@@ -109,13 +118,59 @@ public class UserDao extends SuperDao {
 				if (rs.next()) {
 					userDto.setName(rs.getString("user_name"));
 					userDto.setRankId(rs.getInt("rank_id"));
+					userDto.setPassword(rs.getString("password"));
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return userDto;
+	}
 
+	//	ユーザー名とパスワードを更新するメソッド
+	public int updateNamePassword(int userId, String name, String password) {
+		int ret = 0;
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql4)) {
+			ps.setString(1, name);
+			ps.setString(2, password);
+			ps.setInt(3, userId);
+
+			ret = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	//	パスワードを変更するメソッド
+	public int updatePassword(int userId, String password) {
+		int ret = 0;
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql5)) {
+			ps.setString(1, password);
+			ps.setInt(2, userId);
+
+			ret = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	//	名前を変更するメソッド
+	public int updateName(int userId, String name) {
+		int ret = 0;
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql6)) {
+			ps.setString(1, name);
+			ps.setInt(2, userId);
+
+			ret = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 
 }
