@@ -10,12 +10,15 @@ import org.springframework.stereotype.Repository;
 
 import com.example.you_say_app.model.dto.OutputCollectionDto;
 
-@Repository
+@Repository // このクラスをDB操作用のBeanとしてSpringに登録
 public class CollectionDao extends SuperDao {
+
+	// コレクションに1件追加する（user_id と quote_id を登録）
 	public int insertCollection(int user_id, int quote_id) {
-		int ret = 0;
+		int ret = 0; // 更新された行数を返す（成功なら1）
 		String sql = "INSERT INTO you_say.collecton_quotes (user_id, quote_id) VALUES (?, ?)";
 
+		// try-with-resources：接続とステートメントを自動でクローズ
 		try (Connection con = getConnection();
 				PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, user_id);
@@ -27,16 +30,19 @@ public class CollectionDao extends SuperDao {
 		}
 		return ret;
 	}
-	
-//	問題文と答えとQuoteIdを引き出してくるメソッド
+
+	// 指定ユーザーが集めたコレクションを取得するメソッド
 	public OutputCollectionDto collectionDisplay(int userId) {
 		OutputCollectionDto collect = new OutputCollectionDto();
+		// collecton_quotes と quotes を quote_id で結合し、対象ユーザーの分だけ取得
 		String sql = "SELECT c.collection_id, c.user_id, c.quote_id, quotes.full_text, c.has_gold_medal, c.created_at, c.deleted_at FROM collecton_quotes AS c JOIN quotes ON c.quote_id = quotes.quote_id WHERE user_id = ?";
 		try (Connection con = getConnection();
 				PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setInt(1, userId);
-			try (ResultSet rs = ps.executeQuery()) {
+			ps.setInt(1, userId); // WHERE の ? に userId をセット
 
+			try (ResultSet rs = ps.executeQuery()) { // SELECT実行、結果を受け取る
+
+				// 取得した行を1行ずつ読み取る
 				while (rs.next()) {
 					collect.setCollectionId(rs.getInt("collection_id"));
 					collect.setUserId(rs.getInt("user_id"));
@@ -44,16 +50,14 @@ public class CollectionDao extends SuperDao {
 					collect.setQuote(rs.getString("full_text"));
 					collect.setHasGoldMedal(rs.getBoolean("has_gold_medal"));
 					collect.setQuote(rs.getString("full_text"));
-					collect.setCreatedAt(rs.getObject("created_at", LocalDateTime.class));
+					collect.setCreatedAt(rs.getObject("created_at", LocalDateTime.class)); // 日時として取得
 					collect.setDeletedAt(rs.getObject("deleted_at", LocalDateTime.class));
-					
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return collect;
-
+		return collect; // 1件のDTOを返す
 	}
 
 }

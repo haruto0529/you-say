@@ -15,12 +15,13 @@ public class CollectionController {
 	    private CollectionDao collectionDao;
 	 
 	@GetMapping("/collection")
+	//コレクションの全件表示
 	public String showCollection(HttpSession session,Model model) {
-		int loginUser = (int) session.getAttribute("loginUser");
-		if (loginUser == 0) {
+		Object loginObject = session.getAttribute("loginUser");
+		if (loginObject == null) {
 			return "redirect:/top";
 		}
-		collectionDao.collectionDisplay(loginUser);
+		int loginUser = (int) loginObject;
 		model.addAttribute("collection", collectionDao.collectionDisplay(loginUser));
 		return "collection";
 	}
