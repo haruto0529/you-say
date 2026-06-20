@@ -101,4 +101,25 @@ public class UserController {
 
 	}
 
+	@PostMapping("/profile/delete")
+	public String delete(HttpSession session, @RequestParam("currentPassword") String currentPassword,
+			RedirectAttributes redirectAttributes) {
+		if (session.getAttribute("loginUser") == null) {
+			return "redirect:/";
+		}
+
+		int userId = (int) session.getAttribute("loginUser");
+
+		if (userDao.getUserInfo(userId).getPassword().equals(currentPassword)) {
+			userDao.unsubscribe(userId);
+			session.invalidate();
+		} else {			
+			redirectAttributes.addFlashAttribute("message", "パスワードが違います");
+		}
+		
+		return "redirect:/";
+
+
+	}
+
 }

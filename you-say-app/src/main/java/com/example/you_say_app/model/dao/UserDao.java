@@ -25,6 +25,9 @@ public class UserDao extends SuperDao {
 	//	ユーザー名を更新するSQL
 	private static final String sql6 = "UPDATE `you_say`.`users` SET `user_name` = ? WHERE `user_id` = ?";
 
+	//	deleted_atに時間を入れるSQL
+	private static final String sql7 = "UPDATE `you_say`.`users` SET `deleted_at` = CURRENT_TIMESTAMP WHERE `user_id` = ? AND deleted_at is null";
+
 	//DBに一致するメールアドレス存在する場合、対応するユーザーの情報を取得
 	public UserDto verify(String mail) {
 
@@ -165,6 +168,20 @@ public class UserDao extends SuperDao {
 				PreparedStatement ps = con.prepareStatement(sql6)) {
 			ps.setString(1, name);
 			ps.setInt(2, userId);
+
+			ret = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	//	deleted_atに現在の時間を入れるメソッド
+	public int unsubscribe(int userId) {
+		int ret = 0;
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql7)) {
+			ps.setInt(1, userId);
 
 			ret = ps.executeUpdate();
 		} catch (SQLException e) {
