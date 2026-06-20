@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class CollectionDao extends SuperDao {
-	public int insartCollection(int user_id, int quote_id) {
+	public int insertCollection(int user_id, int quote_id) {
 		int ret = 0;
-		String sql = "INSERT INTO `you_say`.`collecton_quotes` (user_id, `quote_id, has_gold_medal) VALUES (?, ?, 0)";
+		String sql = "INSERT INTO you_say.collecton_quotes (user_id, quote_id) VALUES (?, ?)";
 
 		try (Connection con = getConnection();
 				PreparedStatement ps = con.prepareStatement(sql)) {
