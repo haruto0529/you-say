@@ -549,49 +549,43 @@
 
 		<div class="collection-list">
 
-			<div class="collection-item-card" th:each="item : ${collectionList}"
-				th:classappend="${item.isUnlocked} ? 'unlocked' : 'locked'">
+		    <!-- データが1件もないとき -->
+		    <p th:if="${#lists.isEmpty(collection)}"
+		       style="text-align:center; color:#fff; font-weight:800;">
+		        まだコレクションがありません。クイズに正解して集めよう！
+		    </p>
 
-				<div class="item-main-info">
-					<div class="item-header">
-						<span class="item-number" th:text="${#numbers.formatInteger(item.id, 3)}">001</span>
-						<div class="item-progress-bar">
-							<div class="progress-fill" th:style="'width: ' + ${item.progress} + '%;'"></div>
-						</div>
-						<div class="item-likes" th:if="${item.isUnlocked}">
-							<i class="fa-solid fa-thumbs-up like-icon"></i>
-							<span class="like-count" th:text="${item.likes}">24</span>
-						</div>
-					</div>
+		    <!-- collection（List<OutputCollectionDto>）を1件ずつ表示 -->
+		    <div class="collection-item-card unlocked"
+		         th:each="item : ${collection}"
+		         th:if="${item.deletedAt == null}">
 
-					<h3 class="item-word" th:text="${item.isUnlocked} ? ${item.word} : '？？？？？？？？？？'">
-						小さく産んで大きく育てる
-					</h3>
-				</div>
+		        <div class="item-main-info">
+		            <div class="item-header">
+		                <!-- collectionId を3桁ゼロ埋めで番号表示 -->
+		                <span class="item-number"
+		                      th:text="${#numbers.formatInteger(item.collectionId, 3)}">001</span>
 
-				<div class="item-status-tag" th:if="${item.isUnlocked}">GET!</div>
+		                <!-- 金メダルを持っているときだけ表示 -->
+		                <span class="item-likes" th:if="${item.hasGoldMedal}">
+		                    <i class="fa-solid fa-medal like-icon" style="color: var(--color-orange);"></i>
+		                    <span>金メダル</span>
+		                </span>
 
-				<div class="lock-overlay" th:if="${!item.isUnlocked}">
-					<i class="fa-solid fa-lock"></i>
-					<span>クイズ正解で解放</span>
-				</div>
-			</div>
+		                <!-- 獲得日（createdAt） -->
+		                <span class="item-likes" th:if="${item.createdAt != null}">
+		                    <i class="fa-regular fa-calendar like-icon"></i>
+		                    <span th:text="${#temporals.format(item.createdAt, 'yyyy/MM/dd')}">2026/01/01</span>
+		                </span>
+		            </div>
 
-			<div class="collection-item-card unlocked">
-				<div class="item-main-info">
-					<div class="item-header">
-						<span class="item-number">002</span>
-						<div class="item-progress-bar">
-							<div class="progress-fill" style="width: 70%;"></div>
-						</div>
-						<div class="item-likes"><i class="fa-solid fa-thumbs-up like-icon"></i> <span
-								class="like-count">15</span></div>
-					</div>
-					<h3 class="item-word">継続は力なり</h3>
-				</div>
-				<div class="item-status-tag">GET!</div>
-			</div>
-			
+		            <!-- 言葉本体（quote） -->
+		            <h3 class="item-word" th:text="${item.quote}">継続は力なり</h3>
+		        </div>
+
+		        <div class="item-status-tag">GET!</div>
+		    </div>
+
 		</div>
 
 		<div class="collection-footer">

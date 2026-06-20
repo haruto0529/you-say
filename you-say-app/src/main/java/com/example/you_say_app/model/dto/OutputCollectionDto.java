@@ -5,19 +5,24 @@ import java.time.LocalDateTime;
 public class OutputCollectionDto {
 	private int collectionId;
 	private int userId;
+	private int quoteId;
 	private String quote;
 	private Boolean hasGoldMedal;
 	private LocalDateTime createdAt;
 	private LocalDateTime deletedAt;
-	public OutputCollectionDto(int collectionId, int userId, String quote, Boolean hasGoldMedal,
+	public OutputCollectionDto(int collectionId, int userId, int quoteId, String quote, Boolean hasGoldMedal,
 			LocalDateTime createdAt, LocalDateTime deletedAt) {
 		super();
 		this.collectionId = collectionId;
 		this.userId = userId;
+		this.quoteId = quoteId;
 		this.quote = quote;
 		this.hasGoldMedal = hasGoldMedal;
 		this.createdAt = createdAt;
 		this.deletedAt = deletedAt;
+	}
+	public OutputCollectionDto() {
+		// TODO 自動生成されたコンストラクター・スタブ
 	}
 	public int getCollectionId() {
 		return collectionId;
@@ -30,6 +35,12 @@ public class OutputCollectionDto {
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	public int getQuoteId() {
+		return quoteId;
+	}
+	public void setQuoteId(int quoteId) {
+		this.quoteId = quoteId;
 	}
 	public String getQuote() {
 		return quote;
@@ -57,10 +68,10 @@ public class OutputCollectionDto {
 	}
 	@Override
 	public String toString() {
-		return "OutputCollectionDto [collectionId=" + collectionId + ", userId=" + userId + ", quote=" + quote
-				+ ", hasGoldMedal=" + hasGoldMedal + ", createdAt=" + createdAt + ", deletedAt=" + deletedAt + "]";
+		return "OutputCollectionDto [collectionId=" + collectionId + ", userId=" + userId + ", quoteId=" + quoteId
+				+ ", quote=" + quote + ", hasGoldMedal=" + hasGoldMedal + ", createdAt=" + createdAt + ", deletedAt="
+				+ deletedAt + "]";
 	}
 	
 	
-
 }
