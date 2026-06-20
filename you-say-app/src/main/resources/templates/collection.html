@@ -1,622 +1,622 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Collection - You Say Quiz</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* ==========================================================================
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Word Collection - You Say Quiz</title>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+
+	<style>
+		/* ==========================================================================
            1. ベース・共通スタイル (common.css & top.css 統合)
            ========================================================================== */
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;500;700&display=swap');
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
 
-        :root {
-            --color-green:  #4caf50;
-            --color-red:    #e8453c;
-            --color-orange: #f5a623;
-            --color-blue:   #4285f4;
-            --font-display: 'Nunito', sans-serif;
-            --font-body:    'Noto Sans JP', sans-serif;
-            --radius-card: 16px;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.10);
-            --shadow-md: 0 4px 20px rgba(0,0,0,0.14);
-        }
+		:root {
+			--color-green: #4caf50;
+			--color-red: #e8453c;
+			--color-orange: #f5a623;
+			--color-blue: #4285f4;
+			--font-display: 'Nunito', sans-serif;
+			--font-body: 'Noto Sans JP', sans-serif;
+			--radius-card: 16px;
+			--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.10);
+			--shadow-md: 0 4px 20px rgba(0, 0, 0, 0.14);
+		}
 
-        body {
-            font-family: var(--font-body);
-            color: #333;
-            background: linear-gradient(135deg, #f0f4f8 0%, #d7e1ec 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+		body {
+			font-family: var(--font-body);
+			color: #333;
+			background: linear-gradient(135deg, #f0f4f8 0%, #d7e1ec 100%);
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+		}
 
-        /* 共通ヘッダー */
-        .site-header {
-            width: 100%;
-            background: var(--color-green);
-            display: flex;
-            align-items: center;
-            padding: 24px 40px;
-            box-shadow: var(--shadow-sm);
-        }
+		/* 共通ヘッダー */
+		.site-header {
+			width: 100%;
+			background: var(--color-green);
+			display: flex;
+			align-items: center;
+			padding: 24px 40px;
+			box-shadow: var(--shadow-sm);
+		}
 
-        /* 共通フッター */
-        .site-footer {
-            width: 100%;
-            height: 56px;
-            background: var(--color-green);
-            margin-top: auto;
-        }
+		/* 共通フッター */
+		.site-footer {
+			width: 100%;
+			height: 56px;
+			background: var(--color-green);
+			margin-top: auto;
+		}
 
-        .flex-center { display: flex; align-items: center; justify-content: center; }
-        .gap-sm { gap: 12px; }
+		.flex-center {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 
-        /* ==========================================================================
+		.gap-sm {
+			gap: 12px;
+		}
+
+		/* ==========================================================================
            2. ヘッダー用3Dコンポーネント & 吹き出しメニュー
            ========================================================================== */
-        .rank-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 16px;
-            background: linear-gradient(to bottom, #444444 0%, #222222 100%);
-            border-radius: 30px;
-            border: 2px solid #ffea9f;
-            outline: 1.5px solid #a3751a;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 2px 3px rgba(255, 255, 255, 0.2);
-        }
-        .rank-label {
-            font-size: 11px;
-            font-weight: 900;
-            color: #ffea9f;
-            background: rgba(163, 117, 26, 0.4);
-            padding: 2px 6px;
-            border-radius: 10px;
-            letter-spacing: 0.5px;
-        }
-        .rank-name {
-            font-size: clamp(14px, 1.8vw, 18px);
-            font-weight: 800;
-            color: #ffffff;
-            white-space: nowrap;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        }
+		.rank-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			padding: 8px 16px;
+			background: linear-gradient(to bottom, #444444 0%, #222222 100%);
+			border-radius: 30px;
+			border: 2px solid #ffea9f;
+			outline: 1.5px solid #a3751a;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 2px 3px rgba(255, 255, 255, 0.2);
+		}
 
-        .user-name-badge {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 2px solid rgba(255, 234, 159, 0.5);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .user-name-text {
-            font-size: clamp(13px, 1.6vw, 16px);
-            font-weight: 800;
-            color: #ffffff;
-            white-space: nowrap;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        }
+		.rank-label {
+			font-size: 11px;
+			font-weight: 900;
+			color: #ffea9f;
+			background: rgba(163, 117, 26, 0.4);
+			padding: 2px 6px;
+			border-radius: 10px;
+			letter-spacing: 0.5px;
+		}
 
-        /* アバターの親コンテナ（吹き出しの基準位置） */
-        .user-avatar-container {
-            position: relative;
-        }
+		.rank-name {
+			font-size: clamp(14px, 1.8vw, 18px);
+			font-weight: 800;
+			color: #ffffff;
+			white-space: nowrap;
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+		}
 
-        .user-window-frame {
-            width: clamp(46px, 5.5vw, 56px);
-            height: clamp(46px, 5.5vw, 56px);
-            background: radial-gradient(circle, #1a3a5f 0%, #0b1d33 100%);
-            border: 3px solid #ffea9f;
-            outline: 1.5px solid #a3751a;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 2px 6px rgba(0,0,0,0.6);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        .user-window-frame:hover {
-            transform: scale(1.05);
-        }
+		.user-name-badge {
+			background: rgba(0, 0, 0, 0.6);
+			backdrop-filter: blur(4px);
+			padding: 6px 16px;
+			border-radius: 20px;
+			border: 2px solid rgba(255, 234, 159, 0.5);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
 
-        .avatar-icon {
-            width: 80%;
-            height: 80%;
-            color: #4fc3f7;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
-            transition: transform 0.2s, color 0.2s;
-        }
-        
-        .user-window-frame:hover .avatar-icon {
-            transform: rotate(10deg);
-            color: #81d4fa;
-        }
+		.user-name-text {
+			font-size: clamp(13px, 1.6vw, 16px);
+			font-weight: 800;
+			color: #ffffff;
+			white-space: nowrap;
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+		}
 
-        /* 👑 3D高級設定吹き出しメニュー */
-        .setting-balloon {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 16px;
-            width: 200px;
-            background: linear-gradient(to bottom, #333333 0%, #1a1a1a 100%);
-            border: 2px solid #ffea9f;
-            outline: 1.5px solid #a3751a;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            padding: 12px 0;
-            z-index: 2000;
-            
-            /* 初期状態は非表示（JSでコントロール） */
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
-        }
+		/* アバターの親コンテナ（吹き出しの基準位置） */
+		.user-avatar-container {
+			position: relative;
+		}
 
-        /* JSでこのクラスがついたら表示 */
-        .setting-balloon.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
+		.user-window-frame {
+			width: clamp(46px, 5.5vw, 56px);
+			height: clamp(46px, 5.5vw, 56px);
+			background: radial-gradient(circle, #1a3a5f 0%, #0b1d33 100%);
+			border: 3px solid #ffea9f;
+			outline: 1.5px solid #a3751a;
+			border-radius: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 2px 6px rgba(0, 0, 0, 0.6);
+			cursor: pointer;
+			transition: transform 0.2s;
+		}
 
-        .balloon-arrow {
-            position: absolute;
-            top: -8px;
-            right: 18px;
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 8px solid #ffea9f;
-        }
-        .balloon-arrow::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: -7px;
-            border-left: 7px solid transparent;
-            border-right: 7px solid transparent;
-            border-bottom: 7px solid #333333;
-        }
+		.user-window-frame:hover {
+			transform: scale(1.05);
+		}
 
-        .balloon-title {
-            font-size: 11px;
-            font-weight: 800;
-            color: #a3751a;
-            padding: 0 16px 6px 16px;
-            border-bottom: 1px solid rgba(255,234,159,0.2);
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
+		.avatar-icon {
+			width: 80%;
+			height: 80%;
+			color: #4fc3f7;
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+			transition: transform 0.2s, color 0.2s;
+		}
 
-        .balloon-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .balloon-menu li a {
-            display: block;
-            padding: 8px 16px;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: background 0.15s, color 0.15s;
-        }
-        .balloon-menu li a:hover {
-            background: #ffea9f;
-            color: #222222;
-        }
+		.user-window-frame:hover .avatar-icon {
+			transform: rotate(10deg);
+			color: #81d4fa;
+		}
 
-        .menu-divider {
-            height: 1px;
-            background: rgba(255,234,159,0.15);
-            margin: 6px 0;
-        }
-        .balloon-menu li a.menu-logout {
-            color: #ff4a4a;
-        }
-        .balloon-menu li a.menu-logout:hover {
-            background: #ff4a4a;
-            color: #ffffff;
-        }
+		/* 👑 3D高級設定吹き出しメニュー */
+		.setting-balloon {
+			position: absolute;
+			top: 100%;
+			right: 0;
+			margin-top: 16px;
+			width: 200px;
+			background: linear-gradient(to bottom, #333333 0%, #1a1a1a 100%);
+			border: 2px solid #ffea9f;
+			outline: 1.5px solid #a3751a;
+			border-radius: 14px;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+			padding: 12px 0;
+			z-index: 2000;
 
-        /* ==========================================================================
+			/* 初期状態は非表示（JSでコントロール） */
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(10px);
+			transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+		}
+
+		/* JSでこのクラスがついたら表示 */
+		.setting-balloon.active {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(0);
+		}
+
+		.balloon-arrow {
+			position: absolute;
+			top: -8px;
+			right: 18px;
+			width: 0;
+			height: 0;
+			border-left: 8px solid transparent;
+			border-right: 8px solid transparent;
+			border-bottom: 8px solid #ffea9f;
+		}
+
+		.balloon-arrow::after {
+			content: '';
+			position: absolute;
+			top: 2px;
+			left: -7px;
+			border-left: 7px solid transparent;
+			border-right: 7px solid transparent;
+			border-bottom: 7px solid #333333;
+		}
+
+		.balloon-title {
+			font-size: 11px;
+			font-weight: 800;
+			color: #a3751a;
+			padding: 0 16px 6px 16px;
+			border-bottom: 1px solid rgba(255, 234, 159, 0.2);
+			margin-bottom: 6px;
+			letter-spacing: 0.5px;
+		}
+
+		.balloon-menu {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.balloon-menu li a {
+			display: block;
+			padding: 8px 16px;
+			color: #ffffff;
+			font-size: 14px;
+			font-weight: 700;
+			text-decoration: none;
+			transition: background 0.15s, color 0.15s;
+		}
+
+		.balloon-menu li a:hover {
+			background: #ffea9f;
+			color: #222222;
+		}
+
+		.menu-divider {
+			height: 1px;
+			background: rgba(255, 234, 159, 0.15);
+			margin: 6px 0;
+		}
+
+		.balloon-menu li a.menu-logout {
+			color: #ff4a4a;
+		}
+
+		.balloon-menu li a.menu-logout:hover {
+			background: #ff4a4a;
+			color: #ffffff;
+		}
+
+		/* ==========================================================================
            3. コレクション画面専用：メイン装飾スタイル（超豪華3D版）
            ========================================================================== */
-        .collection-main {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px 60px;
-            box-sizing: border-box;
-        }
+		.collection-main {
+			width: 100%;
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 40px 20px 60px;
+			box-sizing: border-box;
+		}
 
-        .collection-title {
-            font-family: var(--font-display);
-            font-size: clamp(32px, 5vw, 46px);
-            font-weight: 900;
-            text-align: center;
-            color: #fff;
-            letter-spacing: 2px;
-            margin-bottom: 35px;
-            text-shadow: 
-                -2px -2px 0 var(--color-blue),  2px -2px 0 var(--color-blue),
-                -2px  2px 0 var(--color-blue),  2px  2px 0 var(--color-blue),
-                0px 6px 0px #1a56b3, 0px 10px 15px rgba(0,0,0,0.2);
-            animation: fadeUp 0.5s ease both;
-        }
+		.collection-title {
+			font-family: var(--font-display);
+			font-size: clamp(32px, 5vw, 46px);
+			font-weight: 900;
+			text-align: center;
+			color: #fff;
+			letter-spacing: 2px;
+			margin-bottom: 35px;
+			text-shadow:
+				-2px -2px 0 var(--color-blue), 2px -2px 0 var(--color-blue),
+				-2px 2px 0 var(--color-blue), 2px 2px 0 var(--color-blue),
+				0px 6px 0px #1a56b3, 0px 10px 15px rgba(0, 0, 0, 0.2);
+			animation: fadeUp 0.5s ease both;
+		}
 
-        /* 検索バー */
-        .collection-tools {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            animation: fadeUp 0.5s ease 0.1s both;
-        }
+		/* 検索バー */
+		.collection-tools {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 15px;
+			margin-bottom: 40px;
+			animation: fadeUp 0.5s ease 0.1s both;
+		}
 
-        .search-container {
-            width: 100%;
-            max-width: 550px;
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+		.search-container {
+			width: 100%;
+			max-width: 550px;
+			position: relative;
+			display: flex;
+			align-items: center;
+		}
 
-        .search-icon {
-            position: absolute;
-            left: 20px;
-            color: #888;
-            font-size: 18px;
-        }
+		.search-icon {
+			position: absolute;
+			left: 20px;
+			color: #888;
+			font-size: 18px;
+		}
 
-        .search-input {
-            width: 100%;
-            padding: 14px 20px 14px 50px;
-            border-radius: 30px;
-            border: 2px solid #ffea9f;
-            outline: 1.5px solid #a3751a;
-            background: #fff;
-            box-shadow: inset 0 3px 6px rgba(0,0,0,0.15), 0 4px 6px rgba(0,0,0,0.05);
-            font-size: 16px;
-            font-weight: 700;
-            transition: all 0.2s ease;
-        }
+		.search-input {
+			width: 100%;
+			padding: 14px 20px 14px 50px;
+			border-radius: 30px;
+			border: 2px solid #ffea9f;
+			outline: 1.5px solid #a3751a;
+			background: #fff;
+			box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.05);
+			font-size: 16px;
+			font-weight: 700;
+			transition: all 0.2s ease;
+		}
 
-        .search-input:focus {
-            outline: 1.5px solid #704e0a;
-            border-color: var(--color-orange);
-            box-shadow: 0 0 0 4px rgba(245, 166, 35, 0.25), inset 0 2px 4px rgba(0,0,0,0.1);
-        }
+		.search-input:focus {
+			outline: 1.5px solid #704e0a;
+			border-color: var(--color-orange);
+			box-shadow: 0 0 0 4px rgba(245, 166, 35, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
 
-        .sort-controls {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            max-width: 550px;
-        }
+		.sort-controls {
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+			max-width: 550px;
+		}
 
-        .sort-label {
-            font-size: 13px;
-            font-weight: 800;
-            color: #555;
-            cursor: pointer;
-            background: #fff;
-            padding: 6px 14px;
-            border-radius: 12px;
-            border: 1px solid #ccc;
-            box-shadow: var(--shadow-sm);
-        }
+		.sort-label {
+			font-size: 13px;
+			font-weight: 800;
+			color: #555;
+			cursor: pointer;
+			background: #fff;
+			padding: 6px 14px;
+			border-radius: 12px;
+			border: 1px solid #ccc;
+			box-shadow: var(--shadow-sm);
+		}
 
-        /* リストコンテナ */
-        .collection-list {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
+		/* リストコンテナ */
+		.collection-list {
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
+		}
 
-        /* 💡 金縁ベゼル付き3Dリストカード基盤 */
-        .collection-item-card {
-            position: relative;
-            background: #fff;
-            border-radius: var(--radius-card);
-            padding: 22px 28px;
-            border: 3px solid #ffea9f; 
-            outline: 2px solid #a3751a;
-            box-shadow: 
-                0 6px 0px #704e0a, 
-                0 12px 18px rgba(0, 0, 0, 0.15),
-                inset 0 4px 4px rgba(255, 255, 255, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 110px;
-            transition: transform 0.15s, box-shadow 0.15s;
-            animation: fadeUp 0.5s ease 0.2s both;
-        }
+		/* 💡 金縁ベゼル付き3Dリストカード基盤 */
+		.collection-item-card {
+			position: relative;
+			background: #fff;
+			border-radius: var(--radius-card);
+			padding: 22px 28px;
+			border: 3px solid #ffea9f;
+			outline: 2px solid #a3751a;
+			box-shadow:
+				0 6px 0px #704e0a,
+				0 12px 18px rgba(0, 0, 0, 0.15),
+				inset 0 4px 4px rgba(255, 255, 255, 0.5);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			min-height: 110px;
+			transition: transform 0.15s, box-shadow 0.15s;
+			animation: fadeUp 0.5s ease 0.2s both;
+		}
 
-        .collection-item-card.unlocked:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 0px #704e0a, 0 16px 24px rgba(0, 0, 0, 0.18);
-        }
-        .collection-item-card.unlocked:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0px #704e0a, 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+		.collection-item-card.unlocked:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 0px #704e0a, 0 16px 24px rgba(0, 0, 0, 0.18);
+		}
 
-        /* 左側情報エリア */
-        .item-main-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+		.collection-item-card.unlocked:active {
+			transform: translateY(4px);
+			box-shadow: 0 2px 0px #704e0a, 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
 
-        .item-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+		/* 左側情報エリア */
+		.item-main-info {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+		}
 
-        .item-number {
-            font-family: var(--font-display);
-            font-weight: 900;
-            color: #a3751a;
-            font-size: 18px;
-            text-shadow: 1px 1px 0px #fff;
-        }
+		.item-header {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+		}
 
-        .item-progress-bar {
-            width: clamp(100px, 20vw, 180px);
-            height: 12px;
-            background: #e0e0e0;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
-        }
+		.item-number {
+			font-family: var(--font-display);
+			font-weight: 900;
+			color: #a3751a;
+			font-size: 18px;
+			text-shadow: 1px 1px 0px #fff;
+		}
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, var(--color-orange) 0%, #ffcd38 100%);
-            border-radius: 6px;
-        }
+		.item-progress-bar {
+			width: clamp(100px, 20vw, 180px);
+			height: 12px;
+			background: #e0e0e0;
+			border-radius: 6px;
+			overflow: hidden;
+			box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+		}
 
-        .item-likes {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: #f5f5f5;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 800;
-            color: #555;
-            border: 1px solid #ddd;
-        }
-        .like-icon { color: var(--color-blue); }
+		.progress-fill {
+			height: 100%;
+			background: linear-gradient(to right, var(--color-orange) 0%, #ffcd38 100%);
+			border-radius: 6px;
+		}
 
-        .item-word {
-            font-size: clamp(18px, 3.5vw, 24px);
-            font-weight: 800;
-            color: #222;
-        }
+		.item-likes {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			background: #f5f5f5;
+			padding: 4px 12px;
+			border-radius: 20px;
+			font-size: 14px;
+			font-weight: 800;
+			color: #555;
+			border: 1px solid #ddd;
+		}
 
-        .item-status-tag {
-            background: linear-gradient(to bottom, #2cd140 0%, #199c29 100%);
-            color: #fff;
-            font-family: var(--font-display);
-            font-weight: 900;
-            padding: 6px 18px;
-            border-radius: 12px;
-            font-size: 14px;
-            border: 2px solid #ffea9f;
-            box-shadow: 0 4px 0px #065c10, 0 4px 8px rgba(0,0,0,0.2);
-            transform: rotate(4deg);
-        }
+		.like-icon {
+			color: var(--color-blue);
+		}
 
-        /* 🔒 ロック状態 */
-        .collection-item-card.locked {
-            background: #d5dadf;
-            border-color: #b0b8c0;
-            outline-color: #717d8a;
-            box-shadow: 0 6px 0px #505a64, 0 8px 12px rgba(0, 0, 0, 0.1);
-        }
+		.item-word {
+			font-size: clamp(18px, 3.5vw, 24px);
+			font-weight: 800;
+			color: #222;
+		}
 
-        .locked .item-word, .locked .item-number {
-            color: #7e8a98;
-        }
+		.item-status-tag {
+			background: linear-gradient(to bottom, #2cd140 0%, #199c29 100%);
+			color: #fff;
+			font-family: var(--font-display);
+			font-weight: 900;
+			padding: 6px 18px;
+			border-radius: 12px;
+			font-size: 14px;
+			border: 2px solid #ffea9f;
+			box-shadow: 0 4px 0px #065c10, 0 4px 8px rgba(0, 0, 0, 0.2);
+			transform: rotate(4deg);
+		}
 
-        .lock-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.02);
-            border-radius: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 32px;
-            color: #505a64;
-            font-weight: 800;
-            gap: 10px;
-        }
-        .lock-overlay i {
-            font-size: 20px;
-            color: #e8453c; 
-        }
+		/* 🔒 ロック状態 */
+		.collection-item-card.locked {
+			background: #d5dadf;
+			border-color: #b0b8c0;
+			outline-color: #717d8a;
+			box-shadow: 0 6px 0px #505a64, 0 8px 12px rgba(0, 0, 0, 0.1);
+		}
 
-        /* 下部戻るボタン */
-        .collection-footer {
-            margin-top: 50px;
-            text-align: center;
-            animation: fadeUp 0.5s ease 0.3s both;
-        }
+		.locked .item-word,
+		.locked .item-number {
+			color: #7e8a98;
+		}
 
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--color-blue);
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 18px;
-            background: #fff;
-            padding: 12px 32px;
-            border-radius: 30px;
-            border: 2px solid #ddd;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s ease;
-        }
-        .back-btn:hover {
-            color: #fff;
-            background: var(--color-blue);
-            border-color: var(--color-blue);
-            transform: translateY(-2px);
-        }
+		.lock-overlay {
+			position: absolute;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.02);
+			border-radius: 13px;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			padding-right: 32px;
+			color: #505a64;
+			font-weight: 800;
+			gap: 10px;
+		}
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+		.lock-overlay i {
+			font-size: 20px;
+			color: #e8453c;
+		}
+
+		/* 下部戻るボタン */
+		.collection-footer {
+			margin-top: 50px;
+			text-align: center;
+			animation: fadeUp 0.5s ease 0.3s both;
+		}
+
+		.back-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			color: var(--color-blue);
+			text-decoration: none;
+			font-weight: 800;
+			font-size: 18px;
+			background: #fff;
+			padding: 12px 32px;
+			border-radius: 30px;
+			border: 2px solid #ddd;
+			box-shadow: var(--shadow-sm);
+			transition: all 0.2s ease;
+		}
+
+		.back-btn:hover {
+			color: #fff;
+			background: var(--color-blue);
+			border-color: var(--color-blue);
+			transform: translateY(-2px);
+		}
+
+		@keyframes fadeUp {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+	</style>
 </head>
+
 <body>
 
-    <header class="site-header">
-        <div class="flex-center" style="width: 100%; justify-content: space-between;">
-            <div class="rank-badge">
-                <span class="rank-label">RANK</span>
-                <span class="rank-name" th:text="${userRank != null ? userRank : 'クイズマスター'}">クイズマスター</span>
-            </div>
+	<header th:replace="~{fragments/header :: header}"></header>
 
-            <div class="flex-center gap-sm">
-                <div class="user-name-badge">
-                    <span class="user-name-text" th:text="${userName != null ? userName : 'GUEST USER'}">GUEST USER</span>
-                </div>
-                
-                <div class="user-avatar-container">
-                    <div class="user-window-frame" id="avatarTrigger">
-                        <svg class="avatar-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                        </svg>
-                    </div>
-                    
-                    <div class="setting-balloon" id="settingBalloon">
-                        <div class="balloon-arrow"></div>
-                        <div class="balloon-title">USER SETTING</div>
-                        <ul class="balloon-menu">
-                            <li><a href="/profile"><i class="fa-solid fa-user-gear"></i> プロフィール設定</a></li>
-                            <li><a href="/achievements"><i class="fa-solid fa-trophy"></i> 実績一覧</a></li>
-                            <div class="menu-divider"></div>
-                            <li><a href="/logout" class="menu-logout"><i class="fa-solid fa-right-from-bracket"></i> ログアウト</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </header>
+	<main class="collection-main">
+		<h2 class="collection-title">WORD COLLECTION</h2>
 
-    <main class="collection-main">
-        <h2 class="collection-title">WORD COLLECTION</h2>
+		<section class="collection-tools">
+			<div class="search-container">
+				<i class="fa-solid fa-magnifying-glass search-icon"></i>
+				<input text="text" class="search-input" placeholder="獲得したキーワードを検索...">
+			</div>
+			<div class="sort-controls">
+				<span class="sort-label"><i class="fa-solid fa-sort"></i> 並び替え: 標準</span>
+			</div>
+		</section>
 
-        <section class="collection-tools">
-            <div class="search-container">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input text="text" class="search-input" placeholder="獲得したキーワードを検索...">
-            </div>
-            <div class="sort-controls">
-                <span class="sort-label"><i class="fa-solid fa-sort"></i> 並び替え: 標準</span>
-            </div>
-        </section>
+		<div class="collection-list">
 
-        <div class="collection-list">
-            
-            <div class="collection-item-card" 
-                 th:each="item : ${collectionList}" 
-                 th:classappend="${item.isUnlocked} ? 'unlocked' : 'locked'">
-                
-                <div class="item-main-info">
-                    <div class="item-header">
-                        <span class="item-number" th:text="${#numbers.formatInteger(item.id, 3)}">001</span>
-                        <div class="item-progress-bar">
-                            <div class="progress-fill" th:style="'width: ' + ${item.progress} + '%;'"></div>
-                        </div>
-                        <div class="item-likes" th:if="${item.isUnlocked}">
-                            <i class="fa-solid fa-thumbs-up like-icon"></i>
-                            <span class="like-count" th:text="${item.likes}">24</span>
-                        </div>
-                    </div>
-                    
-                    <h3 class="item-word" th:text="${item.isUnlocked} ? ${item.word} : '？？？？？？？？？？'">
-                        小さく産んで大きく育てる
-                    </h3>
-                </div>
-                
-                <div class="item-status-tag" th:if="${item.isUnlocked}">GET!</div>
-                
-                <div class="lock-overlay" th:if="${!item.isUnlocked}">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>クイズ正解で解放</span>
-                </div>
-            </div>
-            
-            <div class="collection-item-card unlocked">
-                <div class="item-main-info">
-                    <div class="item-header">
-                        <span class="item-number">002</span>
-                        <div class="item-progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>
-                        <div class="item-likes"><i class="fa-solid fa-thumbs-up like-icon"></i> <span class="like-count">15</span></div>
-                    </div>
-                    <h3 class="item-word">継続は力なり</h3>
-                </div>
-                <div class="item-status-tag">GET!</div>
-            </div>
-            </div>
+		    <!-- データが1件もないとき -->
+		    <p th:if="${#lists.isEmpty(collection)}"
+		       style="text-align:center; color:#fff; font-weight:800;">
+		        まだコレクションがありません。クイズに正解して集めよう！
+		    </p>
 
-        <div class="collection-footer">
-            <a href="top.html" class="back-btn">
-                <i class="fa-solid fa-arrow-left"></i> メニューに戻る
-            </a>
-        </div>
-    </main>
+		    <!-- collection（List<OutputCollectionDto>）を1件ずつ表示 -->
+		    <div class="collection-item-card unlocked"
+		         th:each="item : ${collection}"
+		         th:if="${item.deletedAt == null}">
 
-    <footer class="site-footer"></footer>
+		        <div class="item-main-info">
+		            <div class="item-header">
+		                <!-- collectionId を3桁ゼロ埋めで番号表示 -->
+		                <span class="item-number"
+		                      th:text="${#numbers.formatInteger(item.collectionId, 3)}">001</span>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const trigger = document.getElementById('avatarTrigger');
-            const balloon = document.getElementById('settingBalloon');
+		                <!-- 金メダルを持っているときだけ表示 -->
+		                <span class="item-likes" th:if="${item.hasGoldMedal}">
+		                    <i class="fa-solid fa-medal like-icon" style="color: var(--color-orange);"></i>
+		                    <span>金メダル</span>
+		                </span>
 
-            // アイコンタップでメニューの表示/非表示を切り替え
-            trigger.addEventListener('click', (e) => {
-                e.stopPropagation(); // 画面クリックイベントへの伝播を防ぐ
-                balloon.classList.toggle('active');
-            });
+		                <!-- 獲得日（createdAt） -->
+		                <span class="item-likes" th:if="${item.createdAt != null}">
+		                    <i class="fa-regular fa-calendar like-icon"></i>
+		                    <span th:text="${#temporals.format(item.createdAt, 'yyyy/MM/dd')}">2026/01/01</span>
+		                </span>
+		            </div>
 
-            // メニューの外側をタップしたら自動的に閉じる
-            document.addEventListener('click', (e) => {
-                if (!balloon.contains(e.target) && e.target !== trigger) {
-                    balloon.classList.remove('active');
-                }
-            });
-        });
-    </script>
+		            <!-- 言葉本体（quote） -->
+		            <h3 class="item-word" th:text="${item.quote}">継続は力なり</h3>
+		        </div>
+
+		        <div class="item-status-tag">GET!</div>
+		    </div>
+
+		</div>
+
+		<div class="collection-footer">
+			<a th:href="@{/}" class="back-btn">
+				<i class="fa-solid fa-arrow-left"></i> メニューに戻る
+			</a>
+		</div>
+	</main>
+
+	<footer th:replace="~{fragments/footer :: footer}" style="z-index: 5; position: relative;"></footer>
+
+
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const trigger = document.getElementById('avatarTrigger');
+			const balloon = document.getElementById('settingBalloon');
+
+			// アイコンタップでメニューの表示/非表示を切り替え
+			trigger.addEventListener('click', (e) => {
+				e.stopPropagation(); // 画面クリックイベントへの伝播を防ぐ
+				balloon.classList.toggle('active');
+			});
+
+			// メニューの外側をタップしたら自動的に閉じる
+			document.addEventListener('click', (e) => {
+				if (!balloon.contains(e.target) && e.target !== trigger) {
+					balloon.classList.remove('active');
+				}
+			});
+		});
+	</script>
 </body>
+
 </html>
