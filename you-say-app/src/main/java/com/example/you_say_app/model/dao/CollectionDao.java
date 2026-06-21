@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
@@ -32,8 +34,8 @@ public class CollectionDao extends SuperDao {
 	}
 
 	// 指定ユーザーが集めたコレクションを取得するメソッド
-	public OutputCollectionDto collectionDisplay(int userId) {
-		OutputCollectionDto collect = new OutputCollectionDto();
+	public List<OutputCollectionDto> collectionDisplay(int userId) {
+		List<OutputCollectionDto> collects = new ArrayList<>();
 		// collecton_quotes と quotes を quote_id で結合し、対象ユーザーの分だけ取得
 		String sql = "SELECT c.collection_id, c.user_id, c.quote_id, quotes.full_text, c.has_gold_medal, c.created_at, c.deleted_at FROM collecton_quotes AS c JOIN quotes ON c.quote_id = quotes.quote_id WHERE user_id = ?";
 		try (Connection con = getConnection();
@@ -44,6 +46,7 @@ public class CollectionDao extends SuperDao {
 
 				// 取得した行を1行ずつ読み取る
 				while (rs.next()) {
+					OutputCollectionDto collect = new OutputCollectionDto();
 					collect.setCollectionId(rs.getInt("collection_id"));
 					collect.setUserId(rs.getInt("user_id"));
 					collect.setQuoteId(rs.getInt("quote_id"));
@@ -52,12 +55,13 @@ public class CollectionDao extends SuperDao {
 					collect.setQuote(rs.getString("full_text"));
 					collect.setCreatedAt(rs.getObject("created_at", LocalDateTime.class)); // 日時として取得
 					collect.setDeletedAt(rs.getObject("deleted_at", LocalDateTime.class));
+					collects.add(collect);
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return collect; // 1件のDTOを返す
+		return collects; // 1件のDTOを返す
 	}
 
 }
