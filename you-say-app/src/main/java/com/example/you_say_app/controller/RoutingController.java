@@ -1,13 +1,13 @@
 package com.example.you_say_app.controller;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.you_say_app.model.dao.UserDao;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class RoutingController {
@@ -17,7 +17,7 @@ public class RoutingController {
 
 	@GetMapping("/")
 	public String showIndex(HttpSession session, Model model) {
-		UserDto loginUser = (UserDto) session.getAttribute("loginUser");
+		Object loginUser = session.getAttribute("loginUser");
 		if (loginUser == null) {
 			return "redirect:/top";
 		}
@@ -36,14 +36,6 @@ public class RoutingController {
 		return "top";
 	}
 	
-	@GetMapping("/collection")
-	public String showCollection(HttpSession session) {
-		UserDto loginUser = (UserDto) session.getAttribute("loginUser");
-		if (loginUser == null) {
-			return "redirect:/top";
-		}
-		return "collection";
-	}
 	
 	@GetMapping("/minigame")
     public String showStart() {
