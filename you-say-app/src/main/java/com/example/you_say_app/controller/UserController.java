@@ -1,5 +1,7 @@
 package com.example.you_say_app.controller;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.you_say_app.model.Profile;
 import com.example.you_say_app.model.dao.UserDao;
 import com.example.you_say_app.model.dto.UserDto;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
@@ -72,15 +72,21 @@ public class UserController {
 			RedirectAttributes redirectAttrs) {
 
 		if (userDao.isMailDuplication(mail)) {
-			redirectAttrs.addFlashAttribute("errorMassage", "そのメールアドレスはすでに登録済みです");
+			redirectAttrs.addFlashAttribute("errorMassage", "すでに登録済みです");
 			return "redirect:/registration";
 		}
-		UserDto user = userDao.userRegister(name, mail, password);
-
-		session.setAttribute("loginUser", user);
+		if (userDao.isNameDuplication(name)) {
+			redirectAttrs.addFlashAttribute("errorMassage", "すでに登録済みです");
+			return "redirect:/registration";
+		}
+		userDao.userRegister(name, mail, password);
+		UserDto user = userDao.verify(mail);
+		int userId = user.getUserId();
+		session.setAttribute("loginUser", userId);
 		return "redirect:/";
 
 	}
+	
 
 	//	プロフィール編集をするコントローラー
 	@PostMapping("/profile/update")
@@ -122,4 +128,5 @@ public class UserController {
 
 	}
 
+}
 }
