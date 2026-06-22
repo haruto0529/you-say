@@ -17,6 +17,7 @@ public class RoutingController {
 
 	@GetMapping("/")
 	public String showIndex(HttpSession session, Model model) {
+
 		Object loginUser = session.getAttribute("loginUser");
 		if (loginUser == null) {
 			return "redirect:/top";
@@ -35,11 +36,10 @@ public class RoutingController {
 	public String showTop() {
 		return "top";
 	}
-	
-	
+
 	@GetMapping("/minigame")
-    public String showStart() {
-        return "connect4";
-    }
+	public String showStart() {
+		return "connect4";
+	}
 
 }

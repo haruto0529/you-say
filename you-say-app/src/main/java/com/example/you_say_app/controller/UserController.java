@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.you_say_app.model.Profile;
 import com.example.you_say_app.model.dao.UserDao;
 import com.example.you_say_app.model.dto.UserDto;
 
@@ -16,6 +17,9 @@ import com.example.you_say_app.model.dto.UserDto;
 public class UserController {
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private Profile profile;
 
 	@PostMapping("/login")
 	public String doLogin(
@@ -84,4 +88,45 @@ public class UserController {
 	}
 	
 
+	//	プロフィール編集をするコントローラー
+	@PostMapping("/profile/update")
+	public String changeProfile(@RequestParam(name = "username") String userName,
+			@RequestParam(name = "password", required = false) String password,
+			@RequestParam(name = "currentPassword", required = false) String currentPassword, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+		if (session.getAttribute("loginUser") == null) {
+			return "redirect:/";
+		}
+		if (profile.changeProfile((int) session.getAttribute("loginUser"), userName, currentPassword, password)) {
+			redirectAttributes.addFlashAttribute("message", "ユーザー情報を更新しました！");
+		} else {
+			redirectAttributes.addFlashAttribute("message", "パスワードが違います");
+		}
+
+		return "redirect:/";
+
+	}
+
+	@PostMapping("/profile/delete")
+	public String delete(HttpSession session, @RequestParam("currentPassword") String currentPassword,
+			RedirectAttributes redirectAttributes) {
+		if (session.getAttribute("loginUser") == null) {
+			return "redirect:/";
+		}
+
+		int userId = (int) session.getAttribute("loginUser");
+
+		if (userDao.getUserInfo(userId).getPassword().equals(currentPassword)) {
+			userDao.unsubscribe(userId);
+			session.invalidate();
+		} else {			
+			redirectAttributes.addFlashAttribute("message", "パスワードが違います");
+		}
+		
+		return "redirect:/";
+
+
+	}
+
+}
 }

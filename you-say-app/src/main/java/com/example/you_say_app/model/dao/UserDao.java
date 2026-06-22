@@ -19,6 +19,19 @@ public class UserDao extends SuperDao {
 	// user_id でユーザーを1件取得
 	private static final String sql3 = "SELECT *  FROM users WHERE user_id= ?";
 
+	//	ユーザー名とパスワードをアップデートするSQL
+	private static final String sql4 = "UPDATE `you_say`.`users` SET `user_name` = ?, `password` = ? WHERE `user_id` = ?";
+
+	//	パスワードを更新するSQL
+	private static final String sql5 = "UPDATE `you_say`.`users` SET `password` = ? WHERE `user_id` = ?";
+
+	//	ユーザー名を更新するSQL
+	private static final String sql6 = "UPDATE `you_say`.`users` SET `user_name` = ? WHERE `user_id` = ?";
+
+	//	deleted_atに時間を入れるSQL
+	private static final String sql7 = "UPDATE `you_say`.`users` SET `deleted_at` = CURRENT_TIMESTAMP WHERE `user_id` = ? AND deleted_at is null";
+
+	//DBに一致するメールアドレス存在する場合、対応するユーザーの情報を取得
 	// メールアドレスでユーザーを検索し、いれば情報をDTOで返す（なければnull）
 	public UserDto verify(String mail) {
 		try (Connection con = getConnection();
@@ -118,11 +131,73 @@ public class UserDao extends SuperDao {
 				if (rs.next()) {
 					userDto.setName(rs.getString("user_name"));
 					userDto.setRankId(rs.getInt("rank_id"));
+					userDto.setPassword(rs.getString("password"));
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return userDto;
+
+	}
+
+	//	ユーザー名とパスワードを更新するメソッド
+	public int updateNamePassword(int userId, String name, String password) {
+		int ret = 0;
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql4)) {
+			ps.setString(1, name);
+			ps.setString(2, password);
+			ps.setInt(3, userId);
+
+			ret = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	//	パスワードを変更するメソッド
+	public int updatePassword(int userId, String password) {
+		int ret = 0;
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql5)) {
+			ps.setString(1, password);
+			ps.setInt(2, userId);
+
+			ret = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	//	名前を変更するメソッド
+	public int updateName(int userId, String name) {
+		int ret = 0;
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql6)) {
+			ps.setString(1, name);
+			ps.setInt(2, userId);
+
+			ret = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	//	deleted_atに現在の時間を入れるメソッド
+	public int unsubscribe(int userId) {
+		int ret = 0;
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql7)) {
+			ps.setInt(1, userId);
+
+			ret = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 }
