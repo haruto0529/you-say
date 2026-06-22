@@ -3,20 +3,20 @@ package com.example.you_say_app.model.dto;
 import java.time.LocalDateTime;
 
 public class LikeDto {
-	int collectionId;
-	LocalDateTime createdAt;
-	LocalDateTime updatedAt;
-	LocalDateTime deletedAt;
+	private int collectionId;
+	private LocalDateTime createdAt;
+	private LocalDateTime updateAt;
+	private LocalDateTime deletedAt;
 
 	public LikeDto() {
 
 	}
 
-	public LikeDto(int collectionId, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+	public LikeDto(int collectionId, LocalDateTime createdAt, LocalDateTime updateAt, LocalDateTime deletedAt) {
 		super();
 		this.collectionId = collectionId;
 		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+		this.updateAt = updateAt;
 		this.deletedAt = deletedAt;
 	}
 
@@ -36,12 +36,12 @@ public class LikeDto {
 		this.createdAt = createdAt;
 	}
 
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
+	public LocalDateTime getUpdateAt() {
+		return updateAt;
 	}
 
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
+	public void setUpdateAt(LocalDateTime updateAt) {
+		this.updateAt = updateAt;
 	}
 
 	public LocalDateTime getDeletedAt() {
@@ -54,7 +54,7 @@ public class LikeDto {
 
 	@Override
 	public String toString() {
-		return "LikeDto [collectionId=" + collectionId + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+		return "likeDto [collectionId=" + collectionId + ", createdAt=" + createdAt + ", updateAt=" + updateAt
 				+ ", deletedAt=" + deletedAt + "]";
 	}
 

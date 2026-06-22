@@ -55,6 +55,9 @@ public class CollectionDao extends SuperDao {
 					collect.setQuote(rs.getString("full_text"));
 					collect.setCreatedAt(rs.getObject("created_at", LocalDateTime.class)); // 日時として取得
 					collect.setDeletedAt(rs.getObject("deleted_at", LocalDateTime.class));
+
+					//					collect.setLiked();
+					//					collect.setLikeCount();
 					collects.add(collect);
 				}
 			}
