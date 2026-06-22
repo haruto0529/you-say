@@ -55,7 +55,11 @@ public class LikesDao extends SuperDao {
 				if (rs.next()) {
 					likeDto.setCollectionId(collectionId);
 					likeDto.setCreatedAt(rs.getObject("created_at", LocalDateTime.class));
+<<<<<<< HEAD
 					likeDto.setUpdateAt(rs.getObject("update_at", LocalDateTime.class));;
+=======
+					likeDto.setUpdateAt(rs.getObject("update_at", LocalDateTime.class));
+>>>>>>> e720a9f1fe793dd26e681182f2abb765cb3ca2fb
 					likeDto.setDeletedAt(rs.getObject("deleted_at", LocalDateTime.class));
 				}
 			}
