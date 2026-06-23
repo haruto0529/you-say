@@ -8,10 +8,11 @@
         body {
             background-color: #f8f9fa; /* 明るい薄グレーの背景 */
             color: #212529; /* ダークグレーの文字 */
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px 0;
         }
         .start-card {
             max-width: 550px;
@@ -39,11 +40,41 @@
             background-color: #eef8ff;
             color: #0077b6;
         }
+        /* ルールエリアのカスタムスタイル */
+        .rule-header {
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            transition: background-color 0.2s;
+        }
+        .rule-header:hover {
+            background-color: #e9ecef;
+        }
     </style>
 </head>
 <body>
 <div class="start-card">
     <h1 class="text-center mb-4 fw-bold th-title" style="color: #0077b6;">Connect 4</h1>
+    
+    <!-- 追加：アコーディオン形式のルール説明 -->
+    <div class="mb-4">
+        <div class="rule-header p-3 rounded-3 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#ruleContent" aria-expanded="false" aria-controls="ruleContent">
+            <span class="fw-bold" style="color: #495057;">📖 遊び方・ルールを見る</span>
+            <span class="text-muted small">クリックで開閉</span>
+        </div>
+        <div class="collapse" id="ruleContent">
+            <div class="card card-body mt-2 border-0 bg-light text-muted small">
+                <p class="mb-2 fw-bold text-dark">【Connect 4（四目並べ）のルール】</p>
+                <ul class="ps-3 mb-0">
+                    <li class="mb-1">格子状のボードに、プレイヤーが交互に自分の色の駒を落としていきます。</li>
+                    <li class="mb-1">駒は列の一番下（すでに駒がある場合はその上）に積み上がります。</li>
+                    <li class="mb-1"><strong>縦・横・斜めのいずれかで、自分の駒を4つ一直線に並べた方</strong>が勝ちとなります。</li>
+                    <li>すべてのマスが埋まっても4つ並ばなかった場合は引き分けです。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <p class="text-center text-muted mb-4">ゲームの基本設定を行ってください。</p>
     <form th:action="@{/start}" method="post">
         
@@ -97,6 +128,10 @@
         </div>
     </form>
 </div>
+
+<!-- BootstrapのJavaScript（アコーディオンの動作に必要） -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     function toggleOptions() {
         const is1P = document.getElementById('mode1P').checked;
