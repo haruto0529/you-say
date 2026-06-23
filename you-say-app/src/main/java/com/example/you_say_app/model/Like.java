@@ -1,10 +1,12 @@
 package com.example.you_say_app.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.you_say_app.model.dao.LikesDao;
 import com.example.you_say_app.model.dto.LikeDto;
 
+@Service
 public class Like {
 
 	@Autowired
@@ -29,7 +31,8 @@ public class Like {
 		return ret;
 	}
 
-	//	自分がいいねした名言を持ってくる
-	//	名言ごとのいいねを持ってくる
+	public int likeCount(int quoteId) {
+		return likesDao.countLike(quoteId);
+	}
 
 }

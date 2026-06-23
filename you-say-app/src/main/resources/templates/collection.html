@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Word Collection - You Say Quiz</title>
-
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<link rel="stylesheet" th:href="@{/css/common.css}">
-
 	<style>
 		/* ==========================================================================
            1. ベース・共通スタイル (common.css & top.css 統合)
-           ========================================================================== */
+           ========================================================================= */
 		@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+JP:wght@400;500;700&display=swap');
-
 		*,
 		*::before,
 		*::after {
@@ -22,7 +18,6 @@
 			margin: 0;
 			padding: 0;
 		}
-
 		:root {
 			--color-green: #4caf50;
 			--color-red: #e8453c;
@@ -34,16 +29,16 @@
 			--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.10);
 			--shadow-md: 0 4px 20px rgba(0, 0, 0, 0.14);
 		}
-
 		body {
 			font-family: var(--font-body);
 			color: #333;
+			/* 💡 修正：グラデーションを画面に固定して、途切れや変色を防ぐ */
 			background: linear-gradient(135deg, #f0f4f8 0%, #d7e1ec 100%);
+			background-attachment: fixed;
 			min-height: 100vh;
 			display: flex;
 			flex-direction: column;
 		}
-
 		/* 共通ヘッダー */
 		.site-header {
 			width: 100%;
@@ -53,7 +48,6 @@
 			padding: 24px 40px;
 			box-shadow: var(--shadow-sm);
 		}
-
 		/* 共通フッター */
 		.site-footer {
 			width: 100%;
@@ -61,17 +55,14 @@
 			background: var(--color-green);
 			margin-top: auto;
 		}
-
 		.flex-center {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 		}
-
 		.gap-sm {
 			gap: 12px;
 		}
-
 		/* ==========================================================================
            2. ヘッダー用3Dコンポーネント & 吹き出しメニュー
            ========================================================================== */
@@ -86,7 +77,6 @@
 			outline: 1.5px solid #a3751a;
 			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 2px 3px rgba(255, 255, 255, 0.2);
 		}
-
 		.rank-label {
 			font-size: 11px;
 			font-weight: 900;
@@ -96,7 +86,6 @@
 			border-radius: 10px;
 			letter-spacing: 0.5px;
 		}
-
 		.rank-name {
 			font-size: clamp(14px, 1.8vw, 18px);
 			font-weight: 800;
@@ -104,7 +93,6 @@
 			white-space: nowrap;
 			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 		}
-
 		.user-name-badge {
 			background: rgba(0, 0, 0, 0.6);
 			backdrop-filter: blur(4px);
@@ -113,7 +101,6 @@
 			border: 2px solid rgba(255, 234, 159, 0.5);
 			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 		}
-
 		.user-name-text {
 			font-size: clamp(13px, 1.6vw, 16px);
 			font-weight: 800;
@@ -121,12 +108,10 @@
 			white-space: nowrap;
 			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 		}
-
-		/* アバターの親コンテナ（吹き出しの基準位置） */
+		/* アバターの親コンテナ */
 		.user-avatar-container {
 			position: relative;
 		}
-
 		.user-window-frame {
 			width: clamp(46px, 5.5vw, 56px);
 			height: clamp(46px, 5.5vw, 56px);
@@ -141,11 +126,9 @@
 			cursor: pointer;
 			transition: transform 0.2s;
 		}
-
 		.user-window-frame:hover {
 			transform: scale(1.05);
 		}
-
 		.avatar-icon {
 			width: 80%;
 			height: 80%;
@@ -153,12 +136,10 @@
 			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 			transition: transform 0.2s, color 0.2s;
 		}
-
 		.user-window-frame:hover .avatar-icon {
 			transform: rotate(10deg);
 			color: #81d4fa;
 		}
-
 		/* 👑 3D高級設定吹き出しメニュー */
 		.setting-balloon {
 			position: absolute;
@@ -173,21 +154,16 @@
 			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 			padding: 12px 0;
 			z-index: 2000;
-
-			/* 初期状態は非表示（JSでコントロール） */
 			opacity: 0;
 			visibility: hidden;
 			transform: translateY(10px);
 			transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
 		}
-
-		/* JSでこのクラスがついたら表示 */
 		.setting-balloon.active {
 			opacity: 1;
 			visibility: visible;
 			transform: translateY(0);
 		}
-
 		.balloon-arrow {
 			position: absolute;
 			top: -8px;
@@ -198,7 +174,6 @@
 			border-right: 8px solid transparent;
 			border-bottom: 8px solid #ffea9f;
 		}
-
 		.balloon-arrow::after {
 			content: '';
 			position: absolute;
@@ -208,7 +183,6 @@
 			border-right: 7px solid transparent;
 			border-bottom: 7px solid #333333;
 		}
-
 		.balloon-title {
 			font-size: 11px;
 			font-weight: 800;
@@ -218,13 +192,11 @@
 			margin-bottom: 6px;
 			letter-spacing: 0.5px;
 		}
-
 		.balloon-menu {
 			list-style: none;
 			padding: 0;
 			margin: 0;
 		}
-
 		.balloon-menu li a {
 			display: block;
 			padding: 8px 16px;
@@ -234,27 +206,22 @@
 			text-decoration: none;
 			transition: background 0.15s, color 0.15s;
 		}
-
 		.balloon-menu li a:hover {
 			background: #ffea9f;
 			color: #222222;
 		}
-
 		.menu-divider {
 			height: 1px;
 			background: rgba(255, 234, 159, 0.15);
 			margin: 6px 0;
 		}
-
 		.balloon-menu li a.menu-logout {
 			color: #ff4a4a;
 		}
-
 		.balloon-menu li a.menu-logout:hover {
 			background: #ff4a4a;
 			color: #ffffff;
 		}
-
 		/* ==========================================================================
            3. コレクション画面専用：メイン装飾スタイル（超豪華3D版）
            ========================================================================== */
@@ -265,7 +232,6 @@
 			padding: 40px 20px 60px;
 			box-sizing: border-box;
 		}
-
 		.collection-title {
 			font-family: var(--font-display);
 			font-size: clamp(32px, 5vw, 46px);
@@ -280,7 +246,6 @@
 				0px 6px 0px #1a56b3, 0px 10px 15px rgba(0, 0, 0, 0.2);
 			animation: fadeUp 0.5s ease both;
 		}
-
 		/* 検索バー */
 		.collection-tools {
 			display: flex;
@@ -290,7 +255,6 @@
 			margin-bottom: 40px;
 			animation: fadeUp 0.5s ease 0.1s both;
 		}
-
 		.search-container {
 			width: 100%;
 			max-width: 550px;
@@ -298,14 +262,12 @@
 			display: flex;
 			align-items: center;
 		}
-
 		.search-icon {
 			position: absolute;
 			left: 20px;
 			color: #888;
 			font-size: 18px;
 		}
-
 		.search-input {
 			width: 100%;
 			padding: 14px 20px 14px 50px;
@@ -318,20 +280,17 @@
 			font-weight: 700;
 			transition: all 0.2s ease;
 		}
-
 		.search-input:focus {
 			outline: 1.5px solid #704e0a;
 			border-color: var(--color-orange);
 			box-shadow: 0 0 0 4px rgba(245, 166, 35, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.1);
 		}
-
 		.sort-controls {
 			width: 100%;
 			display: flex;
 			justify-content: flex-end;
 			max-width: 550px;
 		}
-
 		.sort-label {
 			font-size: 13px;
 			font-weight: 800;
@@ -343,15 +302,13 @@
 			border: 1px solid #ccc;
 			box-shadow: var(--shadow-sm);
 		}
-
 		/* リストコンテナ */
 		.collection-list {
 			display: flex;
 			flex-direction: column;
 			gap: 24px;
 		}
-
-		/* 💡 金縁ベゼル付き3Dリストカード基盤 */
+		/* 金縁ベゼル付き3Dリストカード基盤 */
 		.collection-item-card {
 			position: relative;
 			background: #fff;
@@ -370,31 +327,24 @@
 			transition: transform 0.15s, box-shadow 0.15s;
 			animation: fadeUp 0.5s ease 0.2s both;
 		}
-
 		.collection-item-card.unlocked:hover {
 			transform: translateY(-2px);
 			box-shadow: 0 8px 0px #704e0a, 0 16px 24px rgba(0, 0, 0, 0.18);
 		}
-
-		.collection-item-card.unlocked:active {
-			transform: translateY(4px);
-			box-shadow: 0 2px 0px #704e0a, 0 4px 8px rgba(0, 0, 0, 0.2);
-		}
-
 		/* 左側情報エリア */
 		.item-main-info {
 			flex: 1;
 			display: flex;
 			flex-direction: column;
 			gap: 12px;
+			padding-right: 16px;
 		}
-
 		.item-header {
 			display: flex;
 			align-items: center;
-			gap: 16px;
+			flex-wrap: wrap;
+			gap: 12px;
 		}
-
 		.item-number {
 			font-family: var(--font-display);
 			font-weight: 900;
@@ -402,24 +352,25 @@
 			font-size: 18px;
 			text-shadow: 1px 1px 0px #fff;
 		}
-
-		.item-progress-bar {
-			width: clamp(100px, 20vw, 180px);
-			height: 12px;
-			background: #e0e0e0;
-			border-radius: 6px;
-			overflow: hidden;
-			box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+		.item-word {
+			font-size: clamp(18px, 3.5vw, 24px);
+			font-weight: 800;
+			color: #222;
+			margin-top: 4px;
 		}
-
-		.progress-fill {
-			height: 100%;
-			background: linear-gradient(to right, var(--color-orange) 0%, #ffcd38 100%);
-			border-radius: 6px;
-		}
-
-		.item-likes {
+		
+		/* 右側のボタンエリア */
+		.item-actions {
 			display: flex;
+			align-items: center;
+			justify-content: center;
+			/* 💡 修正：ボタンのサイズ変化が親要素に影響しないよう幅を固定 */
+			width: 140px; 
+			height: 46px;
+		}
+		/* 各種バッジのスタイル */
+		.item-likes {
+			display: inline-flex;
 			align-items: center;
 			gap: 6px;
 			background: #f5f5f5;
@@ -430,69 +381,68 @@
 			color: #555;
 			border: 1px solid #ddd;
 		}
-
 		.like-icon {
 			color: var(--color-blue);
 		}
-
-		.item-word {
-			font-size: clamp(18px, 3.5vw, 24px);
-			font-weight: 800;
-			color: #222;
+		.medal-icon {
+			color: var(--color-orange);
 		}
-
-		.item-status-tag {
-			background: linear-gradient(to bottom, #2cd140 0%, #199c29 100%);
-			color: #fff;
-			font-family: var(--font-display);
-			font-weight: 900;
-			padding: 6px 18px;
-			border-radius: 12px;
-			font-size: 14px;
-			border: 2px solid #ffea9f;
-			box-shadow: 0 4px 0px #065c10, 0 4px 8px rgba(0, 0, 0, 0.2);
-			transform: rotate(4deg);
-		}
-
-		/* 🔒 ロック状態 */
-		.collection-item-card.locked {
-			background: #d5dadf;
-			border-color: #b0b8c0;
-			outline-color: #717d8a;
-			box-shadow: 0 6px 0px #505a64, 0 8px 12px rgba(0, 0, 0, 0.1);
-		}
-
-		.locked .item-word,
-		.locked .item-number {
-			color: #7e8a98;
-		}
-
-		.lock-overlay {
-			position: absolute;
-			inset: 0;
-			background: rgba(0, 0, 0, 0.02);
-			border-radius: 13px;
-			display: flex;
+		
+		/* 👍 いいねボタン基本スタイル（通常：白ベース） */
+		.like-btn {
+			display: inline-flex;
 			align-items: center;
-			justify-content: flex-end;
-			padding-right: 32px;
-			color: #505a64;
+			justify-content: center;
+			gap: 8px;
+			background: #ffffff;
+			border: 2px solid #ddd;
+			border-radius: 50px;
+			width: 100%;
+			height: 100%;
+			cursor: pointer;
+			font-family: var(--font-body);
+			font-size: 14px;
 			font-weight: 800;
-			gap: 10px;
+			color: #5a5a72;
+			/* 💡 修正：3D影の厚みを 3px に統一 */
+			box-shadow: 0 3px 0px #ccc, 0 4px 6px rgba(0,0,0,0.05);
+			transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 		}
-
-		.lock-overlay i {
-			font-size: 20px;
-			color: #e8453c;
+		.like-btn:hover {
+			border-color: var(--color-blue);
+			color: var(--color-blue);
+			background: #f0f4f8;
+			/* 💡 修正：ホバー時にボタン自体を上に浮かせない（文字ズレ防止） */
+			box-shadow: 0 3px 0px #2a6ed1, 0 4px 6px rgba(66, 133, 244, 0.1);
 		}
-
+		
+		/* いいね済みのスタイル（色がポップな青にガラッと変わる3Dデザイン） */
+		.like-btn.liked {
+			background: linear-gradient(to bottom, #4285f4 0%, #2a6ed1 100%);
+			/* 💡 修正：枠線の色を合わせることで、ボーダーの太さによるサイズ変化を防ぐ */
+			border-color: #4285f4; 
+			color: #ffffff;
+			/* 💡 修正：通常時と完全に同じ 3px の影の厚みに統一 */
+			box-shadow: 0 3px 0px #1d4fa0, 0 4px 6px rgba(42, 110, 209, 0.2);
+		}
+		.like-btn.liked:hover {
+			background: linear-gradient(to bottom, #5492f5 0%, #357ae8 100%);
+			border-color: #5492f5;
+			color: #ffffff;
+			box-shadow: 0 3px 0px #1d4fa0, 0 4px 6px rgba(42, 110, 209, 0.3);
+		}
+		.like-btn:active {
+			/* 💡 修正：クリック時の沈み込み量と位置を精密にコントロール */
+			transform: translateY(3px);
+			box-shadow: 0 0px 0px transparent !important;
+		}
+		
 		/* 下部戻るボタン */
 		.collection-footer {
 			margin-top: 50px;
 			text-align: center;
 			animation: fadeUp 0.5s ease 0.3s both;
 		}
-
 		.back-btn {
 			display: inline-flex;
 			align-items: center;
@@ -508,20 +458,17 @@
 			box-shadow: var(--shadow-sm);
 			transition: all 0.2s ease;
 		}
-
 		.back-btn:hover {
 			color: #fff;
 			background: var(--color-blue);
 			border-color: var(--color-blue);
 			transform: translateY(-2px);
 		}
-
 		@keyframes fadeUp {
 			from {
 				opacity: 0;
 				transform: translateY(20px);
 			}
-
 			to {
 				opacity: 1;
 				transform: translateY(0);
@@ -529,94 +476,139 @@
 		}
 	</style>
 </head>
-
 <body>
-
 	<header th:replace="~{fragments/header :: header}"></header>
-
 	<main class="collection-main">
 		<h2 class="collection-title">WORD COLLECTION</h2>
-
 		<section class="collection-tools">
 			<div class="search-container">
 				<i class="fa-solid fa-magnifying-glass search-icon"></i>
-				<input text="text" class="search-input" placeholder="獲得したキーワードを検索...">
+				<input type="text" class="search-input" placeholder="獲得したキーワードを検索...">
 			</div>
 			<div class="sort-controls">
 				<span class="sort-label"><i class="fa-solid fa-sort"></i> 並び替え: 標準</span>
 			</div>
 		</section>
-
+		
 		<div class="collection-list">
-
-		    <!-- データが1件もないとき -->
 		    <p th:if="${#lists.isEmpty(collection)}"
 		       style="text-align:center; color:#fff; font-weight:800;">
 		        まだコレクションがありません。クイズに正解して集めよう！
 		    </p>
-
-		    <!-- collection（List<OutputCollectionDto>）を1件ずつ表示 -->
+		    
 		    <div class="collection-item-card unlocked"
 		         th:each="item : ${collection}"
 		         th:if="${item.deletedAt == null}">
-
+		        
 		        <div class="item-main-info">
 		            <div class="item-header">
-		                <!-- collectionId を3桁ゼロ埋めで番号表示 -->
 		                <span class="item-number"
 		                      th:text="${#numbers.formatInteger(item.collectionId, 3)}">001</span>
-
-		                <!-- 金メダルを持っているときだけ表示 -->
+		                
 		                <span class="item-likes" th:if="${item.hasGoldMedal}">
-		                    <i class="fa-solid fa-medal like-icon" style="color: var(--color-orange);"></i>
+		                    <i class="fa-solid fa-medal medal-icon"></i>
 		                    <span>金メダル</span>
 		                </span>
-
-		                <!-- 獲得日（createdAt） -->
+		                
 		                <span class="item-likes" th:if="${item.createdAt != null}">
 		                    <i class="fa-regular fa-calendar like-icon"></i>
 		                    <span th:text="${#temporals.format(item.createdAt, 'yyyy/MM/dd')}">2026/01/01</span>
 		                </span>
+		                
+		                <span class="item-likes">
+		                    <i class="fa-solid fa-thumbs-up like-icon"></i>
+		                    <span th:id="'like-count-' + ${item.collectionId}" th:text="${item.likeCount != null ? item.likeCount : 0}">0</span>
+		                </span>
 		            </div>
-
-		            <!-- 言葉本体（quote） -->
 		            <h3 class="item-word" th:text="${item.quote}">継続は力なり</h3>
 		        </div>
-
-		        <div class="item-status-tag">GET!</div>
+		        
+		        <div class="item-actions">
+			        <button class="like-btn" 
+			                th:classappend="${item.isLiked} ? 'liked' : ''" 
+			                th:data-id="${item.collectionId}"
+			                th:data-quote-id="${item.quoteId}">
+			        	<span class="like-btn-text" th:text="${item.isLiked} ? '👍 いいね済み' : '👍 いいね'">👍 いいね</span>
+			        </button>
+		        </div>
 		    </div>
-
 		</div>
-
 		<div class="collection-footer">
 			<a th:href="@{/}" class="back-btn">
 				<i class="fa-solid fa-arrow-left"></i> メニューに戻る
 			</a>
 		</div>
 	</main>
-
 	<footer th:replace="~{fragments/footer :: footer}" style="z-index: 5; position: relative;"></footer>
-
-
+	
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
+			// --- アバターメニューの制御 ---
 			const trigger = document.getElementById('avatarTrigger');
 			const balloon = document.getElementById('settingBalloon');
-
-			// アイコンタップでメニューの表示/非表示を切り替え
-			trigger.addEventListener('click', (e) => {
-				e.stopPropagation(); // 画面クリックイベントへの伝播を防ぐ
-				balloon.classList.toggle('active');
-			});
-
-			// メニューの外側をタップしたら自動的に閉じる
-			document.addEventListener('click', (e) => {
-				if (!balloon.contains(e.target) && e.target !== trigger) {
-					balloon.classList.remove('active');
-				}
+			if (trigger && balloon) {
+				trigger.addEventListener('click', (e) => {
+					e.stopPropagation();
+					balloon.classList.toggle('active');
+				});
+				document.addEventListener('click', (e) => {
+					if (!balloon.contains(e.target) && e.target !== trigger) {
+						balloon.classList.remove('active');
+					}
+				});
+			}
+			
+			// --- いいねボタンの一括イベント設定 ---
+			const likeButtons = document.querySelectorAll('.like-btn');
+			likeButtons.forEach(button => {
+				button.addEventListener('click', async function(e) {
+					e.preventDefault();
+					
+					const collectionId = this.getAttribute('data-id');
+					const quoteId = this.getAttribute('data-quote-id');
+					if (!collectionId || !quoteId) return;
+					
+					this.disabled = true;
+					
+					try {
+						const response = await fetch('/like', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({ 
+								collectionId: parseInt(collectionId),
+								quoteId: parseInt(quoteId)
+							})
+						});
+						
+						if (response.ok) {
+							const updatedCount = await response.json();
+							
+							const countTarget = document.getElementById(`like-count-${collectionId}`);
+							if (countTarget) {
+								countTarget.textContent = updatedCount;
+							}
+							
+							const textTarget = this.querySelector('.like-btn-text');
+							if (this.classList.contains('liked')) {
+								this.classList.remove('liked');
+								if (textTarget) textTarget.textContent = '👍 いいね';
+							} else {
+								this.classList.add('liked');
+								if (textTarget) textTarget.textContent = '👍 いいね済み';
+							}
+						} else {
+							console.error('サーバーエラーが発生しました');
+						}
+					} catch (error) {
+						console.error('通信に失敗しました', error);
+					} finally {
+						this.disabled = false;
+					}
+				});
 			});
 		});
 	</script>
 </body>
-
 </html>

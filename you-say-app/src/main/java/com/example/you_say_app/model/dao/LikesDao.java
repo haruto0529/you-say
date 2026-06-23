@@ -25,6 +25,12 @@ public class LikesDao extends SuperDao {
 	//collection_idのdeleted_atに時間を入れるSQL	
 	private static String sql4 = "UPDATE likes SET deleted_at = CURRENT_TIMESTAMP WHERE deleted_at is null AND collection_id = ? ";
 
+	//	名言ごとのいいね数
+	private static String sql5 = "SELECT count(*) as 'likeCount' FROM you_say.likes join collecton_quotes on likes.collection_id=collecton_quotes.collection_id where likes.deleted_at is null and collecton_quotes.quote_id=?";
+
+	//	名言に対していいねしているか
+	private static String sql6 = "SELECT *  FROM you_say.likes join collecton_quotes on likes.collection_id=collecton_quotes.collection_id where likes.deleted_at is null and collecton_quotes.user_id=? and quote_id=?";
+
 	//	いいねしたときにインサートするメソッド
 	public int setLike(int collectionId) {
 		int ret = 0;
@@ -44,8 +50,7 @@ public class LikesDao extends SuperDao {
 
 	//	likesテーブルの特定のcollection_idのレコードをゲットするメソッド
 	public LikeDto getRecord(int collectionId) {
-		LikeDto likeDto = new LikeDto();
-
+		LikeDto likeDto = null;
 		try (Connection con = getConnection();
 				PreparedStatement ps = con.prepareStatement(sql2)) {
 
@@ -53,9 +58,10 @@ public class LikesDao extends SuperDao {
 
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
+					likeDto = new LikeDto();
 					likeDto.setCollectionId(collectionId);
 					likeDto.setCreatedAt(rs.getObject("created_at", LocalDateTime.class));
-					likeDto.setUpdateAt(rs.getObject("update_at", LocalDateTime.class));
+					likeDto.setUpdateAt(rs.getObject("updated_at", LocalDateTime.class));					;
 					likeDto.setDeletedAt(rs.getObject("deleted_at", LocalDateTime.class));
 				}
 			}
@@ -96,6 +102,46 @@ public class LikesDao extends SuperDao {
 		}
 
 		return ret;
+
+	}
+
+	public int countLike(int quoteId) {
+		int ret = 0;
+
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql5)) {
+			ps.setInt(1, quoteId);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					ret = rs.getInt("likeCount");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return ret;
+
+	}
+
+	public boolean checkLiked(int userId, int quoteId) {
+		boolean liked = false;
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql6)) {
+			ps.setInt(1, userId);
+			ps.setInt(2, quoteId);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					liked = true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return liked;
 
 	}
 

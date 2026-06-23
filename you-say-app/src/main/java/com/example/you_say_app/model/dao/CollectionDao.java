@@ -8,12 +8,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.you_say_app.model.dto.OutputCollectionDto;
 
 @Repository // このクラスをDB操作用のBeanとしてSpringに登録
 public class CollectionDao extends SuperDao {
+	@Autowired
+	private LikesDao likesDao;
 
 	// コレクションに1件追加する（user_id と quote_id を登録）
 	public int insertCollection(int user_id, int quote_id) {
@@ -55,6 +58,8 @@ public class CollectionDao extends SuperDao {
 					collect.setQuote(rs.getString("full_text"));
 					collect.setCreatedAt(rs.getObject("created_at", LocalDateTime.class)); // 日時として取得
 					collect.setDeletedAt(rs.getObject("deleted_at", LocalDateTime.class));
+					collect.setLiked(likesDao.checkLiked(userId, collect.getQuoteId()));
+					collect.setLikeCount(likesDao.countLike(collect.getQuoteId()));
 					collects.add(collect);
 				}
 			}
