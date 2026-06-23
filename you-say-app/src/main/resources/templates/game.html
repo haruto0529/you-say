@@ -277,6 +277,44 @@
 			display: flex;
 			gap: 12px;
 		}
+
+		/* オーバーレイ（ゲーム終了画面）の中のボタンを特別に装飾 */
+		.overlay-buttons .btn-primary {
+			font-size: 16px;
+			/* 文字を大きく */
+			padding: 14px 40px;
+			/* ボタンを分厚く、ワイドに */
+			background: #0055ff;
+			/* 背景をしっかり青色に */
+			color: #ffffff;
+			/* 文字はクッキリ白 */
+			border: none;
+			/* 太い枠線を消してスッキリ */
+			border-radius: 50px;
+			/* 丸みのある押しやすい形に */
+			box-shadow: 0 0 20px rgba(0, 85, 255, 0.6);
+			/* 青く光るエフェクト */
+			transition: all 0.2s ease;
+			text-transform: uppercase;
+			font-weight: 700;
+		}
+
+		/* ボタンにマウスを乗せたときの動き */
+		.overlay-buttons .btn-primary:hover {
+			background: #2277ff;
+			/* 少し明るい青に */
+			transform: scale(1.05);
+			/* ほんの少しボタンを大きく（ぷにっと感を出す） */
+			box-shadow: 0 0 30px rgba(0, 85, 255, 0.9);
+			/* 光を強く */
+			cursor: pointer;
+		}
+
+		/* ボタンを押した瞬間 */
+		.overlay-buttons .btn-primary:active {
+			transform: scale(0.98);
+			/* 押し込まれたような動き */
+		}
 	</style>
 </head>
 

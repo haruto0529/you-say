@@ -51,11 +51,24 @@ public class Connect4 {
 			if (checkWin(player.getPieceColor(), col, i)) {
 				GameOver = true;
 
-				this.message = (turn == 1)
-						? (player1.isHuman() && !player2.isHuman() ? "チャッピーよりユッピー"
-								: (player1.isHuman() ? "プレイヤー1の勝ち" : "コンピュータの勝ち"))
-						: (player2.isHuman() && !player1.isHuman() ? "チャッピーよりユッピー"
-								: (player2.isHuman() ? "プレイヤー2の勝ち" : "ユッピーよりチャッピー"));
+				// 1. まず現在のターンに応じたプレイヤー（勝者）と対戦相手を特定
+				Player winner = (turn == 1) ? player1 : player2;
+				Player loser = (turn == 1) ? player2 : player1;
+
+				// 2. 対戦パターンの組み合わせでメッセージを決定
+				if (winner.isHuman() && !loser.isHuman()) {
+					// 人間がCPUに勝った場合
+					this.message = "YOU WIN！チャッピーよりユッピー";
+				} else if (!winner.isHuman() && winner == player2 && !player1.isHuman()) {
+					// ターン2（player2）がCPUで、player1もCPUの場合（CPU同士の対戦でplayer2が勝った）
+					this.message = "コンピューター2の勝ち";
+				} else if (winner.isHuman()) {
+					// 人間同士の対戦などで、人間が勝った場合
+					this.message = (turn == 1) ? "プレイヤー1の勝ち" : "プレイヤー2の勝ち";
+				} else {
+					// それ以外のCPUの勝ち（1PモードでCPUが勝った場合など）
+					this.message = "YOU LOSE！ユッピーよりチャッピー";
+				}
 
 			} else {
 				if (this.board.checkFull(col)) {
