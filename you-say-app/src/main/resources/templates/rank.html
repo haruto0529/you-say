@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>RANK INFO - YOU SAY QUIZE</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+	<style>
+		/* ===================================================
+		   common.css の内容（未読み込み時の崩れ防止用ベーススタイル）
+		   =================================================== */
+		body {
+			font-family: 'Noto Sans JP', sans-serif;
+			color: #333;
+			background: #fff;
+			margin: 0;
+			padding: 0;
+		}
+		.card {
+			background: #fff;
+			border-radius: 16px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+			padding: 32px;
+		}
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 14px 44px;
+			border: none;
+			border-radius: 50px;
+			font-size: 16px;
+			font-weight: 700;
+			color: #fff;
+			cursor: pointer;
+			text-decoration: none;
+			letter-spacing: 0.04em;
+			transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+		}
+		.btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+			filter: brightness(1.06);
+		}
+		.btn-green {
+			background: #4caf50;
+		}
+		.text-center {
+			text-align: center;
+		}
+		.flex {
+			display: flex;
+		}
+		.flex-col {
+			flex-direction: column;
+		}
+		.gap-md {
+			gap: 24px;
+		}
+		.mt-md {
+			margin-top: 24px;
+		}
+		/* ===================================================
+		   ランク説明ページ 専用スタイル
+		   =================================================== */
+		.rank-info-container {
+			width: 100%;
+			max-width: 550px;
+			padding: 0 20px;
+			margin: 40px auto;
+		}
+		/* ページタイトル */
+		.page-title-area {
+			margin-bottom: 32px;
+		}
+		.page-title {
+			font-family: 'Nunito', sans-serif;
+			font-size: clamp(24px, 5vw, 32px);
+			font-weight: 900;
+			color: #333;
+			letter-spacing: 0.05em;
+		}
+		.page-subtitle {
+			font-size: 14px;
+			color: #666;
+			font-weight: 500;
+			margin-top: 6px;
+		}
+		/* ルール説明用アナウンス枠 */
+		.rank-notice-box {
+			padding: 18px;
+			background: #fff9e6;
+			/* ライトモード時の薄い黄色 */
+			border: 2px dashed #f5a623;
+			border-radius: 12px;
+			font-size: 14px;
+			color: #555;
+			text-align: left;
+			line-height: 1.6;
+			margin-bottom: 8px;
+		}
+		.rank-notice-box strong {
+			color: #e67e22;
+			/* 視認性の高いオレンジ */
+			font-weight: 700;
+		}
+		.notice-icon {
+			font-size: 18px;
+			margin-right: 4px;
+			vertical-align: text-bottom;
+		}
+		/* テーブル構造 */
+		.rank-table {
+			width: 100%;
+			border-collapse: separate;
+			border-spacing: 0 12px;
+		}
+		.rank-th-row {
+			color: #666;
+			font-size: 13px;
+			font-weight: 700;
+		}
+		.rank-th {
+			padding: 8px 16px;
+			text-align: center;
+		}
+		.rank-row {
+			transition: transform 0.2s ease;
+		}
+		.rank-row:hover {
+			transform: scale(1.02);
+		}
+		.rank-td {
+			padding: 16px;
+			vertical-align: middle;
+		}
+		/* 2列の幅均等調整 */
+		.font-display-cell {
+			width: 50%;
+			text-align: center;
+			border-top: 1px solid #eee;
+			border-bottom: 1px solid #eee;
+			border-left: 1px solid #eee;
+			border-top-left-radius: 12px;
+			border-bottom-left-radius: 12px;
+			background: #f8f9fa;
+			/* ライトモードでのセルの背景 */
+		}
+		.num-cell {
+			width: 50%;
+			text-align: center;
+			border-top: 1px solid #eee;
+			border-bottom: 1px solid #eee;
+			border-right: 1px solid #eee;
+			border-top-right-radius: 12px;
+			border-bottom-right-radius: 12px;
+			background: #f8f9fa;
+		}
+		/* ランクバッジベース */
+		.badge-capsule {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 8px 16px;
+			border-radius: 30px;
+			font-family: 'Noto Sans JP', sans-serif;
+			font-size: 14px;
+			font-weight: 700;
+			color: #fff;
+			/* 文字色は白 */
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+			min-width: 150px;
+			text-align: center;
+		}
+		/* どんな文字列が来ても部分一致で色が適用されるスタイル */
+		[class*="サブクラス"] {
+			background: #4caf50 !important;
+		}
+		[class*="スーパークラス"] {
+			background: #4285f4 !important;
+		}
+		[class*="Kazuateクラス"] {
+			background: #f5a623 !important;
+		}
+		[class*="神クラス"] {
+			background: #e91e8c !important;
+		}
+		/* 安全対策：万が一どれにもマッチしなかった場合の初期背景色（文字の保護） */
+		.badge-capsule {
+			background: #95a5a6;
+		}
+		/* 数値部分のフォント */
+		.required-num {
+			font-family: 'Nunito', sans-serif;
+			font-size: 22px;
+			font-weight: 900;
+			color: #f5a623;
+		}
+		.num-unit {
+			font-size: 12px;
+			font-weight: 700;
+			color: #666;
+			margin-left: 2px;
+		}
+		/* ===================================================
+		   ダークモード時のスタイル同期
+		   =================================================== */
+		/* htmlタグ自体にも背景色を指定することで、画面全体の最下部白浮きを完全に防ぐ */
+		html.dark-mode,
+		body.dark-mode {
+			background-color: #1a1a1a !important;
+			color: #f5f5f5 !important;
+		}
+		body.dark-mode .page-title {
+			color: #fff;
+		}
+		body.dark-mode .page-subtitle {
+			color: #aaa;
+		}
+		body.dark-mode .rank-th {
+			color: #aaa;
+		}
+		body.dark-mode .card {
+			background: #2a2a2a;
+		}
+		body.dark-mode .rank-notice-box {
+			background: #3a2e1b;
+			border-color: #fbbc05;
+			color: #ddd;
+		}
+		body.dark-mode .rank-notice-box strong {
+			color: #fbbc05;
+		}
+		body.dark-mode .font-display-cell,
+		body.dark-mode .num-cell {
+			background: #333;
+			border-color: #444;
+		}
+		body.dark-mode .required-num {
+			color: #fbbc05;
+		}
+		body.dark-mode .num-unit {
+			color: #aaa;
+		}
+		
+		/* フッターや外部共通パーツのダークモード背景も同時に上書き */
+		body.dark-mode footer,
+		body.dark-mode .footer-container {
+			background-color: #1a1a1a !important;
+			color: #aaa !important;
+			border-top-color: #333 !important;
+		}
+	</style>
+</head>
+<body>
+	<header th:replace="~{fragments/header :: header}"></header>
+	<canvas id="effectCanvas"
+		style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2;"></canvas>
+	<main
+		style="display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px 0; z-index: 5; position: relative;">
+		<div class="rank-info-container text-center flex flex-col">
+			<div class="page-title-area">
+				<h2 class="page-title">RANK SYSTEM</h2>
+				<p class="page-subtitle">たくさんのクイズを解いて、神の領域へ到達しよう！</p>
+			</div>
+			<div class="card flex flex-col gap-md">
+				<div class="rank-notice-box">
+					<span class="notice-icon">🪙</span>
+					クイズやミニゲームで正解して<strong>獲得したコレクションの総数</strong>によって、あなたのランクがリアルタイムに変化します！
+				</div>
+				<table class="rank-table">
+					<thead>
+						<tr class="rank-th-row">
+							<th class="rank-th">ランク</th>
+							<th class="rank-th">必要なコレクション数</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="rank-row" th:each="rank : ${rankList}">
+							<td class="rank-td font-display-cell">
+								<span class="badge-capsule" th:classappend="${rank.rank_name}"
+									th:text="${rank.rank_name}">
+									サブクラス
+								</span>
+							</td>
+							<td class="rank-td num-cell">
+								<span class="required-num" th:text="${rank.required_number}">0</span>
+								<span class="num-unit">個</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="mt-md">
+					<button type="button" class="btn btn-green" th:onclick="|location.href='@{/}'|">
+						<span style="margin-right: 8px;">◀</span>メニューに戻る
+					</button>
+				</div>
+			</div>
+		</div>
+	</main>
+	<footer th:replace="~{fragments/footer :: footer}" style="z-index: 5; position: relative;"></footer>
+	<script>
+		// ローカルストレージからダークモード設定を読み込み、htmlとbodyの両方にクラスを適用する
+		const savedDark = localStorage.getItem('quiz_dark_mode');
+		if (savedDark === 'true') {
+			document.documentElement.classList.add('dark-mode'); // <html> タグ
+			document.body.classList.add('dark-mode');            // <body> タグ
+		}
+		let isEffectEnabled = true;
+		let currentEffectType = 'all';
+		const savedEffectEnabled = localStorage.getItem('quiz_effect_enabled');
+		if (savedEffectEnabled !== null) {
+			isEffectEnabled = (savedEffectEnabled === 'true');
+		}
+		const savedEffectType = localStorage.getItem('quiz_effect_type');
+		if (savedEffectType !== null) {
+			currentEffectType = savedEffectType;
+		}
+		// === 背景アニメーション（Canvas制御） ===
+		const canvas = document.getElementById('effectCanvas');
+		const ctx = canvas.getContext('2d');
+		function resizeCanvas() {
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+		}
+		window.addEventListener('resize', resizeCanvas);
+		resizeCanvas();
+		const confettis = [];
+		const balloons = [];
+		const colors = ['#ff4a4a', '#3b9eff', '#4fff5a', '#ffdf3b', '#ff63ca', '#9b4dff'];
+		class Confetti {
+			constructor() {
+				this.x = Math.random() * canvas.width;
+				this.y = Math.random() * canvas.height - canvas.height;
+				this.size = Math.random() * 6 + 5;
+				this.color = colors[Math.floor(Math.random() * colors.length)];
+				this.speedX = Math.random() * 2 - 1;
+				this.speedY = Math.random() * 2 + 1.5;
+				this.rotation = Math.random() * 360;
+				this.rotationSpeed = Math.random() * 4 - 2;
+			}
+			update() {
+				this.y += this.speedY;
+				this.x += Math.sin(this.y / 20) * 0.5 + this.speedX;
+				this.rotation += this.rotationSpeed;
+				if (this.y > canvas.height) {
+					this.y = -20;
+					this.x = Math.random() * canvas.width;
+				}
+			}
+			draw() {
+				ctx.save();
+				ctx.translate(this.x, this.y);
+				ctx.rotate(this.rotation * Math.PI / 180);
+				ctx.fillStyle = this.color;
+				ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size / 1.5);
+				ctx.restore();
+			}
+		}
+		class Balloon {
+			constructor() {
+				this.reset();
+				this.y = canvas.height + Math.random() * canvas.height;
+			}
+			reset() {
+				this.x = Math.random() * canvas.width;
+				this.y = canvas.height + 50;
+				this.radius = Math.random() * 15 + 20;
+				this.color = colors[Math.floor(Math.random() * colors.length)];
+				this.speedY = Math.random() * 0.8 + 0.6;
+				this.swingSpeed = Math.random() * 0.02 + 0.01;
+				this.swingRange = Math.random() * 2 + 1;
+				this.swingSeed = Math.random() * 100;
+			}
+			update() {
+				this.y -= this.speedY;
+				this.swingSeed += this.swingSpeed;
+				this.x += Math.sin(this.swingSeed) * 0.3;
+				if (this.y < -60) {this.reset();}
+			}
+			draw() {
+				ctx.save();
+				ctx.beginPath();
+				ctx.ellipse(this.x, this.y, this.radius * 0.8, this.radius, 0, 0, Math.PI * 2);
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.beginPath();
+				ctx.moveTo(this.x, this.y + this.radius);
+				ctx.lineTo(this.x - 4, this.y + this.radius + 6);
+				ctx.lineTo(this.x + 4, this.y + this.radius + 6);
+				ctx.closePath();
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.beginPath();
+				ctx.moveTo(this.x, this.y + this.radius + 6);
+				ctx.quadraticCurveTo(this.x - 5, this.y + this.radius + 20, this.x, this.y + this.radius + 35);
+				ctx.strokeStyle = 'rgba(100,100,100,0.4)';
+				ctx.lineWidth = 1.5;
+				ctx.stroke();
+				ctx.beginPath();
+				ctx.ellipse(this.x - this.radius * 0.3, this.y - this.radius * 0.4, this.radius * 0.2, this.radius * 0.3, Math.PI / 4, 0, Math.PI * 2);
+				ctx.fillStyle = 'rgba(255,255,255,0.4)';
+				ctx.fill();
+				ctx.restore();
+			}
+		}
+		for (let i = 0; i < 50; i++) confettis.push(new Confetti());
+		for (let i = 0; i < 12; i++) balloons.push(new Balloon());
+		function animate() {
+			if (isEffectEnabled) {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				if (currentEffectType === 'all' || currentEffectType === 'balloon') {
+					balloons.forEach(b => {b.update(); b.draw();});
+				}
+				if (currentEffectType === 'all' || currentEffectType === 'confetti') {
+					confettis.forEach(c => {c.update(); c.draw();});
+				}
+			}
+			requestAnimationFrame(animate);
+		}
+		animate();
+	</script>
+</body>
+</html>
