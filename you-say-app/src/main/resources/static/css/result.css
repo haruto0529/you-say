@@ -1,0 +1,253 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+           🎨 結果画面専用のスタイル
+           ========================================================================== */
+.result-page-container {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	position: relative;
+	overflow: hidden;
+	/* 星が画面外に飛び散ったときのスクロールバーを防止 */
+	transition: background-color 0.3s ease;
+}
+
+.result-main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 40px 20px;
+	box-sizing: border-box;
+	z-index: 5;
+	position: relative;
+}
+
+/* --------------------------------------------------------------------------
+           正解・不正解タイトルの3D装飾
+           -------------------------------------------------------------------------- */
+.result-status-title {
+	font-size: clamp(36px, 5vw, 54px);
+	font-weight: 900;
+	margin-bottom: 30px;
+	text-align: center;
+	letter-spacing: 4px;
+	animation: fadeUp 0.5s ease both;
+}
+
+/* 正解時：緑と深緑の立体テキスト */
+.status-correct {
+	color: #fff;
+	text-shadow:
+		-2px -2px 0 var(--color-green), 2px -2px 0 var(--color-green),
+		-2px 2px 0 var(--color-green), 2px 2px 0 var(--color-green),
+		0px 6px 0px #2e7d32, 0px 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 不正解時：赤とダークレッドの立体テキスト */
+.status-incorrect {
+	color: #fff;
+	text-shadow:
+		-2px -2px 0 var(--color-red), 2px -2px 0 var(--color-red),
+		-2px 2px 0 var(--color-red), 2px 2px 0 var(--color-red),
+		0px 6px 0px #b71c1c, 0px 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+           解説ボックス（index.cssの高級3Dカード風）
+           -------------------------------------------------------------------------- */
+.explanation-display-card {
+	width: 100%;
+	max-width: 720px;
+	min-height: 250px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #fdfdfd;
+	border: 2px solid #ffea9f;
+	outline: 1.5px solid #a3751a;
+	position: relative;
+	margin-bottom: 40px;
+	animation: fadeUp 0.6s ease 0.1s both;
+	transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.explanation-display-card::after {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	top: 4px;
+	left: 4px;
+	right: -4px;
+	bottom: -4px;
+	background: rgba(163, 117, 26, 0.15);
+	border-radius: var(--radius-card);
+}
+
+.explanation-inner-text {
+	font-size: clamp(16px, 2.2vw, 20px);
+	font-weight: 800;
+	color: #333;
+	text-align: center;
+	line-height: 1.8;
+	padding: 15px;
+	transition: color 0.3s ease;
+}
+
+/* 正解の答えをオレンジで強調 */
+.correct-answer-highlight {
+	color: var(--color-orange);
+	font-size: 1.25em;
+	border-bottom: 3px double var(--color-orange);
+	padding-bottom: 2px;
+	display: inline-block;
+}
+
+/* --------------------------------------------------------------------------
+           下部のボタングループ（横並びレスポンシブ）
+           -------------------------------------------------------------------------- */
+.result-button-group {
+	display: flex;
+	width: 100%;
+	max-width: 720px;
+	justify-content: center;
+	gap: 20px;
+	flex-wrap: wrap;
+	animation: fadeUp 0.6s ease 0.2s both;
+}
+
+/* 横並び用にボタンの幅を柔軟に調整 */
+.result-button-group .btn {
+	flex: 1;
+	min-width: 180px;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+           ✨ 演出用CSS：【1.5秒で爽快に消え去る爆速テンポ版】
+           -------------------------------------------------------------------------- */
+.quiz-success-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 9999;
+}
+
+.quiz-success-text {
+	position: absolute;
+	top: 35%;
+	left: 50%;
+	transform: translate(-50%, -50%) scale(0.5);
+	font-family: var(--font-display);
+	font-size: clamp(60px, 9vw, 110px);
+	font-weight: 900;
+	color: #fff;
+	text-shadow:
+		0 0 25px rgba(76, 175, 80, 0.8),
+		-3px -3px 0 #34a853, 3px -3px 0 #34a853,
+		-3px 3px 0 #34a853, 3px 3px 0 #34a853,
+		0px 10px 0px #1b5e20, 0px 18px 25px rgba(0, 0, 0, 0.5);
+	animation: quizPopSuccessKey 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes quizPopSuccessKey {
+	0% {
+		transform: translate(-50%, -50%) scale(0.4) rotate(-10deg);
+		opacity: 0;
+	}
+
+	15% {
+		transform: translate(-50%, -50%) scale(1.2) rotate(5deg);
+		opacity: 1;
+	}
+
+	25% {
+		transform: translate(-50%, -50%) scale(1.0) rotate(0deg);
+		opacity: 1;
+	}
+
+	65% {
+		transform: translate(-50%, -50%) scale(1.0);
+		opacity: 1;
+	}
+
+	100% {
+		transform: translate(-50%, -50%) scale(0.8);
+		opacity: 0;
+	}
+}
+
+.quiz-custom-sparkle {
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+	animation: quizExplodeKey 1.5s cubic-bezier(0.05, 0.7, 0.1, 1) forwards;
+}
+
+@keyframes quizExplodeKey {
+	0% {
+		transform: translate(0, 0) scale(0) rotate(0deg);
+		opacity: 0;
+	}
+
+	5% {
+		opacity: 1;
+	}
+
+	15% {
+		transform: translate(calc(var(--tx) * 0.55), calc(var(--ty) * 0.55)) scale(1.4) rotate(180deg);
+	}
+
+	60% {
+		transform: translate(calc(var(--tx) * 0.85), calc(var(--ty) * 0.85)) scale(0.8) rotate(360deg);
+		opacity: 1;
+	}
+
+	100% {
+		transform: translate(var(--tx), var(--ty)) scale(0.1) rotate(540deg);
+		opacity: 0;
+	}
+}
+
+/* ==========================================================================
+           🌙 ダークモード用のスタイル追加 (.dark-mode が有効な場合)
+           ========================================================================== */
+body.dark-mode.result-page-container {
+	background-color: #18191a !important;
+}
+
+body.dark-mode .explanation-display-card {
+	background: #242526;
+	border-color: #4e4f50;
+	outline: 1.5px solid #666;
+}
+
+body.dark-mode .explanation-display-card::after {
+	background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .explanation-inner-text {
+	color: #e4e6eb;
+}
+
+body.dark-mode .status-correct {
+	text-shadow:
+		-2px -2px 0 var(--color-green), 2px -2px 0 var(--color-green),
+		-2px 2px 0 var(--color-green), 2px 2px 0 var(--color-green),
+		0px 6px 0px #1b5e20, 0px 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .status-incorrect {
+	text-shadow:
+		-2px -2px 0 var(--color-red), 2px -2px 0 var(--color-red),
+		-2px 2px 0 var(--color-red), 2px 2px 0 var(--color-red),
+		0px 6px 0px #5c0f0f, 0px 10px 15px rgba(0, 0, 0, 0.6);
+}
