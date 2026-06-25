@@ -14,10 +14,11 @@
 	border-radius: 30px;
 	border: 2px solid #ffea9f;
 	outline: 1.5px solid #a3751a;
-	box-shadow: 
+	box-shadow:
 		0 4px 6px rgba(0, 0, 0, 0.3),
 		inset 0 2px 3px rgba(255, 255, 255, 0.2);
 }
+
 .rank-label {
 	font-size: 11px;
 	font-weight: 900;
@@ -27,6 +28,7 @@
 	border-radius: 10px;
 	letter-spacing: 0.5px;
 }
+
 .rank-name {
 	font-size: clamp(14px, 1.8vw, 18px);
 	font-weight: 800;
@@ -46,6 +48,7 @@
 	border: 2px solid rgba(255, 234, 159, 0.5);
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .user-name-text {
 	font-size: clamp(13px, 1.6vw, 16px);
 	font-weight: 800;
@@ -53,6 +56,7 @@
 	white-space: nowrap;
 	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
+
 .user-window-frame {
 	width: clamp(46px, 5.5vw, 56px);
 	height: clamp(46px, 5.5vw, 56px);
@@ -63,9 +67,9 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	box-shadow: 
-		0 4px 10px rgba(0,0,0,0.4),
-		inset 0 2px 6px rgba(0,0,0,0.6);
+	box-shadow:
+		0 4px 10px rgba(0, 0, 0, 0.4),
+		inset 0 2px 6px rgba(0, 0, 0, 0.6);
 	overflow: visible;
 }
 
@@ -81,18 +85,21 @@
 	justify-content: center;
 	align-items: center;
 }
+
 .avatar-icon {
 	width: 80%;
 	height: 80%;
-	color: #4fc3f7; 
-	filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+	color: #4fc3f7;
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 	transition: transform 0.2s, color 0.2s, filter 0.2s;
 }
+
 .user-avatar-trigger:hover .avatar-icon {
 	transform: scale(1.1) rotate(10deg);
 	color: #81d4fa;
 	filter: drop-shadow(0 0 6px rgba(79, 195, 247, 0.8));
 }
+
 .setting-balloon {
 	position: absolute;
 	top: 100%;
@@ -103,18 +110,20 @@
 	border: 2px solid #ffea9f;
 	outline: 1.5px solid #a3751a;
 	border-radius: 14px;
-	box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 	padding: 12px 0;
 	opacity: 0;
 	visibility: hidden;
 	transform: translateY(10px);
 	transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
 }
+
 .user-avatar-trigger:hover .setting-balloon {
 	opacity: 1;
 	visibility: visible;
 	transform: translateY(0);
 }
+
 .balloon-arrow {
 	position: absolute;
 	top: -8px;
@@ -125,6 +134,7 @@
 	border-right: 8px solid transparent;
 	border-bottom: 8px solid #ffea9f;
 }
+
 .balloon-arrow::after {
 	content: '';
 	position: absolute;
@@ -134,20 +144,23 @@
 	border-right: 7px solid transparent;
 	border-bottom: 7px solid #333333;
 }
+
 .balloon-title {
 	font-size: 11px;
 	font-weight: 800;
 	color: #a3751a;
 	padding: 0 16px 6px 16px;
-	border-bottom: 1px solid rgba(255,234,159,0.2);
+	border-bottom: 1px solid rgba(255, 234, 159, 0.2);
 	margin-bottom: 6px;
 	letter-spacing: 0.5px;
 }
+
 .balloon-menu {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 }
+
 .balloon-menu li a {
 	display: block;
 	padding: 8px 16px;
@@ -157,18 +170,22 @@
 	text-decoration: none;
 	transition: background 0.15s, color 0.15s;
 }
+
 .balloon-menu li a:hover {
 	background: #ffea9f;
 	color: #222222;
 }
+
 .menu-divider {
 	height: 1px;
-	background: rgba(255,234,159,0.15);
+	background: rgba(255, 234, 159, 0.15);
 	margin: 6px 0;
 }
+
 .balloon-menu li a.menu-logout {
 	color: #ff4a4a;
 }
+
 .balloon-menu li a.menu-logout:hover {
 	background: #ff4a4a;
 	color: #ffffff;
@@ -199,6 +216,7 @@
 	align-items: center;
 	transition: transform 0.1s, box-shadow 0.1s;
 }
+
 .btn:active {
 	transform: translateY(6px);
 	box-shadow:
@@ -206,11 +224,438 @@
 		0 4px 8px rgba(0, 0, 0, 0.4),
 		inset 0 2px 4px rgba(255, 255, 255, 0.4);
 }
-.btn-red { background: linear-gradient(to bottom, #ff3366 0%, #d61a4c 40%, #990026 100%); }
-.btn-red:hover { background: linear-gradient(to bottom, #ff4d79 0%, #e62254 40%, #b3002d 100%); }
-.btn-orange { background: linear-gradient(to bottom, #ff9933 0%, #d66f1a 40%, #994000 100%); }
-.btn-orange:hover { background: linear-gradient(to bottom, #ffad57 0%, #e67e22 40%, #b34a00 100%); }
-.btn-blue { background: linear-gradient(to bottom, #2da2ff 0%, #1a62d6 40%, #002b99 100%); }
-.btn-blue:hover { background: linear-gradient(to bottom, #4db3ff 0%, #2673e6 40%, #0033b3 100%); }
-.btn-green { background: linear-gradient(to bottom, #2cd140 0%, #199c29 40%, #065c10 100%); }
-.btn-green:hover { background: linear-gradient(to bottom, #42e055 0%, #20b032 40%, #097315 100%); }
+
+.btn-red {
+	background: linear-gradient(to bottom, #ff3366 0%, #d61a4c 40%, #990026 100%);
+}
+
+.btn-red:hover {
+	background: linear-gradient(to bottom, #ff4d79 0%, #e62254 40%, #b3002d 100%);
+}
+
+.btn-orange {
+	background: linear-gradient(to bottom, #ff9933 0%, #d66f1a 40%, #994000 100%);
+}
+
+.btn-orange:hover {
+	background: linear-gradient(to bottom, #ffad57 0%, #e67e22 40%, #b34a00 100%);
+}
+
+.btn-blue {
+	background: linear-gradient(to bottom, #2da2ff 0%, #1a62d6 40%, #002b99 100%);
+}
+
+.btn-blue:hover {
+	background: linear-gradient(to bottom, #4db3ff 0%, #2673e6 40%, #0033b3 100%);
+}
+
+.btn-green {
+	background: linear-gradient(to bottom, #2cd140 0%, #199c29 40%, #065c10 100%);
+}
+
+.btn-green:hover {
+	background: linear-gradient(to bottom, #42e055 0%, #20b032 40%, #097315 100%);
+}
+
+.setting-balloon {
+	min-width: 250px;
+}
+
+/* --- プロフィール編集フォームのスタイル --- */
+.profile-inline-form {
+	display: none;
+	padding: 10px 8px;
+	background: #f9f9f9;
+	border-radius: 6px;
+	margin: 8px 0;
+	border: 1px solid #eee;
+	color: #333;
+	text-align: left;
+}
+
+/* --- オプション設定フォームのスタイル --- */
+.options-inline-container {
+	display: none;
+	padding: 10px 8px;
+	background: #f9f9f9;
+	border-radius: 6px;
+	margin: 8px 0;
+	border: 1px solid #eee;
+}
+
+.inline-group {
+	margin-bottom: 8px;
+}
+
+.inline-group label {
+	display: block;
+	font-size: 11px;
+	font-weight: bold;
+	margin-bottom: 3px;
+	color: #555;
+}
+
+.inline-group input,
+.inline-group select {
+	width: 100%;
+	padding: 4px 8px;
+	font-size: 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	background: #fff;
+}
+
+/* 新しいパスワード入力時に活性化するエリア */
+.current-password-area {
+	transition: all 0.3s ease;
+	padding: 4px;
+	border-radius: 4px;
+}
+
+.current-password-area.required-active {
+	background-color: #fff3cd;
+	border: 1px dashed #ffc107;
+}
+
+.inline-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 6px;
+	margin-top: 10px;
+}
+
+.inline-btn {
+	padding: 3px 8px;
+	font-size: 11px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.btn-inline-cancel {
+	background: #e0e0e0;
+	color: #333;
+}
+
+.btn-inline-save {
+	background: #ff4a4a;
+	color: #fff;
+}
+
+/* アカウント削除の確認エリア */
+.delete-inline-container {
+	display: none;
+	padding: 16px 12px;
+	background: #fff5f5;
+	border: 1px solid #ffcccc;
+	border-radius: 6px;
+	margin: 8px 0;
+	color: #cc0000;
+	text-align: left;
+	font-size: 13px;
+}
+
+.delete-inline-container .inline-group label {
+	font-size: 12px;
+}
+
+.delete-inline-container .inline-group input {
+	font-size: 12px;
+	padding: 6px 8px;
+}
+
+.btn-inline-delete {
+	background: #ff4a4a;
+	color: #fff;
+}
+
+.btn-inline-delete:disabled {
+	background: #e0e0e0;
+	color: #aaaaaa;
+	cursor: not-allowed;
+}
+
+/* オプション用設定アイテムの並び */
+.option-toggle-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 6px 8px;
+	font-size: 12px;
+	color: #333;
+}
+
+.option-toggle-item input[type="checkbox"] {
+	cursor: pointer;
+}
+
+/* 演出スタイルの表示・非表示の切り替え用コンテナ */
+.effect-style-area {
+	display: block;
+	transition: all 0.3s ease;
+}
+
+.option-select-item {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 6px 8px;
+	font-size: 12px;
+	color: #333;
+	text-align: left;
+}
+
+.option-select-item select {
+	padding: 3px;
+	font-size: 11px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+}
+
+.menu-delete-account {
+	color: #ff4a4a !important;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+/* アバター表示用のラッパー調整 */
+.user-avatar-trigger {
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.avatar-icon-wrapper {
+	font-size: 26px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.avatar-icon {
+	width: 100%;
+	height: 100%;
+	color: #3b9eff !important;
+}
+
+/* --- ダークモード時のスタイル --- */
+body.dark-mode {
+	background-color: #1a1a1a !important;
+	color: #f5f5f5 !important;
+}
+
+body.dark-mode .setting-balloon {
+	background: #2a2a2a;
+	border-color: #444;
+}
+
+body.dark-mode .balloon-title {
+	color: #fff;
+	border-bottom-color: #444;
+}
+
+body.dark-mode .balloon-menu a {
+	color: #ddd;
+}
+
+body.dark-mode .option-toggle-item,
+body.dark-mode .option-select-item {
+	color: #ddd;
+}
+
+body.dark-mode .profile-inline-form,
+body.dark-mode .options-inline-container {
+	background: #333;
+	border-color: #444;
+}
+
+body.dark-mode .delete-inline-container {
+	background: #3a2222;
+	border-color: #663333;
+	color: #ff9999;
+}
+
+body.dark-mode .inline-group label {
+	color: #ccc;
+}
+
+body.dark-mode .inline-group input,
+body.dark-mode .inline-group select,
+body.dark-mode .option-select-item select {
+	background: #444;
+	color: #fff;
+	border-color: #555;
+}
+
+/* --- 目マーク付きパスワード入力 --- */
+.password-wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.password-wrapper input {
+	width: 100%;
+	padding-right: 30px !important;
+	box-sizing: border-box;
+}
+
+.toggle-password-btn {
+	position: absolute;
+	right: 6px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	color: #999;
+	font-size: 15px;
+	line-height: 1;
+}
+
+.toggle-password-btn:hover {
+	color: #555;
+}
+
+/* --- フラッシュメッセージ --- */
+.flash-message {
+	position: fixed;
+	top: calc(var(--header-height, 60px) + 12px);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 9999;
+	min-width: 260px;
+	max-width: 90vw;
+	background: #ffffff;
+	border-left: 5px solid #4caf50;
+	border-radius: 8px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+	padding: 12px 20px 12px 16px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	font-weight: bold;
+	color: #2e7d32;
+	animation: flashSlideIn 0.3s ease, flashFadeOut 0.5s ease 3s forwards;
+}
+
+.flash-message::before {
+	content: '✅';
+	font-size: 18px;
+	flex-shrink: 0;
+}
+
+@keyframes flashSlideIn {
+	from {
+		opacity: 0;
+		transform: translateX(-50%) translateY(-10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateX(-50%) translateY(0);
+	}
+}
+
+@keyframes flashFadeOut {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+		pointer-events: none;
+	}
+}
+
+/* ==========================================================================
+   ランクバッジ用ツールチップ（ホバー時に表示）
+   ========================================================================== */
+.rank-display {
+	position: relative;
+	/* 子要素の基準点にするため追加 */
+}
+
+.rank-tooltip {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%) translateY(10px);
+	/* 最初は少し下に下げておく */
+	margin-top: 10px;
+	padding: 6px 12px;
+	background: linear-gradient(to bottom, #333333 0%, #1a1a1a 100%);
+	border: 1.5px solid #ffea9f;
+	outline: 1px solid #a3751a;
+	border-radius: 8px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+
+	/* 文字スタイル */
+	color: #ffffff;
+	font-size: 11px;
+	font-weight: 700;
+	white-space: nowrap;
+	letter-spacing: 0.5px;
+
+	/* アニメーション制御 */
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+	z-index: 20;
+}
+
+/* 上向きの小さな三角矢印 */
+.rank-tooltip::before {
+	content: '';
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-bottom: 6px solid #ffea9f;
+}
+
+.rank-tooltip::after {
+	content: '';
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 5px solid #333333;
+	margin-bottom: -1px;
+	/* 微調整 */
+}
+
+/* ホバー時に起動 */
+.rank-display:hover .rank-tooltip {
+	opacity: 1;
+	visibility: visible;
+	transform: translateX(-50%) translateY(0);
+	/* 定位置へスライド */
+}
+
+/* ダークモード時の微調整 */
+body.dark-mode .rank-tooltip {
+	background: #2a2a2a;
+	border-color: #444;
+}
+
+body.dark-mode .rank-tooltip::before {
+	border-bottom-color: #444;
+}
+
+body.dark-mode .rank-tooltip::after {
+	border-bottom-color: #2a2a2a;
+}
