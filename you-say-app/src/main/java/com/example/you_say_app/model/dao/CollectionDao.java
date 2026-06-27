@@ -69,4 +69,24 @@ public class CollectionDao extends SuperDao {
 		return collects; // 1件のDTOを返す
 	}
 
+	// 指定ユーザーが、その名言を既にコレクション済みか確認（あればtrue）
+	public Boolean canCollect(int userId, int quoteId) {
+		Boolean ret = true; // 重複していれば true（初期値は false）
+
+		// user_id と quote_id の組み合わせが既に存在するか調べるSQL
+		String sql = "SELECT * FROM  collecton_quotes where user_id = ? AND quote_id = ?;";
+		try (Connection con = getConnection();
+				PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, userId); // WHERE の1つ目の ? に userId をセット
+			ps.setInt(2, quoteId); // WHERE の2つ目の ? に quoteId をセット
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) { // 1件でもあれば重複あり
+				ret = false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace(); // エラー内容をコンソールに出力
+		}
+		return ret; // 重複の有無を返す
+	}
+
 }
