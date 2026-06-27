@@ -200,4 +200,23 @@ public class UserDao extends SuperDao {
 		}
 		return ret;
 	}
+	
+	// 指定ユーザーのランクを更新する（戻り値は更新された行数）
+	public int updateUserRank(int userId, int rankId) {
+	    int ret = 0; // 更新件数（0なら未更新）
+
+	    // users テーブルの該当ユーザーの rank_id を更新するSQL
+	    String sql = "UPDATE you_say.users SET rank_id = ? WHERE (user_id = ?)";
+	    try (Connection con = getConnection();
+	            PreparedStatement ps = con.prepareStatement(sql)) {
+	        ps.setInt(1, rankId); // SET の ? に新しい rankId をセット
+	        ps.setInt(2, userId); // WHERE の ? に userId をセット
+
+	        ret = ps.executeUpdate(); // UPDATE実行、更新された行数を取得
+	    } catch (SQLException e) {
+	        e.printStackTrace(); // エラー内容をコンソールに出力
+	    }
+
+	    return ret; // 更新件数を返す（成功時は通常1）
+	}
 }
