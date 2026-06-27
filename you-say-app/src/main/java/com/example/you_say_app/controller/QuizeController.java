@@ -94,7 +94,9 @@ public class QuizeController {
 			int userId = (int) session.getAttribute("loginUser");
 
 			// 正解した名言をコレクションとしてDBに保存
-			collectionDao.insertCollection(userId, questionDto.getQuoteId());
+			if (collectionDao.canCollect(userId, questionDto.getQuoteId())) {
+				collectionDao.insertCollection(userId, questionDto.getQuoteId());
+			}
 
 			// 現在のコレクション数を取得
 			int collectionCount = collectionDao.collectionDisplay(userId).size();
