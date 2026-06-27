@@ -10,6 +10,9 @@ public class RankDto {
 		this.rank_name = rank_name;
 		this.required_number = required_number;
 	}
+	public RankDto() {
+		
+	}
 	public int getRank_id() {
 		return rank_id;
 	}
