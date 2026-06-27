@@ -1,0 +1,155 @@
+@charset "UTF-8";
+
+
+
+/* ---- クイズ画面専用の追加・微調整スタイル ---- */
+.quiz-page-container {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	position: relative;
+}
+
+.quiz-main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 40px 20px;
+	box-sizing: border-box;
+	z-index: 5;
+	position: relative;
+}
+
+/* クイズ表示部分：index.cssの高級カード風デザイン */
+.quiz-display-card {
+	width: 100%;
+	max-width: 680px;
+	min-height: 250px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #fdfdfd;
+	border: 2px solid #ffea9f;
+	outline: 1.5px solid #a3751a;
+	position: relative;
+	margin-bottom: 40px;
+	animation: fadeUp 0.6s ease both;
+}
+
+/* 擬似的な3Dの影をカードに付与 */
+.quiz-display-card::after {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	top: 4px;
+	left: 4px;
+	right: -4px;
+	bottom: -4px;
+	background: rgba(163, 117, 26, 0.15);
+	border-radius: var(--radius-card);
+}
+
+.quiz-question-text {
+	font-size: clamp(18px, 2.5vw, 24px);
+	font-weight: 800;
+	color: #333;
+	text-align: center;
+	line-height: 1.8;
+	padding: 10px;
+}
+
+/* 回答フォームのレイアウト */
+.quiz-answer-form {
+	width: 100%;
+	max-width: 680px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	align-items: center;
+	animation: fadeUp 0.6s ease 0.15s both;
+}
+
+/* 入力エリア（丸みを持たせ、フォーカス時にオレンジに光るモダンデザイン） */
+.quiz-input-field {
+	width: 100%;
+	padding: 16px 24px;
+	font-size: 20px;
+	font-weight: 700;
+	text-align: center;
+	color: #222;
+	background-color: #f5f5f5;
+	border: 2px solid #ddd;
+	border-radius: var(--radius-btn);
+	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+}
+
+.quiz-input-field:focus {
+	outline: none;
+	border-color: var(--color-orange);
+	background-color: #fff;
+	box-shadow: 0 0 0 4px rgba(245, 166, 35, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ボタンの横幅をフォームのバランスに最適化 */
+.quiz-answer-form .btn {
+	max-width: 320px;
+	width: 100%;
+}
+
+/* ==========================================================================
+   ダークモード用のスタイル（bodyに .dark-mode が付与された時に適用）
+   ========================================================================== */
+body.dark-mode,
+body.dark-mode .top-page {
+	background-color: #1a1a1a !important;
+	/* 背景をダークグレーに */
+	color: #f5f5f5 !important;
+	/* 文字色を明るいグレーに */
+}
+
+/* ユーザー名バッジやランクバッジの調整 */
+body.dark-mode .user-name-badge,
+body.dark-mode .rank-badge {
+	background: #2d2d2d;
+	border-color: #444;
+	color: #fff;
+}
+
+/* バルーンメニュー（ユーザー設定）の中身もダーク化 */
+body.dark-mode .setting-balloon {
+	background: #2a2a2a;
+	border: 1px solid #444;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .balloon-title {
+	color: #ffd700;
+	/* タイトルをゴールドっぽく見やすく */
+}
+
+body.dark-mode .balloon-menu li a {
+	color: #ddd;
+}
+
+body.dark-mode .balloon-menu li a:hover {
+	background-color: #383838;
+}
+
+/* フォーム内の入力エリア */
+body.dark-mode .inline-group input,
+body.dark-mode .option-select-item select {
+	background-color: #333;
+	color: #fff;
+	border-color: #555;
+}
+
+/* フッターやヘッダーのテキスト */
+body.dark-mode footer,
+body.dark-mode header {
+	color: #aaa;
+}
