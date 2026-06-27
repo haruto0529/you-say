@@ -130,8 +130,10 @@
 		<form class="quiz-answer-form" th:action="@{/quize/check}" method="post">
 			<input type="hidden" name="questionId" th:value="${question.questionId}" />
 
-			<input type="text" class="quiz-input-field" name="userAnswer" placeholder="回答を入力してください" required
-				autocomplete="off">
+			<input type="text" class="quiz-input-field" name="userAnswer"
+				placeholder="ひらがなで回答してください" required autocomplete="off"
+				pattern="[ぁ-んー]+"
+				title="ひらがなで入力してください">
 			<button type="submit" class="btn btn-orange">決定</button>
 		</form>
 	</main>
