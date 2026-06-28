@@ -18,6 +18,7 @@ public class RoutingController {
 
 	@Autowired
 	private RanksDao ranksDao;
+	
 
 	@GetMapping("/")
 	public String showIndex(HttpSession session, Model model) {
@@ -55,5 +56,7 @@ public class RoutingController {
 		model.addAttribute("rankList", ranksDao.getRankList());
 		return "rank";
 	}
+
+	
 
 }
