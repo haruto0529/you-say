@@ -1,19 +1,23 @@
 package com.example.you_say_app.controller;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.you_say_app.model.dao.RanksDao;
 import com.example.you_say_app.model.dao.UserDao;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class RoutingController {
 
 	@Autowired
 	private UserDao userdao;
+
+	@Autowired
+	private RanksDao ranksDao;
 
 	@GetMapping("/")
 	public String showIndex(HttpSession session, Model model) {
@@ -40,6 +44,16 @@ public class RoutingController {
 	@GetMapping("/minigame")
 	public String showStart() {
 		return "connect4";
+	}
+
+	@GetMapping("/rank")
+	public String showrank(HttpSession session, Model model) {
+		Object loginUser = session.getAttribute("loginUser");
+		if (loginUser == null) {
+			return "redirect:/top";
+		}
+		model.addAttribute("rankList", ranksDao.getRankList());
+		return "rank";
 	}
 
 }

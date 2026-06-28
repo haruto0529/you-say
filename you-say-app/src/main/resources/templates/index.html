@@ -350,7 +350,7 @@
 		<canvas id="effectCanvas"
 			style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2;"></canvas>
 
-		<div class="rank-display"
+		<div class="rank-display" th:onclick="|location.href='@{/rank}'|"
 			style="position: absolute; top: calc(var(--header-height, 60px) + 20px); left: 20px; z-index: 10;">
 			<div class="rank-badge">
 				<span class="rank-label">RANK</span>
