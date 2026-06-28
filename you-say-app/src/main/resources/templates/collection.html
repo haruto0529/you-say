@@ -28,7 +28,6 @@
 			--radius-card: 16px;
 			--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.10);
 			--shadow-md: 0 4px 20px rgba(0, 0, 0, 0.14);
-
 			--bg-gradient-start: #f0f4f8;
 			--bg-gradient-end: #d7e1ec;
 			--card-bg: #ffffff;
@@ -87,9 +86,12 @@
 			min-height: 100vh;
 			display: flex;
 			flex-direction: column;
-			padding-bottom: 100px;
 			transition: color 0.3s;
 			background: transparent;
+		}
+
+		footer {
+			display: none !important;
 		}
 
 		/* ===== ヘッダー ===== */
@@ -282,8 +284,9 @@
 			width: 100%;
 			max-width: 800px;
 			margin: 0 auto;
-			padding: 40px 20px 20px;
+			padding: 40px 20px 120px;
 			box-sizing: border-box;
+			flex: 1;
 		}
 
 		.collection-title {
@@ -502,18 +505,17 @@
 			box-shadow: 0 0px 0px transparent !important;
 		}
 
-		/* ===== 固定「メニューに戻る」ボタン（バーなし・浮かせるだけ） ===== */
+		/* ===== 固定ボタンバー ===== */
 		.fixed-footer-bar {
 			position: fixed;
-			bottom: 80px;
-			/* 56px(フッター) + 24px(余白) */
-			left: 24px;
+			bottom: 24px;
+			left: 0;
+			right: 0;
+			padding: 0 24px;
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			justify-content: space-between;
 			z-index: 1000;
-			background: none;
-			border: none;
 			pointer-events: none;
 		}
 
@@ -541,6 +543,16 @@
 			transform: translateY(-2px);
 		}
 
+		.quiz-btn {
+			color: var(--color-orange);
+		}
+
+		.quiz-btn:hover {
+			background: var(--color-orange);
+			border-color: var(--color-orange);
+			color: #fff;
+		}
+
 		@keyframes fadeUp {
 			from {
 				opacity: 0;
@@ -557,10 +569,8 @@
 
 <body>
 	<header th:replace="~{fragments/header :: header}"></header>
-
 	<main class="collection-main">
 		<h2 class="collection-title">WORD COLLECTION</h2>
-
 		<div class="sort-section">
 			<button class="sort-btn active" data-sort="id">
 				<i class="fa-solid fa-hashtag"></i> 番号順
@@ -578,31 +588,25 @@
 				<i class="fa-solid fa-arrow-up"></i>
 			</button>
 		</div>
-
 		<div class="collection-list" id="collectionList">
 			<p th:if="${#lists.isEmpty(collection)}" style="text-align:center; color:#fff; font-weight:800;">
 				まだコレクションがありません。クイズに正解して集めよう！
 			</p>
-
 			<div class="collection-item-card unlocked" th:each="item : ${collection}" th:if="${item.deletedAt == null}"
 				th:data-id="${item.collectionId}" th:data-likes="${item.likeCount != null ? item.likeCount : 0}"
 				th:data-date="${item.createdAt != null ? #temporals.format(item.createdAt, 'yyyy/MM/dd') : '0000/00/00'}"
 				th:data-kana="${item.quote}">
-
 				<div class="item-main-info">
 					<div class="item-header">
 						<span class="item-number" th:text="${#numbers.formatInteger(item.collectionId, 3)}">001</span>
-
 						<span class="item-likes" th:if="${item.hasGoldMedal}">
 							<i class="fa-solid fa-medal medal-icon"></i>
 							<span>金メダル</span>
 						</span>
-
 						<span class="item-likes" th:if="${item.createdAt != null}">
 							<i class="fa-regular fa-calendar like-icon"></i>
 							<span th:text="${#temporals.format(item.createdAt, 'yyyy/MM/dd')}">2026/01/01</span>
 						</span>
-
 						<span class="item-likes">
 							<i class="fa-solid fa-thumbs-up like-icon"></i>
 							<span th:id="'like-count-' + ${item.collectionId}"
@@ -611,7 +615,6 @@
 					</div>
 					<h3 class="item-word" th:text="${item.quote}">継続は力なり</h3>
 				</div>
-
 				<div class="item-actions">
 					<button class="like-btn" th:classappend="${item.isLiked} ? 'liked' : ''"
 						th:data-id="${item.collectionId}" th:data-quote-id="${item.quoteId}">
@@ -621,15 +624,17 @@
 			</div>
 		</div>
 	</main>
-
 	<div class="fixed-footer-bar">
 		<a th:href="@{/}" class="back-btn">
 			<i class="fa-solid fa-arrow-left"></i> メニューに戻る
 		</a>
+		<a th:if="${toQuize != null}" th:href="@{/quize}" class="back-btn quiz-btn">
+			<i class="fa-solid fa-pen-to-square"></i>
+			<span th:text="${toQuize}">クイズは戻る</span>
+		</a>
+		<div th:if="${toQuize == null}"></div>
 	</div>
-
 	<footer th:replace="~{fragments/footer :: footer}" style="display:none;"></footer>
-
 	<script>
 		(function () {
 			const savedDark = localStorage.getItem('quiz_dark_mode');
@@ -638,7 +643,6 @@
 			}
 		})();
 		document.addEventListener('DOMContentLoaded', () => {
-
 			const trigger = document.getElementById('avatarTrigger');
 			const balloon = document.getElementById('settingBalloon');
 			if (trigger && balloon) {
@@ -652,18 +656,15 @@
 					}
 				});
 			}
-
 			// ===== 並び替え =====
 			const list = document.getElementById('collectionList');
 			const sortBtns = document.querySelectorAll('.sort-btn');
 			const dirBtn = document.getElementById('sortDirBtn');
 			let currentSort = 'id';
 			let ascending = true;
-
 			function getCards() {
 				return Array.from(list.querySelectorAll('.collection-item-card'));
 			}
-
 			function sortCards() {
 				const cards = getCards();
 				cards.sort((a, b) => {
@@ -690,7 +691,6 @@
 				});
 				cards.forEach(card => list.appendChild(card));
 			}
-
 			sortBtns.forEach(btn => {
 				btn.addEventListener('click', () => {
 					sortBtns.forEach(b => b.classList.remove('active'));
@@ -699,14 +699,12 @@
 					sortCards();
 				});
 			});
-
 			dirBtn.addEventListener('click', () => {
 				ascending = !ascending;
 				dirBtn.classList.toggle('desc', !ascending);
 				dirBtn.title = ascending ? '昇順' : '降順';
 				sortCards();
 			});
-
 			// ===== いいねボタン =====
 			document.querySelectorAll('.like-btn').forEach(button => {
 				button.addEventListener('click', async function (e) {
@@ -728,10 +726,8 @@
 							const updatedCount = await response.json();
 							const countTarget = document.getElementById(`like-count-${collectionId}`);
 							if (countTarget) countTarget.textContent = updatedCount;
-
 							const card = this.closest('.collection-item-card');
 							if (card) card.dataset.likes = updatedCount;
-
 							const textTarget = this.querySelector('.like-btn-text');
 							if (this.classList.contains('liked')) {
 								this.classList.remove('liked');

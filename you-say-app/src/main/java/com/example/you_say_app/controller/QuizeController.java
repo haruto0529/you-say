@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.you_say_app.model.dao.AnswerLogDao;
 import com.example.you_say_app.model.dao.CollectionDao;
@@ -128,7 +129,7 @@ public class QuizeController {
 		answerLogDao.setLog(questionId, userId, isCorrect, userAnswer);
 
 		model.addAttribute("isCorrect", isCorrect); // 判定結果をビューに渡す
-		model.addAttribute("questions", questionsList);     // 残りの出題リストを渡す
+		model.addAttribute("questions", questionsList); // 残りの出題リストを渡す
 
 		return "result"; // 結果ページを表示
 	}
@@ -160,4 +161,21 @@ public class QuizeController {
 		}
 		return "redirect:/";
 	}
+
+	@GetMapping("/tocollection")
+	public String toMenu(HttpSession session,
+			@SessionAttribute(name = "questions", required = false) List<Integer> questionsList,
+			RedirectAttributes redirectAttributes) {
+
+		if (session.getAttribute("loginUser") == null) {
+			return "redirect:/top";
+		}
+		if (questionsList != null) {
+			session.removeAttribute("questions");
+		}
+
+		redirectAttributes.addFlashAttribute("toQuize", "クイズに戻る");
+		return "redirect:/collection";
+	}
+
 }
