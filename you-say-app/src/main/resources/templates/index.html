@@ -1,340 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>YOU SAY QUIZE</title>
+	<title>YOU SAY QUIZ</title>
 	<link rel="stylesheet" th:href="@{/css/common.css}">
 	<link rel="stylesheet" th:href="@{/css/index.css}">
-
-	<style>
-		.setting-balloon {
-			min-width: 250px;
-		}
-
-		/* --- プロフィール編集フォームのスタイル --- */
-		.profile-inline-form {
-			display: none;
-			padding: 10px 8px;
-			background: #f9f9f9;
-			border-radius: 6px;
-			margin: 8px 0;
-			border: 1px solid #eee;
-			color: #333;
-			text-align: left;
-		}
-
-		/* --- オプション設定フォームのスタイル --- */
-		.options-inline-container {
-			display: none;
-			padding: 10px 8px;
-			background: #f9f9f9;
-			border-radius: 6px;
-			margin: 8px 0;
-			border: 1px solid #eee;
-		}
-
-		.inline-group {
-			margin-bottom: 8px;
-		}
-
-		.inline-group label {
-			display: block;
-			font-size: 11px;
-			font-weight: bold;
-			margin-bottom: 3px;
-			color: #555;
-		}
-
-		.inline-group input,
-		.inline-group select {
-			width: 100%;
-			padding: 4px 8px;
-			font-size: 12px;
-			border: 1px solid #ccc;
-			border-radius: 4px;
-			box-sizing: border-box;
-			background: #fff;
-		}
-
-		/* 新しいパスワード入力時に活性化するエリア */
-		.current-password-area {
-			transition: all 0.3s ease;
-			padding: 4px;
-			border-radius: 4px;
-		}
-
-		.current-password-area.required-active {
-			background-color: #fff3cd;
-			border: 1px dashed #ffc107;
-		}
-
-		.inline-actions {
-			display: flex;
-			justify-content: flex-end;
-			gap: 6px;
-			margin-top: 10px;
-		}
-
-		.inline-btn {
-			padding: 3px 8px;
-			font-size: 11px;
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-			font-weight: bold;
-		}
-
-		.btn-inline-cancel {
-			background: #e0e0e0;
-			color: #333;
-		}
-
-		.btn-inline-save {
-			background: #ff4a4a;
-			color: #fff;
-		}
-
-		/* アカウント削除の確認エリア */
-		.delete-inline-container {
-			display: none;
-			padding: 16px 12px;
-			background: #fff5f5;
-			border: 1px solid #ffcccc;
-			border-radius: 6px;
-			margin: 8px 0;
-			color: #cc0000;
-			text-align: left;
-			font-size: 13px;
-		}
-
-		.delete-inline-container .inline-group label {
-			font-size: 12px;
-		}
-
-		.delete-inline-container .inline-group input {
-			font-size: 12px;
-			padding: 6px 8px;
-		}
-
-		.btn-inline-delete {
-			background: #ff4a4a;
-			color: #fff;
-		}
-
-		.btn-inline-delete:disabled {
-			background: #e0e0e0;
-			color: #aaaaaa;
-			cursor: not-allowed;
-		}
-
-		/* オプション用設定アイテムの並び */
-		.option-toggle-item {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 6px 8px;
-			font-size: 12px;
-			color: #333;
-		}
-
-		.option-toggle-item input[type="checkbox"] {
-			cursor: pointer;
-		}
-
-		/* 演出スタイルの表示・非表示の切り替え用コンテナ */
-		.effect-style-area {
-			display: block;
-			transition: all 0.3s ease;
-		}
-
-		.option-select-item {
-			display: flex;
-			flex-direction: column;
-			gap: 4px;
-			padding: 6px 8px;
-			font-size: 12px;
-			color: #333;
-			text-align: left;
-		}
-
-		.option-select-item select {
-			padding: 3px;
-			font-size: 11px;
-			border-radius: 4px;
-			border: 1px solid #ccc;
-		}
-
-		.menu-delete-account {
-			color: #ff4a4a !important;
-			font-size: 12px;
-			font-weight: bold;
-		}
-
-		/* アバター表示用のラッパー調整 */
-		.user-avatar-trigger {
-			width: 40px;
-			height: 40px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-		}
-
-		.avatar-icon-wrapper {
-			font-size: 26px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 100%;
-			height: 100%;
-		}
-
-		.avatar-icon {
-			width: 100%;
-			height: 100%;
-			color: #3b9eff !important;
-		}
-
-		/* --- ダークモード時のスタイル --- */
-		body.dark-mode {
-			background-color: #1a1a1a !important;
-			color: #f5f5f5 !important;
-		}
-
-		body.dark-mode .setting-balloon {
-			background: #2a2a2a;
-			border-color: #444;
-		}
-
-		body.dark-mode .balloon-title {
-			color: #fff;
-			border-bottom-color: #444;
-		}
-
-		body.dark-mode .balloon-menu a {
-			color: #ddd;
-		}
-
-		body.dark-mode .option-toggle-item,
-		body.dark-mode .option-select-item {
-			color: #ddd;
-		}
-
-		body.dark-mode .profile-inline-form,
-		body.dark-mode .options-inline-container {
-			background: #333;
-			border-color: #444;
-		}
-
-		body.dark-mode .delete-inline-container {
-			background: #3a2222;
-			border-color: #663333;
-			color: #ff9999;
-		}
-
-		body.dark-mode .inline-group label {
-			color: #ccc;
-		}
-
-		body.dark-mode .inline-group input,
-		body.dark-mode .inline-group select,
-		body.dark-mode .option-select-item select {
-			background: #444;
-			color: #fff;
-			border-color: #555;
-		}
-
-		/* --- 目マーク付きパスワード入力 --- */
-		.password-wrapper {
-			position: relative;
-			display: flex;
-			align-items: center;
-		}
-
-		.password-wrapper input {
-			width: 100%;
-			padding-right: 30px !important;
-			box-sizing: border-box;
-		}
-
-		.toggle-password-btn {
-			position: absolute;
-			right: 6px;
-			background: none;
-			border: none;
-			cursor: pointer;
-			padding: 0;
-			display: flex;
-			align-items: center;
-			color: #999;
-			font-size: 15px;
-			line-height: 1;
-		}
-
-		.toggle-password-btn:hover {
-			color: #555;
-		}
-
-		/* --- フラッシュメッセージ --- */
-		.flash-message {
-			position: fixed;
-			top: calc(var(--header-height, 60px) + 12px);
-			left: 50%;
-			transform: translateX(-50%);
-			z-index: 9999;
-			min-width: 260px;
-			max-width: 90vw;
-			background: #ffffff;
-			border-left: 5px solid #4caf50;
-			border-radius: 8px;
-			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-			padding: 12px 20px 12px 16px;
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			font-size: 14px;
-			font-weight: bold;
-			color: #2e7d32;
-			animation: flashSlideIn 0.3s ease, flashFadeOut 0.5s ease 3s forwards;
-		}
-
-		.flash-message::before {
-			content: '✅';
-			font-size: 18px;
-			flex-shrink: 0;
-		}
-
-		@keyframes flashSlideIn {
-			from {
-				opacity: 0;
-				transform: translateX(-50%) translateY(-10px);
-			}
-
-			to {
-				opacity: 1;
-				transform: translateX(-50%) translateY(0);
-			}
-		}
-
-		@keyframes flashFadeOut {
-			from {
-				opacity: 1;
-			}
-
-			to {
-				opacity: 0;
-				pointer-events: none;
-			}
-		}
-	</style>
 </head>
-
 <body>
 	<div class="top-page" style="display: flex; flex-direction: column; min-height: 100vh; position: relative;">
 		<header th:replace="~{fragments/header :: header}"></header>
-
 		<div th:if="${message}" id="flashMessage" class="flash-message">
 			<span th:text="${message}"></span>
 		</div>
@@ -346,18 +21,16 @@
 				}
 			})();
 		</script>
-
 		<canvas id="effectCanvas"
 			style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2;"></canvas>
-
 		<div class="rank-display" th:onclick="|location.href='@{/rank}'|"
 			style="position: absolute; top: calc(var(--header-height, 60px) + 20px); left: 20px; z-index: 10;">
 			<div class="rank-badge">
 				<span class="rank-label">RANK</span>
 				<span class="rank-name" th:text="${user_rank}">JAVA</span>
 			</div>
+			<div class="rank-tooltip">クリックでランク詳細をチェック！</div>
 		</div>
-
 		<div class="user-setting-container"
 			style="position: absolute; top: calc(var(--header-height, 60px) + 20px); right: 20px; z-index: 10; display: flex; align-items: center; gap: 12px;">
 			<div class="user-name-badge">
@@ -373,16 +46,15 @@
 								clip-rule="evenodd" />
 						</svg>
 					</div>
-
+					
 					<div class="setting-balloon" id="mySettingBalloon" onclick="event.stopPropagation();"
-						onmousedown="event.stopPropagation();">
+						onmousedown="event.stopPropagation();" style="padding-top: 20px; padding-bottom: 20px;">
 						<div class="balloon-arrow"></div>
-						<div class="balloon-title">ユーザー設定</div>
-						<ul class="balloon-menu">
-
+						<div class="balloon-title" style="margin-bottom: 14px;">ユーザー設定</div>
+						<ul class="balloon-menu" style="display: flex; flex-direction: column; gap: 8px;">
+							
 							<li onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
-								<a href="javascript:void(0);" onclick="toggleProfileForm(event);">👤 プロフィール編集</a>
-
+								<a href="javascript:void(0);" onclick="toggleProfileForm(event);">👤 ユーザー設定</a>
 								<form id="inlineProfileForm" th:action="@{/profile/update}" method="post"
 									class="profile-inline-form" onclick="event.stopPropagation();">
 									<div class="inline-group">
@@ -390,7 +62,6 @@
 										<input type="text" id="inlineUsername" name="username" th:value="${user_name}"
 											required>
 									</div>
-
 									<div class="inline-group">
 										<label for="inlinePassword">新しいパスワード</label>
 										<div class="password-wrapper">
@@ -411,7 +82,6 @@
 												onclick="togglePw('currentPassword', this)">👁</button>
 										</div>
 									</div>
-
 									<div class="inline-actions">
 										<button type="button" class="inline-btn btn-inline-cancel"
 											onclick="toggleProfileForm(event)">閉じる</button>
@@ -419,17 +89,33 @@
 									</div>
 								</form>
 							</li>
-
+							
 							<li onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
-								<a href="javascript:void(0);" onclick="toggleOptionsForm(event);">⚙️ オプション設定</a>
-
+								<a href="javascript:void(0);" onclick="toggleAvatarForm(event);">✨ アバター設定</a>
+								<div id="inlineAvatarContainer" class="options-inline-container" onclick="event.stopPropagation();">
+									<div class="option-select-item">
+										<label for="avatarSelect">👤 アバターの見た目を選択</label>
+										<select id="avatarSelect" onchange="changeAvatar(this.value)">
+											<option value="default">標準（シルエット）</option>
+											<option value="robot">🤖 ロボット</option>
+											<option value="chick">🐤 ひよこ</option>
+											<option value="ninja">🥷 忍者</option>
+											<option value="cat">🐱 ねこ</option>
+											<option value="dog">🐶 いぬ</option>
+											<option value="alien">👽 宇宙人</option>
+											<option value="king">👑 王様</option>
+										</select>
+									</div>
+								</div>
+							</li>
+							<li onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
+								<a href="javascript:void(0);" onclick="toggleOptionsForm(event);">⚙️ 画面設定</a>
 								<div id="inlineOptionsContainer" class="options-inline-container"
 									onclick="event.stopPropagation();">
 									<div class="option-toggle-item">
 										<span>🎈 背景演出を有効化</span>
 										<input type="checkbox" id="effectToggle" checked onclick="toggleEffect(this)">
 									</div>
-
 									<div id="effectStyleArea" class="effect-style-area">
 										<div class="option-select-item">
 											<label for="effectTypeSelect">🎬 演出スタイル</label>
@@ -444,31 +130,14 @@
 										<span>🌙 ダークモード</span>
 										<input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode(this)">
 									</div>
-									<div class="option-select-item"
-										style="border-top: 1px dashed #eee; margin-top: 6px; padding-top: 10px;">
-										<label for="avatarSelect">👤 アバターの見た目</label>
-										<select id="avatarSelect" onchange="changeAvatar(this.value)">
-											<option value="default">標準（シルエット）</option>
-											<option value="robot">🤖 ロボット</option>
-											<option value="chick">🐤 ひよこ</option>
-											<option value="ninja">🥷 忍者</option>
-											<option value="cat">🐱 ねこ</option>
-											<option value="dog">🐶 いぬ</option>
-											<option value="alien">👽 宇宙人</option>
-											<option value="king">👑 王様</option>
-										</select>
-									</div>
 								</div>
 							</li>
-
-							<li class="menu-divider"></li>
-
+							<li class="menu-divider" style="margin: 10px 0;"></li>
 							<li onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
 								<a href="javascript:void(0);" onclick="toggleDeleteForm(event);"
 									class="menu-delete-account">
 									⚠️ アカウントの削除
 								</a>
-
 								<form id="deleteAccountForm" th:action="@{/profile/delete}" method="post"
 									class="delete-inline-container" onclick="event.stopPropagation();">
 									<p style="margin: 0 0 6px 0; font-weight: bold;">⚠️ すべてのデータが完全に削除されます。</p>
@@ -489,8 +158,7 @@
 									</div>
 								</form>
 							</li>
-
-							<li onclick="event.stopPropagation();">
+							<li onclick="event.stopPropagation();" style="margin-top: 2px;">
 								<form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;">
 								</form>
 								<a href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();"
@@ -503,12 +171,10 @@
 				</div>
 			</div>
 		</div>
-
 		<main
 			style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 0; z-index: 5; position: relative;">
 			<div class="menu-buttons"
 				style="display: flex; flex-direction: column; gap: clamp(14px, 2.8vh, 26px); width: 100%; max-width: 440px; padding: 0 20px;">
-
 				<form th:action="@{/quize}" method="get" style="width: 100%; margin: 0;">
 					<button type="submit" class="btn btn-red">
 						<span class="icon-left"
@@ -520,23 +186,20 @@
 							★</span>
 					</button>
 				</form>
-
 				<button type="button" class="btn btn-orange" th:onclick="|location.href='@{/minigame}'|">
 					<span class="icon-left"
 						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">🎮</span>
 					<span>ミニゲームで遊ぶ</span>
 					<span class="icon-right"
-						style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 16px;">⚡🎮</span>
+						style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 16px;">⚡🔥</span>
 				</button>
-
 				<button type="button" class="btn btn-blue" th:onclick="|location.href='@{/collection}'|">
 					<span class="icon-left"
-						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">🏆</span>
+						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">👑</span>
 					<span>コレクションを見る</span>
 					<span class="icon-right"
 						style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffd700; font-size: 16px;">🪙✨</span>
 				</button>
-
 				<button type="button" class="btn btn-green" th:onclick="|location.href='@{/about}'|">
 					<span class="icon-left"
 						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 18px;">📖</span>
@@ -544,12 +207,9 @@
 					<span class="icon-right"
 						style="position: absolute; right: 15px; display: flex; align-items: center; font-size: 18px;">✨</span>
 				</button>
-
 			</div>
 		</main>
-
 		<footer th:replace="~{fragments/footer :: footer}" style="z-index: 5; position: relative;"></footer>
-
 		<script>
 			function togglePw(inputId, btn) {
 				const input = document.getElementById(inputId);
@@ -561,7 +221,6 @@
 					btn.textContent = '👁';
 				}
 			}
-
 			let isEffectEnabled = true;
 			let currentEffectType = 'all';
 			let isSwitchingToggle = false;
@@ -577,12 +236,13 @@
 					event.preventDefault();
 					event.stopPropagation();
 				}
-
 				isSwitchingToggle = true;
 				const profileForm = document.getElementById('inlineProfileForm');
 				const optionsContainer = document.getElementById('inlineOptionsContainer');
+				const avatarContainer = document.getElementById('inlineAvatarContainer');
 				const deleteContainer = document.getElementById('deleteAccountForm');
 				optionsContainer.style.display = 'none';
+				avatarContainer.style.display = 'none';
 				deleteContainer.style.display = 'none';
 				if (profileForm.style.display === 'block') {
 					profileForm.style.display = 'none';
@@ -600,8 +260,10 @@
 				isSwitchingToggle = true;
 				const profileForm = document.getElementById('inlineProfileForm');
 				const optionsContainer = document.getElementById('inlineOptionsContainer');
+				const avatarContainer = document.getElementById('inlineAvatarContainer');
 				const deleteContainer = document.getElementById('deleteAccountForm');
 				profileForm.style.display = 'none';
+				avatarContainer.style.display = 'none';
 				deleteContainer.style.display = 'none';
 				if (optionsContainer.style.display === 'block') {
 					optionsContainer.style.display = 'none';
@@ -610,7 +272,26 @@
 				}
 				setTimeout(() => {isSwitchingToggle = false;}, 100);
 			}
-
+			function toggleAvatarForm(event) {
+				if (event) {
+					event.preventDefault();
+					event.stopPropagation();
+				}
+				isSwitchingToggle = true;
+				const profileForm = document.getElementById('inlineProfileForm');
+				const optionsContainer = document.getElementById('inlineOptionsContainer');
+				const avatarContainer = document.getElementById('inlineAvatarContainer');
+				const deleteContainer = document.getElementById('deleteAccountForm');
+				profileForm.style.display = 'none';
+				optionsContainer.style.display = 'none';
+				deleteContainer.style.display = 'none';
+				if (avatarContainer.style.display === 'block') {
+					avatarContainer.style.display = 'none';
+				} else {
+					avatarContainer.style.display = 'block';
+				}
+				setTimeout(() => {isSwitchingToggle = false;}, 100);
+			}
 			function toggleDeleteForm(event) {
 				if (event) {
 					event.preventDefault();
@@ -619,11 +300,11 @@
 				isSwitchingToggle = true;
 				const profileForm = document.getElementById('inlineProfileForm');
 				const optionsContainer = document.getElementById('inlineOptionsContainer');
+				const avatarContainer = document.getElementById('inlineAvatarContainer');
 				const deleteContainer = document.getElementById('deleteAccountForm');
-
 				profileForm.style.display = 'none';
 				optionsContainer.style.display = 'none';
-
+				avatarContainer.style.display = 'none';
 				if (deleteContainer.style.display === 'block') {
 					deleteContainer.style.display = 'none';
 				} else {
@@ -635,7 +316,6 @@
 				}
 				setTimeout(() => {isSwitchingToggle = false;}, 100);
 			}
-
 			function validateDeleteInput() {
 				const inputPassword = document.getElementById('deleteConfirmPassword').value.trim();
 				const finalDeleteBtn = document.getElementById('finalDeleteBtn');
@@ -645,7 +325,6 @@
 					finalDeleteBtn.disabled = true;
 				}
 			}
-
 			function checkPasswordRequired() {
 				const newPasswordInput = document.getElementById('inlinePassword');
 				const currentPasswordInput = document.getElementById('currentPassword');
@@ -664,10 +343,8 @@
 			function toggleEffect(checkbox) {
 				isEffectEnabled = checkbox.checked;
 				localStorage.setItem('quiz_effect_enabled', isEffectEnabled);
-
 				const canvas = document.getElementById('effectCanvas');
 				const styleArea = document.getElementById('effectStyleArea');
-
 				if (isEffectEnabled) {
 					styleArea.style.display = 'block';
 				} else {
@@ -731,22 +408,18 @@
 					changeAvatar(savedAvatar);
 				}
 			}
-
 			// === 背景アニメーション（Canvas制御） ===
 			const canvas = document.getElementById('effectCanvas');
 			const ctx = canvas.getContext('2d');
-
 			function resizeCanvas() {
 				canvas.width = window.innerWidth;
 				canvas.height = window.innerHeight;
 			}
 			window.addEventListener('resize', resizeCanvas);
 			resizeCanvas();
-
 			const confettis = [];
 			const balloons = [];
 			const colors = ['#ff4a4a', '#3b9eff', '#4fff5a', '#ffdf3b', '#ff63ca', '#9b4dff'];
-
 			class Confetti {
 				constructor() {
 					this.x = Math.random() * canvas.width;
@@ -776,7 +449,6 @@
 					ctx.restore();
 				}
 			}
-
 			class Balloon {
 				constructor() {
 					this.reset();
@@ -824,14 +496,11 @@
 					ctx.restore();
 				}
 			}
-
 			for (let i = 0; i < 50; i++) confettis.push(new Confetti());
 			for (let i = 0; i < 12; i++) balloons.push(new Balloon());
-
 			function animate() {
 				if (isEffectEnabled) {
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 					if (currentEffectType === 'all' || currentEffectType === 'balloon') {
 						balloons.forEach(b => {b.update(); b.draw();});
 					}
@@ -846,5 +515,4 @@
 		</script>
 	</div>
 </body>
-
 </html>
