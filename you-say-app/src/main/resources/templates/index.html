@@ -108,6 +108,9 @@
 									</div>
 								</div>
 							</li>
+                            <li onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
+								<a th:href="@{/quize/history}">📜 クイズ履歴</a>
+							</li>
 							<li onclick="event.stopPropagation();" onmousedown="event.stopPropagation();">
 								<a href="javascript:void(0);" onclick="toggleOptionsForm(event);">⚙️ 画面設定</a>
 								<div id="inlineOptionsContainer" class="options-inline-container"
@@ -191,18 +194,18 @@
 						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">🎮</span>
 					<span>ミニゲームで遊ぶ</span>
 					<span class="icon-right"
-						style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 16px;">⚡🔥</span>
+						style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffeb3b; font-size: 16px;">⚡️</span>
 				</button>
 				<button type="button" class="btn btn-blue" th:onclick="|location.href='@{/collection}'|">
 					<span class="icon-left"
-						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">👑</span>
+						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 20px;">📖</span>
 					<span>コレクションを見る</span>
 					<span class="icon-right"
 						style="position: absolute; right: 15px; display: flex; align-items: center; color: #ffd700; font-size: 16px;">🪙✨</span>
 				</button>
 				<button type="button" class="btn btn-green" th:onclick="|location.href='@{/about}'|">
 					<span class="icon-left"
-						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 18px;">📖</span>
+						style="position: absolute; left: 15px; display: flex; align-items: center; font-size: 18px;">ℹ️</span>
 					<span>紹介を見る</span>
 					<span class="icon-right"
 						style="position: absolute; right: 15px; display: flex; align-items: center; font-size: 18px;">✨</span>

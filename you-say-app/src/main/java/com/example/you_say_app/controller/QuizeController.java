@@ -3,8 +3,6 @@ package com.example.you_say_app.controller;
 import java.util.Collections;
 import java.util.List;
 
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,12 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.example.you_say_app.model.dao.AnswerLogDao;
 import com.example.you_say_app.model.dao.CollectionDao;
 import com.example.you_say_app.model.dao.QuestionDao;
 import com.example.you_say_app.model.dao.RankDao;
 import com.example.you_say_app.model.dao.UserDao;
 import com.example.you_say_app.model.dto.QuestionDto;
 import com.example.you_say_app.model.dto.RankDto;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class QuizeController {
@@ -31,6 +32,8 @@ public class QuizeController {
 	private UserDao userDao;
 	@Autowired
 	private RankDao rankDao;
+	@Autowired
+	private AnswerLogDao answerLogDao;
 
 	// クイズ画面を表示する
 	@GetMapping("/quize")
@@ -80,9 +83,11 @@ public class QuizeController {
 			return "redirect:/";
 		}
 
+		// セッションからログイン中のユーザーIDを取得
+		int userId = (int) session.getAttribute("loginUser");
+
 		boolean isCorrect;
-		model.addAttribute("userAnswer", userAnswer);       // ユーザーの回答をビューに渡す
-		model.addAttribute("questions", questionsList);     // 残りの出題リストを渡す
+		model.addAttribute("userAnswer", userAnswer); // ユーザーの回答をビューに渡す
 
 		// questionId から問題情報を取得
 		QuestionDto questionDto = questionDao.putInQuestion(questionId);
@@ -90,8 +95,6 @@ public class QuizeController {
 
 		// ユーザーの回答と正解を比較
 		if (userAnswer.equals(questionDto.getAnswerText())) {
-			// セッションからログイン中のユーザーIDを取得
-			int userId = (int) session.getAttribute("loginUser");
 
 			// 正解した名言をコレクションとしてDBに保存
 			if (collectionDao.canCollect(userId, questionDto.getQuoteId())) {
@@ -116,12 +119,16 @@ public class QuizeController {
 				}
 			}
 
-			isCorrect = true;  // 正解
+			isCorrect = true; // 正解
 		} else {
 			isCorrect = false; // 不正解
 		}
 
+		//		answerLogテーブルに履歴をインサート
+		answerLogDao.setLog(questionId, userId, isCorrect, userAnswer);
+
 		model.addAttribute("isCorrect", isCorrect); // 判定結果をビューに渡す
+		model.addAttribute("questions", questionsList);     // 残りの出題リストを渡す
 
 		return "result"; // 結果ページを表示
 	}
