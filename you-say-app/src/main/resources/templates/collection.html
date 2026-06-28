@@ -593,12 +593,12 @@
 				まだコレクションがありません。クイズに正解して集めよう！
 			</p>
 			<div class="collection-item-card unlocked" th:each="item : ${collection}" th:if="${item.deletedAt == null}"
-				th:data-id="${item.collectionId}" th:data-likes="${item.likeCount != null ? item.likeCount : 0}"
+				th:data-id="${item.quoteId}" th:data-likes="${item.likeCount != null ? item.likeCount : 0}"
 				th:data-date="${item.createdAt != null ? #temporals.format(item.createdAt, 'yyyy/MM/dd') : '0000/00/00'}"
 				th:data-kana="${item.quote}">
 				<div class="item-main-info">
 					<div class="item-header">
-						<span class="item-number" th:text="${#numbers.formatInteger(item.collectionId, 3)}">001</span>
+						<span class="item-number" th:text="${#numbers.formatInteger(item.quoteId, 3)}">001</span>
 						<span class="item-likes" th:if="${item.hasGoldMedal}">
 							<i class="fa-solid fa-medal medal-icon"></i>
 							<span>金メダル</span>
@@ -630,7 +630,7 @@
 		</a>
 		<a th:if="${toQuize != null}" th:href="@{/quize}" class="back-btn quiz-btn">
 			<i class="fa-solid fa-pen-to-square"></i>
-			<span th:text="${toQuize}">クイズは戻る</span>
+			<span th:text="${toQuize}">クイズに戻る</span>
 		</a>
 		<div th:if="${toQuize == null}"></div>
 	</div>
