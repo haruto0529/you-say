@@ -30,150 +30,259 @@
 
 		.history-container {
 			max-width: 800px;
-			margin: 40px auto;
+			margin: 32px auto;
 			padding: 0 20px 100px;
+			min-height: calc(100vh - 56px - 56px - 32px);
 		}
 
+		/* ---- サマリーカード ---- */
+		.summary-card {
+			border-radius: 20px;
+			background: #fff;
+			padding: 24px 32px;
+			margin-bottom: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+		}
+
+		.summary-card.perfect {
+			background: linear-gradient(135deg, #fffde7 0%, #fff8e1 50%, #fffde7 100%);
+			border: 2px solid #ffea9f;
+			outline: 1.5px solid #f5a623;
+			box-shadow: 0 4px 24px rgba(245, 166, 35, 0.3);
+			animation: perfectPulse 2s ease-in-out infinite;
+		}
+
+		.summary-card.perfect .rate-number {
+			text-shadow: 0 0 20px rgba(245, 166, 35, 0.5);
+			animation: perfectGlow 1.5s ease-in-out infinite;
+		}
+
+		.summary-card.perfect .summary-title span {
+			color: #f5a623;
+			font-weight: 700;
+		}
+
+		@keyframes perfectPulse {
+
+			0%,
+			100% {
+				box-shadow: 0 4px 24px rgba(245, 166, 35, 0.3);
+			}
+
+			50% {
+				box-shadow: 0 4px 36px rgba(245, 166, 35, 0.6);
+			}
+		}
+
+		@keyframes perfectGlow {
+
+			0%,
+			100% {
+				text-shadow: 0 0 10px rgba(245, 166, 35, 0.4);
+			}
+
+			50% {
+				text-shadow: 0 0 24px rgba(245, 166, 35, 0.9);
+			}
+		}
+
+		.summary-title {
+			font-family: 'Nunito', sans-serif;
+			font-size: 22px;
+			font-weight: 900;
+			color: #333;
+			letter-spacing: 0.04em;
+		}
+
+		.summary-title span {
+			display: block;
+			font-size: 11px;
+			font-weight: 500;
+			color: #aaa;
+			margin-bottom: 4px;
+			letter-spacing: 0.1em;
+		}
+
+		.rate-number {
+			font-family: 'Nunito', sans-serif;
+			font-size: 48px;
+			font-weight: 900;
+			color: #f5a623;
+			line-height: 1;
+			text-align: center;
+		}
+
+		.rate-label {
+			font-size: 11px;
+			color: #aaa;
+			margin-top: 4px;
+			letter-spacing: 0.06em;
+			text-align: center;
+		}
+
+		/* ---- メインカード ---- */
 		.card {
 			background: #fff;
-			border-radius: 16px;
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
-			padding: 32px;
+			border-radius: 20px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+			padding: 8px 0;
 			transition: background 0.3s;
 		}
 
-		.rate-summary {
-			display: inline-block;
-			margin-top: 8px;
-			padding: 6px 18px;
-			border-radius: 20px;
-			background: #f5f5f5;
-			font-size: 14px;
-			color: #555;
-		}
-
-		.rate-summary .rate-value {
-			font-size: 20px;
-			font-weight: 700;
-			color: #e8943c;
-			margin-left: 6px;
-		}
-
-		.history-list {
-			display: flex;
-			flex-direction: column;
-			gap: 16px;
-			margin-top: 24px;
-		}
-
+		/* ---- 履歴アイテム ---- */
 		.history-item {
-			padding: 16px 0;
-			border-bottom: 1px solid #eee;
+			display: grid;
+			grid-template-columns: 48px 1fr auto;
+			gap: 0 16px;
+			align-items: start;
+			padding: 20px 24px;
+			border-bottom: 1px solid #f0f0f0;
+			transition: background 0.15s;
 		}
 
 		.history-item:last-child {
 			border-bottom: none;
 		}
 
-		.history-date {
-			font-size: 12px;
+		.history-item:hover {
+			background: #fafafa;
+		}
+
+		.item-number {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background: #f0f0f0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: 'Nunito', sans-serif;
+			font-weight: 900;
+			font-size: 15px;
 			color: #888;
-			margin-bottom: 6px;
+			flex-shrink: 0;
+			margin-top: 2px;
+		}
+
+		.item-number.correct {
+			background: #e8f5e9;
+			color: #4caf50;
+		}
+
+		.item-number.wrong {
+			background: #fdecea;
+			color: #e8453c;
+		}
+
+		.history-date {
+			font-size: 11px;
+			color: #aaa;
+			margin-bottom: 4px;
+			letter-spacing: 0.04em;
 		}
 
 		.history-question {
 			font-weight: 700;
-			font-size: 16px;
-			color: #333;
-			margin-bottom: 10px;
+			font-size: 15px;
+			color: #222;
+			margin-bottom: 12px;
+			line-height: 1.5;
 		}
 
-		.history-detail {
+		.answer-area {
 			display: flex;
-			flex-wrap: wrap;
-			gap: 8px;
-			align-items: center;
-			font-size: 14px;
+			flex-direction: column;
+			gap: 6px;
 		}
 
-		.detail-label {
-			color: #888;
-			font-size: 12px;
-			margin-right: 2px;
+		.answer-row {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 13px;
+		}
+
+		.answer-tag {
+			font-size: 10px;
+			font-weight: 700;
+			padding: 2px 8px;
+			border-radius: 4px;
+			white-space: nowrap;
+			letter-spacing: 0.04em;
+		}
+
+		.tag-user {
+			background: #e8f0fe;
+			color: #4285f4;
+		}
+
+		.tag-answer {
+			background: #e8f5e9;
+			color: #2e7d32;
+		}
+
+		.tag-answer-wrong {
+			background: #fdecea;
+			color: #c62828;
+		}
+
+		.answer-text {
+			font-weight: 700;
+			color: #333;
 		}
 
 		.result-badge {
-			display: inline-block;
-			padding: 2px 10px;
-			border-radius: 20px;
-			font-size: 12px;
-			font-weight: 700;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			font-size: 16px;
+			font-weight: 900;
 			color: #fff;
+			flex-shrink: 0;
+			margin-top: 2px;
 		}
 
 		.result-correct {
 			background: #4caf50;
+			box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
 		}
 
 		.result-wrong {
 			background: #e8453c;
+			box-shadow: 0 2px 8px rgba(232, 69, 60, 0.4);
 		}
 
+		/* ---- 空メッセージ ---- */
 		.empty-message {
 			text-align: center;
-			padding: 40px 0;
+			padding: 60px 0;
 			color: #aaa;
 		}
 
-		.empty-message .empty-icon {
-			font-size: 40px;
-			margin-bottom: 12px;
+		.empty-icon {
+			font-size: 48px;
+			margin-bottom: 16px;
 		}
 
-		.empty-message .empty-text {
-			font-size: 15px;
-		}
-
-		.empty-message .empty-sub {
-			font-size: 13px;
-			margin-top: 6px;
+		.empty-text {
+			font-size: 16px;
+			font-weight: 700;
 			color: #bbb;
 		}
 
-		/* ダークモード対応 */
-		body.dark-mode {
-			color: #eee;
-		}
-
-		body.dark-mode .card {
-			background: #2a2a2a;
-		}
-
-		body.dark-mode .history-item {
-			border-bottom-color: #444;
-		}
-
-		body.dark-mode .history-question {
-			color: #fff;
-		}
-
-		body.dark-mode .history-date {
-			color: #aaa;
-		}
-
-		body.dark-mode .detail-label {
-			color: #888;
-		}
-
-		body.dark-mode .rate-summary {
-			background: #333;
+		.empty-sub {
+			font-size: 13px;
+			margin-top: 8px;
 			color: #ccc;
 		}
 
-		body.dark-mode .empty-sub {
-			color: #666;
-		}
-
+		/* ---- 固定ボタン ---- */
 		.fixed-bottom-bar {
 			position: fixed;
 			bottom: 56px;
@@ -187,6 +296,90 @@
 		.fixed-bottom-bar .btn {
 			pointer-events: auto;
 		}
+
+		/* ---- ダークモード ---- */
+		body.dark-mode {
+			color: #eee;
+		}
+
+		body.dark-mode .summary-card {
+			background: #2a2a2a;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+		}
+
+		body.dark-mode .summary-card.perfect {
+			background: linear-gradient(135deg, #2a2200 0%, #1a1600 50%, #2a2200 100%);
+		}
+
+		body.dark-mode .summary-title {
+			color: #fff;
+		}
+
+		body.dark-mode .summary-title span {
+			color: #666;
+		}
+
+		body.dark-mode .card {
+			background: #2a2a2a;
+		}
+
+		body.dark-mode .history-item {
+			border-bottom-color: #333;
+		}
+
+		body.dark-mode .history-item:hover {
+			background: #333;
+		}
+
+		body.dark-mode .history-question {
+			color: #fff;
+		}
+
+		body.dark-mode .history-date {
+			color: #666;
+		}
+
+		body.dark-mode .item-number {
+			background: #333;
+			color: #666;
+		}
+
+		body.dark-mode .item-number.correct {
+			background: #1b3a1c;
+			color: #4caf50;
+		}
+
+		body.dark-mode .item-number.wrong {
+			background: #3a1b1b;
+			color: #e8453c;
+		}
+
+		body.dark-mode .answer-text {
+			color: #eee;
+		}
+
+		body.dark-mode .tag-user {
+			background: #1a2a4a;
+			color: #7baaf7;
+		}
+
+		body.dark-mode .tag-answer {
+			background: #1b3a1c;
+			color: #81c784;
+		}
+
+		body.dark-mode .tag-answer-wrong {
+			background: #3a1b1b;
+			color: #ef9a9a;
+		}
+
+		body.dark-mode .empty-text {
+			color: #555;
+		}
+
+		body.dark-mode .empty-sub {
+			color: #444;
+		}
 	</style>
 </head>
 
@@ -194,30 +387,50 @@
 
 	<header th:replace="~{fragments/header :: header}"></header>
 
-	<main class="history-container">
+	<canvas id="effectCanvas"
+		style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2;"></canvas>
+
+	<main class="history-container" style="position: relative; z-index: 5;">
+
+		<div class="summary-card" th:if="${!#lists.isEmpty(historyList)}"
+			th:classappend="${percent == 100} ? 'perfect' : ''">
+			<div class="summary-title">
+				<span th:text="${percent == 100} ? '🎉 PERFECT SCORE!' : 'YOUR QUIZ HISTORY'"></span>
+				クイズ挑戦履歴
+			</div>
+			<div>
+				<div class="rate-number" th:text="${percent} + '%'"></div>
+				<div class="rate-label" th:text="${percent == 100} ? '満点！' : '正答率'"></div>
+			</div>
+		</div>
+
+		<h2 style="font-family:'Nunito',sans-serif; padding: 0 4px 12px;" th:if="${#lists.isEmpty(historyList)}">クイズ挑戦履歴
+		</h2>
+
 		<div class="card">
-			<h2 style="font-family: 'Nunito', sans-serif;">クイズ挑戦履歴</h2>
-
 			<div th:if="${!#lists.isEmpty(historyList)}">
-				<div class="rate-summary">
-					正答率<span class="rate-value" th:text="${percent} + '%'"></span>
-				</div>
+				<div class="history-item" th:each="h,i : ${historyList}">
+					<div class="item-number" th:classappend="${h.result} ? 'correct' : 'wrong'"
+						th:text="${i.index + 1}"></div>
 
-				<div class="history-list">
-					<div class="history-item" th:each="h : ${historyList}">
-						<div class="history-date" th:text="${#temporals.format(h.createdAt, 'yyyy/MM/dd HH:mm')}"></div>
+					<div>
+						<div class="history-date" th:text="${#temporals.format(h.createdAt, 'yyyy/MM/dd')}"></div>
 						<div class="history-question" th:text="${h.questionText}"></div>
-						<div class="history-detail">
-							<span class="detail-label">あなたの回答：</span>
-							<span th:text="${h.userAnswer}"></span>
-							&nbsp;
-							<span class="result-badge" th:classappend="${h.result} ? 'result-correct' : 'result-wrong'"
-								th:text="${h.result} ? '正解' : '不正解'"></span>
-							&nbsp;
-							<span class="detail-label">正解：</span>
-							<span th:text="${h.answerText}"></span>
+						<div class="answer-area">
+							<div class="answer-row">
+								<span class="answer-tag tag-user">あなた</span>
+								<span class="answer-text" th:text="${h.userAnswer}"></span>
+							</div>
+							<div class="answer-row">
+								<span class="answer-tag"
+									th:classappend="${h.result} ? 'tag-answer' : 'tag-answer-wrong'">正解</span>
+								<span class="answer-text" th:text="${h.answerText}"></span>
+							</div>
 						</div>
 					</div>
+
+					<div class="result-badge" th:classappend="${h.result} ? 'result-correct' : 'result-wrong'"
+						th:text="${h.result} ? '○' : '✕'"></div>
 				</div>
 			</div>
 
@@ -226,15 +439,15 @@
 				<div class="empty-text">まだ挑戦履歴がありません</div>
 				<div class="empty-sub">クイズに挑戦すると、ここに結果が表示されます</div>
 			</div>
-
 		</div>
+
 	</main>
 
 	<div class="fixed-bottom-bar">
 		<button type="button" class="btn btn-orange" onclick="history.back()">戻る</button>
 	</div>
 
-	<footer th:replace="~{fragments/footer :: footer}"></footer>
+	<footer th:replace="~{fragments/footer :: footer}" style="position: relative; z-index: 5;"></footer>
 
 	<script>
 		window.addEventListener('DOMContentLoaded', () => {
@@ -242,6 +455,121 @@
 				document.body.classList.add('dark-mode');
 			}
 		});
+
+		// === 背景アニメーション ===
+		const canvas = document.getElementById('effectCanvas');
+		const ctx = canvas.getContext('2d');
+
+		function resizeCanvas() {
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+		}
+		window.addEventListener('resize', resizeCanvas);
+		resizeCanvas();
+
+		let isEffectEnabled = localStorage.getItem('quiz_effect_enabled') !== 'false';
+		let currentEffectType = localStorage.getItem('quiz_effect_type') || 'all';
+
+		const colors = ['#ff4a4a', '#3b9eff', '#4fff5a', '#ffdf3b', '#ff63ca', '#9b4dff'];
+
+		class Confetti {
+			constructor() {
+				this.x = Math.random() * canvas.width;
+				this.y = Math.random() * canvas.height - canvas.height;
+				this.size = Math.random() * 6 + 5;
+				this.color = colors[Math.floor(Math.random() * colors.length)];
+				this.speedX = Math.random() * 2 - 1;
+				this.speedY = Math.random() * 2 + 1.5;
+				this.rotation = Math.random() * 360;
+				this.rotationSpeed = Math.random() * 4 - 2;
+			}
+			update() {
+				this.y += this.speedY;
+				this.x += Math.sin(this.y / 20) * 0.5 + this.speedX;
+				this.rotation += this.rotationSpeed;
+				if (this.y > canvas.height) {
+					this.y = -20;
+					this.x = Math.random() * canvas.width;
+				}
+			}
+			draw() {
+				ctx.save();
+				ctx.translate(this.x, this.y);
+				ctx.rotate(this.rotation * Math.PI / 180);
+				ctx.fillStyle = this.color;
+				ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size / 1.5);
+				ctx.restore();
+			}
+		}
+
+		class Balloon {
+			constructor() {
+				this.reset();
+				this.y = canvas.height + Math.random() * canvas.height;
+			}
+			reset() {
+				this.x = Math.random() * canvas.width;
+				this.y = canvas.height + 50;
+				this.radius = Math.random() * 15 + 20;
+				this.color = colors[Math.floor(Math.random() * colors.length)];
+				this.speedY = Math.random() * 0.8 + 0.6;
+				this.swingSpeed = Math.random() * 0.02 + 0.01;
+				this.swingRange = Math.random() * 2 + 1;
+				this.swingSeed = Math.random() * 100;
+			}
+			update() {
+				this.y -= this.speedY;
+				this.swingSeed += this.swingSpeed;
+				this.x += Math.sin(this.swingSeed) * 0.3;
+				if (this.y < -60) {this.reset();}
+			}
+			draw() {
+				ctx.save();
+				ctx.beginPath();
+				ctx.ellipse(this.x, this.y, this.radius * 0.8, this.radius, 0, 0, Math.PI * 2);
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.beginPath();
+				ctx.moveTo(this.x, this.y + this.radius);
+				ctx.lineTo(this.x - 4, this.y + this.radius + 6);
+				ctx.lineTo(this.x + 4, this.y + this.radius + 6);
+				ctx.closePath();
+				ctx.fillStyle = this.color;
+				ctx.fill();
+				ctx.beginPath();
+				ctx.moveTo(this.x, this.y + this.radius + 6);
+				ctx.quadraticCurveTo(this.x - 5, this.y + this.radius + 20, this.x, this.y + this.radius + 35);
+				ctx.strokeStyle = 'rgba(100,100,100,0.4)';
+				ctx.lineWidth = 1.5;
+				ctx.stroke();
+				ctx.beginPath();
+				ctx.ellipse(this.x - this.radius * 0.3, this.y - this.radius * 0.4, this.radius * 0.2, this.radius * 0.3, Math.PI / 4, 0, Math.PI * 2);
+				ctx.fillStyle = 'rgba(255,255,255,0.4)';
+				ctx.fill();
+				ctx.restore();
+			}
+		}
+
+		const confettis = [];
+		const balloons = [];
+		for (let i = 0; i < 50; i++) confettis.push(new Confetti());
+		for (let i = 0; i < 12; i++) balloons.push(new Balloon());
+
+		function animate() {
+			if (isEffectEnabled) {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				if (currentEffectType === 'all' || currentEffectType === 'balloon') {
+					balloons.forEach(b => {b.update(); b.draw();});
+				}
+				if (currentEffectType === 'all' || currentEffectType === 'confetti') {
+					confettis.forEach(c => {c.update(); c.draw();});
+				}
+			} else {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+			}
+			requestAnimationFrame(animate);
+		}
+		animate();
 	</script>
 </body>
 
