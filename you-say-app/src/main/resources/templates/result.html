@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,9 @@
 	<link rel="stylesheet" th:href="@{/css/index.css}">
 	<link rel="stylesheet" th:href="@{/css/top.css}">
 	<link rel="stylesheet" th:href="@{/css/result.css}">
-	
+
 </head>
+
 <body class="result-page-container">
 
 	<div class="quiz-success-overlay" id="quizSuccessOverlay" th:if="${isCorrect}">
@@ -17,7 +19,9 @@
 	</div>
 
 	<header th:replace="~{fragments/header :: header}"></header>
-
+	<div th:if="${rankUp != null}" id="rankUpToast" class="rank-up-toast">
+		🎉 ランクアップしました！
+	</div>
 	<main class="result-main">
 		<div class="result-status-title">
 			<span th:if="${isCorrect}" class="status-correct">正解！</span>
@@ -68,6 +72,18 @@
 				document.body.classList.add('dark-mode');
 			}
 		});
+
+
+	</script>
+	<script th:if="${rankUp != null}">
+		document.addEventListener('DOMContentLoaded', function () {
+			const toast = document.getElementById('rankUpToast');
+			if (toast) {
+				setTimeout(() => toast.classList.add('show'), 100);
+				setTimeout(() => toast.classList.remove('show'), 2500);
+			}
+		});
 	</script>
 </body>
+
 </html>

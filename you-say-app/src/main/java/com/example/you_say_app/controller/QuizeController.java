@@ -117,6 +117,7 @@ public class QuizeController {
 				// 必要数に達していればランクを1つ上げる
 				if (collectionCount >= requiredQuantity) {
 					userDao.updateUserRank(userId, nextRankId);
+					model.addAttribute("rankUp", "rankがアップしました");
 				}
 			}
 

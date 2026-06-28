@@ -251,3 +251,26 @@ body.dark-mode .status-incorrect {
 		-2px 2px 0 var(--color-red), 2px 2px 0 var(--color-red),
 		0px 6px 0px #5c0f0f, 0px 10px 15px rgba(0, 0, 0, 0.6);
 }
+
+.rank-up-toast {
+	position: fixed;
+	top: 30px;
+	left: 50%;
+	transform: translateX(-50%) translateY(-20px);
+	background: linear-gradient(135deg, #f5a623, #e8453c);
+	color: #fff;
+	font-weight: 800;
+	font-size: 18px;
+	padding: 14px 36px;
+	border-radius: 50px;
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+	z-index: 9999;
+	opacity: 0;
+	transition: opacity 0.4s ease, transform 0.4s ease;
+	white-space: nowrap;
+}
+
+.rank-up-toast.show {
+	opacity: 1;
+	transform: translateX(-50%) translateY(0);
+}
