@@ -1,4 +1,4 @@
-# you-say-aplication
+# you-say-application
 
 ## 概要
 講師の先生の名言を当てる穴埋め式クイズアプリです。  
